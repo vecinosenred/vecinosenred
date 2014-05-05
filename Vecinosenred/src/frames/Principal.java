@@ -11,12 +11,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class Principal extends JFrame{
-	String titulos[] = { "Producto", "Cantidad", "Precio" };
-	String timodcli[] = { "Nombre", "Apellido1", "Apellido2", "telefono" };
-	String tiprodven[] = { "Nombre", "Descripcion", "Codigo", "Precio Unidad" };
-	String FamiliaProducto[] = { "Todo", "Torre", "PlacaBase", "Procesador", "Memoria RAM", "DiscoDuro", "TarjetaGrafica", "Raton", "Teclado", "Memoria USB", "--" };
-	String TipoCliente[] = { "Normal", "Habitual", "Socio", "Empleado" };
-	String titulomodprod[]={"Codigo","Nombre","Descripcion","Precio"};
 	ArrayList<String> Clientes = new ArrayList<String>();
 	JPanel panelventa, PanelInicio;
 	DefaultTableModel model, tamodcli, tavenpro,tamodpro;
@@ -53,29 +47,9 @@ public class Principal extends JFrame{
 		mnInicio.add(mntmSalir);
 		
 
-		JMenu mnCliente = new JMenu("Cliente");
-		menuBar.add(mnCliente);
-
-		mntmAltaC = new JMenuItem("Alta Cliente");
-		mnCliente.add(mntmAltaC);
 		
-
-		mntmmodBajaC = new JMenuItem("Baja/mod");
-		mnCliente.add(mntmmodBajaC);
 		
-
-		JMenu mnProducto = new JMenu("Producto");
-		menuBar.add(mnProducto);
-
-		mntmAltaP = new JMenuItem("Alta Producto");
-		mnProducto.add(mntmAltaP);
-
-
-		mntmModbajaP = new JMenuItem("Mod/baja");
-		mnProducto.add(mntmModbajaP);
 		
-		tamodpro = new DefaultTableModel(null, titulomodprod);
-		tamodcli = new DefaultTableModel(null, timodcli);
 
 		panelventa = new JPanel();
 		panelventa.setBounds(0, 20, 794, 500);
@@ -85,8 +59,7 @@ public class Principal extends JFrame{
 		panelventa.setLayout(null);
 		panelventa.setMinimumSize(new Dimension(0, 0));
 		panelventa.setBorder(null);
-		model = new DefaultTableModel(null, titulos);
-		tavenpro = new DefaultTableModel(null, tiprodven);
+		
 		
 
 		PanelInicio = new JPanel();

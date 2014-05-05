@@ -11,7 +11,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class Principal extends JFrame{
-	ArrayList<String> Clientes = new ArrayList<String>();
 	JPanel panelventa, PanelInicio;
 	JMenuItem mntmLogin, mntmSalir;
 	public Principal(){

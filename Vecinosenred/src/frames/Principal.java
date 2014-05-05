@@ -50,14 +50,14 @@ public class Principal extends JFrame{
 		
 		
 
-		panelventa = new JPanel();
-		panelventa.setBounds(0, 20, 794, 500);
+		panelLogin = new JPanel();
+		panelLogin.setBounds(0, 20, 794, 500);
 		getContentPane().add(panelventa);
-		panelventa.setOpaque(true);
-		panelventa.setVisible(false);
-		panelventa.setLayout(null);
-		panelventa.setMinimumSize(new Dimension(0, 0));
-		panelventa.setBorder(null);
+		panelLogin.setOpaque(true);
+		panelLogin.setVisible(false);
+		panelLogin.setLayout(null);
+		panelLogin.setMinimumSize(new Dimension(0, 0));
+		panelLogin.setBorder(null);
 		
 		
 

@@ -11,7 +11,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class Principal extends JFrame{
-	JPanel panelventa, PanelInicio;
+	JPanel panelLogin, PanelInicio;
 	JMenuItem mntmLogin, mntmSalir;
 	public Principal(){
 
@@ -38,25 +38,11 @@ public class Principal extends JFrame{
 		menuBar.add(mnInicio);
 
 		mntmLogin = new JMenuItem("Login");
-		mnInicio.add(mntmVenta);
+		mnInicio.add(mntmLogin);
 		
 
 		mntmSalir = new JMenuItem("Salir");
 		mnInicio.add(mntmSalir);
-		
-
-		
-		
-		
-
-		panelLogin = new JPanel();
-		panelLogin.setBounds(0, 20, 794, 500);
-		getContentPane().add(panelventa);
-		panelLogin.setOpaque(true);
-		panelLogin.setVisible(false);
-		panelLogin.setLayout(null);
-		panelLogin.setMinimumSize(new Dimension(0, 0));
-		panelLogin.setBorder(null);
 		
 		
 
@@ -66,12 +52,37 @@ public class Principal extends JFrame{
 		PanelInicio.setMinimumSize(new Dimension(0, 0));
 		PanelInicio.setBorder(null);
 		PanelInicio.setLayout(null);
+		
+		JTabbedPane PanelPrincipal = new JTabbedPane(JTabbedPane.TOP);
+		PanelPrincipal.setBounds(0, 0, 794, 500);
+		PanelInicio.add(PanelPrincipal);
+		JPanel Anuncios = new JPanel();
+		PanelPrincipal.addTab("Ficha uno", null, Anuncios, "Anuncios");
+		JPanel Calendario = new JPanel();
+		PanelPrincipal.addTab("Ficha uno", null, Calendario, " Calendario");
+		JPanel Incidencias = new JPanel();
+		PanelPrincipal.addTab("Ficha uno", null, Incidencias, "Incidencias");
+		JPanel Cuentas = new JPanel();
+		PanelPrincipal.addTab("Ficha uno", null, Cuentas, "Cuentas");
+		JPanel Comunidad = new JPanel();
+		PanelPrincipal.addTab("Ficha uno", null, Comunidad, "Comunidad");
+		JPanel Instalaciones = new JPanel();
+		PanelPrincipal.addTab("Ficha uno", null, Instalaciones, "Instalaciones");
+		JPanel Mensajes = new JPanel();
+		PanelPrincipal.addTab("Ficha uno", null, Mensajes, "Mensajes");
 
-		JLabel imaini = new JLabel("");
-		imaini.setHorizontalAlignment(SwingConstants.CENTER);
-		imaini.setBounds(0, 0, 794, 500);
-		imaini.setIcon(new ImageIcon(Principal.class.getResource("/resources/Imageninicio.jpg")));
-		PanelInicio.add(imaini);
+		
+		
+		
+
+		panelLogin = new JPanel();
+		panelLogin.setBounds(0, 20, 794, 500);
+		getContentPane().add(panelLogin);
+		panelLogin.setOpaque(true);
+		panelLogin.setVisible(false);
+		panelLogin.setLayout(null);
+		panelLogin.setMinimumSize(new Dimension(0, 0));
+		panelLogin.setBorder(null);
 
 		JPanel barrainferior = new JPanel();
 		barrainferior.setBounds(0, 520, 794, 50);
@@ -92,5 +103,4 @@ public class Principal extends JFrame{
 		// TODO Auto-generated method stub
 
 	}
-
 }

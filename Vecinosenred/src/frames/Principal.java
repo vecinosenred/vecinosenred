@@ -13,13 +13,12 @@ import javax.swing.table.DefaultTableModel;
 public class Principal extends JFrame{
 	ArrayList<String> Clientes = new ArrayList<String>();
 	JPanel panelventa, PanelInicio;
-	DefaultTableModel model, tamodcli, tavenpro,tamodpro;
-	JMenuItem mntmVenta, mntmSalir, mntmAltaC, mntmmodBajaC, mntmAltaP, mntmModbajaP;
+	JMenuItem mntmLogin, mntmSalir;
 	public Principal(){
 
 		setResizable(false);
 		getContentPane().setEnabled(false);
-		setTitle("Tienda Informatica");
+		setTitle("Vecinos en Red");
 		setBackground(Color.GRAY);
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,7 +38,7 @@ public class Principal extends JFrame{
 		JMenu mnInicio = new JMenu("Inicio");
 		menuBar.add(mnInicio);
 
-		mntmVenta = new JMenuItem("Venta/devolucion");
+		mntmLogin = new JMenuItem("Login");
 		mnInicio.add(mntmVenta);
 		
 

@@ -57,19 +57,19 @@ public class Principal extends JFrame{
 		PanelPrincipal.setBounds(0, 0, 794, 500);
 		PanelInicio.add(PanelPrincipal);
 		JPanel Anuncios = new JPanel();
-		PanelPrincipal.addTab("Ficha uno", null, Anuncios, "Anuncios");
+		PanelPrincipal.addTab("Anuncios", null, Anuncios, "Anuncios");
 		JPanel Calendario = new JPanel();
-		PanelPrincipal.addTab("Ficha uno", null, Calendario, " Calendario");
+		PanelPrincipal.addTab("Calendario", null, Calendario, "Calendario");
 		JPanel Incidencias = new JPanel();
-		PanelPrincipal.addTab("Ficha uno", null, Incidencias, "Incidencias");
+		PanelPrincipal.addTab("Incidencias", null, Incidencias, "Incidencias");
 		JPanel Cuentas = new JPanel();
-		PanelPrincipal.addTab("Ficha uno", null, Cuentas, "Cuentas");
+		PanelPrincipal.addTab("Cuentas", null, Cuentas, "Cuentas");
 		JPanel Comunidad = new JPanel();
-		PanelPrincipal.addTab("Ficha uno", null, Comunidad, "Comunidad");
+		PanelPrincipal.addTab("Comunidad", null, Comunidad, "Comunidad");
 		JPanel Instalaciones = new JPanel();
-		PanelPrincipal.addTab("Ficha uno", null, Instalaciones, "Instalaciones");
+		PanelPrincipal.addTab("Instalaciones", null, Instalaciones, "Instalaciones");
 		JPanel Mensajes = new JPanel();
-		PanelPrincipal.addTab("Ficha uno", null, Mensajes, "Mensajes");
+		PanelPrincipal.addTab( "Mensajes", null, Mensajes, "Mensajes");
 
 		
 		

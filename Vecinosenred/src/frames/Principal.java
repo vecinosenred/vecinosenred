@@ -4,7 +4,10 @@ import java.awt.Color;
 
 
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -13,8 +16,9 @@ import javax.swing.table.DefaultTableModel;
 public class Principal extends JFrame{
 	JPanel panelLogin, PanelInicio;
 	JMenuItem mntmLogin, mntmSalir;
+	
 	public Principal(){
-
+		
 		setResizable(false);
 		getContentPane().setEnabled(false);
 		setTitle("Vecinos en Red");
@@ -38,6 +42,14 @@ public class Principal extends JFrame{
 		menuBar.add(mnInicio);
 
 		mntmLogin = new JMenuItem("Login");
+		mntmLogin.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Login log=new Login();
+				log.setVisible(true);				
+			}
+		});
 		mnInicio.add(mntmLogin);
 		
 
@@ -70,10 +82,7 @@ public class Principal extends JFrame{
 		PanelPrincipal.addTab("Instalaciones", null, Instalaciones, "Instalaciones");
 		JPanel Mensajes = new JPanel();
 		PanelPrincipal.addTab( "Mensajes", null, Mensajes, "Mensajes");
-
-		
-		
-		
+				
 
 		panelLogin = new JPanel();
 		panelLogin.setBounds(0, 20, 794, 500);
@@ -92,7 +101,7 @@ public class Principal extends JFrame{
 		JLabel labelbarrainferior = new JLabel("");
 		labelbarrainferior.setOpaque(true);
 		labelbarrainferior.setBackground(Color.BLACK);
-		labelbarrainferior.setIcon(new ImageIcon(Principal.class.getResource("/resources/logobarra.jpg")));
+//		labelbarrainferior.setIcon(new ImageIcon(Principal.class.getResource("/resources/logobarra.jpg")));
 		labelbarrainferior.setHorizontalAlignment(SwingConstants.CENTER);
 		labelbarrainferior.setBounds(0, 0, 794, 50);
 		barrainferior.add(labelbarrainferior);
@@ -100,7 +109,15 @@ public class Principal extends JFrame{
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Principal frame = new Principal();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 }

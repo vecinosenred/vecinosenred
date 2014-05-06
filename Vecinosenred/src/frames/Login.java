@@ -1,25 +1,29 @@
 package frames;
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
+import metodos.ComprobarUsuario;
 
 
 public class Login extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
+	private int usuario=1;
+	private int erroneo=0;
+	private int tipoUsuario=0;
+	private JPasswordField passwordField;
 	private JTextField textField_1;
 
 	/**
@@ -36,6 +40,10 @@ public class Login extends JFrame {
 				}
 			}
 		});
+	}	
+
+	public int getTipoUsuario() {
+		return tipoUsuario;
 	}
 
 	/**
@@ -64,10 +72,9 @@ public class Login extends JFrame {
 		lblContrasea.setBounds(12, 112, 408, 16);
 		contentPane.add(lblContrasea);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(102, 141, 242, 22);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
+		passwordField = new JPasswordField();
+		passwordField.setBounds(102, 162, 242, 22);
+		contentPane.add(passwordField);
 		
 		final JLabel lblElUsuarioO = new JLabel("El usuario o contrase\u00F1a es incorrecto");
 		lblElUsuarioO.setForeground(Color.RED);
@@ -76,6 +83,11 @@ public class Login extends JFrame {
 		lblElUsuarioO.setVisible(false);
 		contentPane.add(lblElUsuarioO);
 		
+		textField_1 = new JTextField();
+		textField_1.setBounds(102, 197, 242, 22);
+		contentPane.add(textField_1);
+		textField_1.setColumns(10);
+		
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.setBounds(308, 257, 97, 25);
 		btnAceptar.addActionListener(new ActionListener() {
@@ -83,8 +95,27 @@ public class Login extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				if(comprobarUsuario(textField.getText(), textField_1.getText())=="false"){
+				String pass="";
+				for (int i = 0; i < passwordField.getPassword().length; i++) {
+					pass=pass+passwordField.getPassword()[i];
+				}
+				
+				textField_1.setText(textField.getText()+" "+pass);
+				
+				ComprobarUsuario cu= new ComprobarUsuario(textField.getText(),pass);
+				tipoUsuario=cu.comprobar();
+				
+				if(tipoUsuario==erroneo){
 					lblElUsuarioO.setVisible(true);
+				}else{
+					Principal p= new Principal(textField.getText());
+					p.setVisible(true);
+					try {
+						this.finalize();
+					} catch (Throwable e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				
 			}
@@ -95,15 +126,5 @@ public class Login extends JFrame {
 		btnCancelar.setBounds(22, 257, 97, 25);
 		contentPane.add(btnCancelar);
 	}
-	
-	private String comprobarUsuario(String nom,String cont){
-		
-		String usuario=null;
-		
-		usuario="false";
-		
-		
-		return usuario;
-	}
-	
 }
+

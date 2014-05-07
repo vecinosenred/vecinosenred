@@ -1,8 +1,6 @@
 package frames;
 
 import java.awt.Color;
-
-
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Insets;
@@ -14,8 +12,13 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class Principal extends JFrame{
-	JPanel panelLogin, PanelInicio;
+	JPanel panelLogin, PanelInicio,Mensajes,Incidencias;
+	public JButton anadirmensaje,anadirincidencia;
 	JMenuItem mntmLogin, mntmSalir;
+	String titulosMensajes[] = { "Para", "Asunto", "Mensajes" };
+	String titulosIncidencias[] = { "ticket","Titulo","Estado","Fecha Creada"};
+	DefaultTableModel model,modelo;
+	JTable tablamensajes,tablaincidencias;
 	
 	public Principal(){
 		
@@ -68,22 +71,62 @@ public class Principal extends JFrame{
 		JTabbedPane PanelPrincipal = new JTabbedPane(JTabbedPane.TOP);
 		PanelPrincipal.setBounds(0, 0, 794, 500);
 		PanelInicio.add(PanelPrincipal);
+		//Panel Anuncios
 		JPanel Anuncios = new JPanel();
 		PanelPrincipal.addTab("Anuncios", null, Anuncios, "Anuncios");
+		
+		//Panel Calendario
 		JPanel Calendario = new JPanel();
 		PanelPrincipal.addTab("Calendario", null, Calendario, "Calendario");
-		JPanel Incidencias = new JPanel();
+		
+		//Panel incidencias
+		Incidencias = new JPanel();
+		Incidencias.setBounds(0, 0, 794, 450);
+		Incidencias.setLayout(null);
+		Incidencias.setBorder(null);
+		JScrollPane scrollPanel = new JScrollPane();
+		scrollPanel.setBounds(0, 0, 790, 450);
+		Incidencias.add(scrollPanel);
+		modelo = new DefaultTableModel(null, titulosIncidencias);
+		tablaincidencias = new JTable(modelo);
+		scrollPanel.setViewportView(tablaincidencias);
+		anadirincidencia = new JButton();
+		anadirincidencia.setText("nuevo mensaje");
+		anadirincidencia.setBounds(650, 450, 125, 20);
+		Incidencias.add(anadirincidencia);
 		PanelPrincipal.addTab("Incidencias", null, Incidencias, "Incidencias");
+		
+		//Panel Cuentas
 		JPanel Cuentas = new JPanel();
 		PanelPrincipal.addTab("Cuentas", null, Cuentas, "Cuentas");
+		
+		//Panel Comunidad
 		JPanel Comunidad = new JPanel();
 		PanelPrincipal.addTab("Comunidad", null, Comunidad, "Comunidad");
+		
+		//Panel Instalaciones
 		JPanel Instalaciones = new JPanel();
 		PanelPrincipal.addTab("Instalaciones", null, Instalaciones, "Instalaciones");
-		JPanel Mensajes = new JPanel();
-		PanelPrincipal.addTab( "Mensajes", null, Mensajes, "Mensajes");
+		
+		//Panel Mensajes
+		Mensajes = new JPanel();
+		Mensajes.setBounds(0, 0, 794, 450);
+		Mensajes.setLayout(null);
+		Mensajes.setBorder(null);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 0, 790, 450);
+		Mensajes.add(scrollPane);
+		model = new DefaultTableModel(null, titulosMensajes);
+		tablamensajes = new JTable(model);
+		scrollPane.setViewportView(tablamensajes);
+		anadirmensaje = new JButton();
+		anadirmensaje.setText("nuevo mensaje");
+		anadirmensaje.setBounds(650, 450, 125, 20);
+		Mensajes.add(anadirmensaje);
+		PanelPrincipal.addTab("Mensajes", null, Mensajes, "Mensajes");
 				
-
+		//Panel Login
 		panelLogin = new JPanel();
 		panelLogin.setBounds(0, 20, 794, 500);
 		getContentPane().add(panelLogin);

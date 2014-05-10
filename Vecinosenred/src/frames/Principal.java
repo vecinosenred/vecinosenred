@@ -30,6 +30,15 @@ public class Principal extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		Eventos principal = new Eventos(this);
+		EventosAnuncios Eveanuncios = new EventosAnuncios(this);
+		EventosCalendario EveCalendario = new EventosCalendario(this);
+		EventosComunidad EveComunidad = new EventosComunidad(this);
+		EventosCuentas EveCuentas = new EventosCuentas(this);
+		EventosIncidencias EveIncidencias = new EventosIncidencias(this);
+		EventosInstalaciones EveInstalaciones = new EventosInstalaciones(this);
+		EventosMensajes EveMensajes = new EventosMensajes(this);
+		EventosLogin EveLogin = new EventosLogin(this);
+
 		
 		JPanel panelmenu = new JPanel();
 		panelmenu.setBounds(0, 0, 794, 20);

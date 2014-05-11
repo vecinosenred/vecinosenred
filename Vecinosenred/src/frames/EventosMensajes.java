@@ -20,7 +20,8 @@ public class EventosMensajes implements ActionListener, TableModelListener,
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == gui.anadirmensaje) {
-
+			VentanaMensaje anadirmensaje = new VentanaMensaje();
+			anadirmensaje.setVisible(true);
 		}
 	}
 

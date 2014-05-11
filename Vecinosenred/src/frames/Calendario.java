@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.zip.*;
 import java.io.*;
 
-public class Calendario extends JFrame implements ActionListener {
+public class Calendario extends JPanel implements ActionListener {
 
 	private JLabel etiqueta, horaL, lugarL, actividadL;
 	private JTextField mes, fecha, horaT, lugarT;
@@ -39,25 +39,12 @@ public class Calendario extends JFrame implements ActionListener {
 	int cantidadArchivos = 1;
 	int buffer = 2048;
 
-	public static void main(String args[]) {
-
-		Calendario cal = new Calendario();
-
-			cal.addWindowListener(
-				new WindowAdapter() {
-					public void windowClosing(WindowEvent e) {
-						System.exit(0);
-					}// windowClosing
-				}// WindowAdapter
-			);//WindowListener
-	}// main
 
 	public Calendario() {
 
-		super("Calendario");
 
-		Container c = getContentPane();
-		c.setLayout(new FlowLayout());
+//		Container c = get
+//		c.setLayout(new FlowLayout());
 
 		etiqueta = new JLabel("Hora del Sistema: "+establecerHora());
 
@@ -137,7 +124,7 @@ public class Calendario extends JFrame implements ActionListener {
 		JPanel p8 = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		p8.add(p7);
 
-		c.add(p8);
+		this.add(p8);
 
 		establecerFechaActual();
 		mostrarEnTabla(anoActual, mesActual);

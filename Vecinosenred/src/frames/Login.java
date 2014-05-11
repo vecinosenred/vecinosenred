@@ -1,10 +1,12 @@
 package frames;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -14,6 +16,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import metodos.ComprobarUsuario;
+import BD.Recuperar;
 
 
 public class Login extends JFrame {
@@ -25,22 +28,8 @@ public class Login extends JFrame {
 	private int tipoUsuario=0;
 	private JPasswordField passwordField;
 	private JTextField textField_1;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Login frame = new Login();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}	
+	JComboBox<String> jcb;
+	Principal principal;
 
 	public int getTipoUsuario() {
 		return tipoUsuario;
@@ -49,7 +38,10 @@ public class Login extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Login() {
+	public Login(Principal p) {
+		
+		principal=p;
+				
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 342);
 		contentPane = new JPanel();
@@ -103,11 +95,27 @@ public class Login extends JFrame {
 				textField_1.setText(textField.getText()+" "+pass);
 				
 				ComprobarUsuario cu= new ComprobarUsuario(textField.getText(),pass);
+				
 				tipoUsuario=cu.comprobar();
 				
 				if(tipoUsuario==erroneo){
 					lblElUsuarioO.setVisible(true);
 				}else{
+					
+					try {
+						principal.setR(new Recuperar(textField.getText()));
+						for (int i = 0; i < principal.r.getCom_usu().size(); i++) {
+							principal.comboBox.addItem(principal.r.getCom_usu().get(i).getPiso());
+						}
+						principal.addTablePanes();
+						setVisible(false);
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					
 				}
 				
@@ -118,6 +126,6 @@ public class Login extends JFrame {
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setBounds(22, 257, 97, 25);
 		contentPane.add(btnCancelar);
-	}
+	} 
 }
 

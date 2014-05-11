@@ -25,8 +25,7 @@ public class Recuperar{
 	private ArrayList<Anuncio> anuncios=new ArrayList<Anuncio>();
 	private ArrayList<Incidencia> incidencias=new ArrayList<Incidencia>();
 	private ArrayList<Mensaje> mensajes=new ArrayList<Mensaje>();
-	private ArrayList<Instalacion> instalaciones=new ArrayList<Instalacion>();
-	
+	private ArrayList<Instalacion> instalaciones=new ArrayList<Instalacion>();	
 	private Conectar c=new Conectar();
 	
 	public Recuperar(String id_usu) throws ClassNotFoundException, SQLException{
@@ -39,21 +38,24 @@ public class Recuperar{
 			usuarios.add(usu);
 		}
 		
-		rs=st.executeQuery("SELECT COMUSU_ID_COMUNIDADES FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO="+id_usu);		
+		rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO='"+id_usu+"'");		
 		while(rs.next()){
-			ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
+//			ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
+			ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 
+					rs.getInt("COMUSU_ADMINISTRADOR"), rs.getString("COMUSU_NUM_CUENTA"), rs.getString("COMUSU_PISO"));
+
 			com_usu.add(comusu);
 		}		
 
 		for (int i = 0; i < com_usu.size(); i++) {
-			rs=st.executeQuery("SELECT * FROM COM_COMUNIDADES WHERE COM_ID="+com_usu.get(i));		
+			rs=st.executeQuery("SELECT * FROM COM_COMUNIDADES");		
 			while(rs.next()){
 				Comunidad com= new Comunidad(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
 				comunidades.add(com);
 			}
 		}
 		
-		rs=st.executeQuery("SELECT * FROM MOVCUE_MOVIMIENTOS_CUENTAS WHERE MOVCUE_ID_USUARIO="+id_usu);		
+		rs=st.executeQuery("SELECT * FROM MOVCUE_MOVIMIENTOS_CUENTAS WHERE MOVCUE_ID_USUARIO='"+id_usu+"'");		
 		while(rs.next()){
 			Movimiento mov=new Movimiento(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), 
 					rs.getInt(5), rs.getInt(6));
@@ -77,7 +79,7 @@ public class Recuperar{
 			}			
 		}
 		
-		rs=st.executeQuery("SELECT * FROM MENS_MENSAJES WHERE MENS_ID_USUARIO="+id_usu);		
+		rs=st.executeQuery("SELECT * FROM MENS_MENSAJES WHERE MENS_ID_USUARIO='"+id_usu+"'");		
 		while(rs.next()){
 			Mensaje men=new Mensaje(rs.getString(1), rs.getInt(2), rs.getString(3), rs.getString(4), 
 					rs.getString(5), rs.getDate(6));

@@ -27,6 +27,16 @@ public class EventosMensajes implements ActionListener, TableModelListener,
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		fila = gui.tablamensajes.rowAtPoint(arg0.getPoint());
+		if (arg0.getClickCount() == 2) {
+			if (fila != -1) {
+				VentanaMensaje LeerMensaje = new VentanaMensaje(
+						gui.tablamensajes.getValueAt(fila, 0).toString(),
+						gui.tablamensajes.getValueAt(fila, 1).toString(),
+						gui.tablamensajes.getValueAt(fila, 2).toString(),
+						gui.tablamensajes.getValueAt(fila, 3).toString());
+				LeerMensaje.setVisible(true);
+			}
+		}
 	}
 
 	@Override

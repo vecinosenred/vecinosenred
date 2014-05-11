@@ -15,7 +15,7 @@ public class Principal extends JFrame{
 	JPanel panelLogin, PanelInicio,Mensajes,Incidencias;
 	public JButton anadirmensaje,anadirincidencia;
 	JMenuItem mntmLogin, mntmSalir;
-	String titulosMensajes[] = { "Para", "Asunto", "Mensajes" };
+	String titulosMensajes[] = { "De","Para", "Asunto", "Mensajes" };
 	String titulosIncidencias[] = { "ticket","Titulo","Estado","Fecha Creada"};
 	DefaultTableModel model,modelo;
 	JTable tablamensajes,tablaincidencias;

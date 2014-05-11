@@ -6,8 +6,15 @@ import java.awt.EventQueue;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+
 import clases.*;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -23,6 +30,7 @@ public class Principal extends JFrame{
 	static 	ArrayList<Mensaje> ListaMensajes= new ArrayList<Mensaje>();
 	static	ArrayList<Anuncio> ListaAnuncios= new ArrayList<Anuncio>();
 	static	ArrayList<Incidencia> ListaIncidencias= new ArrayList<Incidencia>();
+	
 	public Principal(){
 		
 		setResizable(false);

@@ -7,7 +7,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
+import clases.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -19,7 +19,10 @@ public class Principal extends JFrame{
 	String titulosIncidencias[] = { "ticket","Titulo","Estado","Fecha Creada"};
 	DefaultTableModel model,modelo;
 	JTable tablamensajes,tablaincidencias;
-	
+	static Usuario logueado = new Usuario("usuario", "pass", "nombre", "domicilio");
+	static 	ArrayList<Mensaje> ListaMensajes= new ArrayList<Mensaje>();
+	static	ArrayList<Anuncio> ListaAnuncios= new ArrayList<Anuncio>();
+	static	ArrayList<Incidencia> ListaIncidencias= new ArrayList<Incidencia>();
 	public Principal(){
 		
 		setResizable(false);
@@ -38,7 +41,8 @@ public class Principal extends JFrame{
 		EventosInstalaciones EveInstalaciones = new EventosInstalaciones(this);
 		EventosMensajes EveMensajes = new EventosMensajes(this);
 		EventosLogin EveLogin = new EventosLogin(this);
-
+		
+		
 		
 		JPanel panelmenu = new JPanel();
 		panelmenu.setBounds(0, 0, 794, 20);
@@ -54,14 +58,7 @@ public class Principal extends JFrame{
 		menuBar.add(mnInicio);
 
 		mntmLogin = new JMenuItem("Login");
-		mntmLogin.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				Login log=new Login();
-				log.setVisible(true);				
-			}
-		});
+		mntmLogin.addActionListener(principal);
 		mnInicio.add(mntmLogin);
 		
 
@@ -96,7 +93,6 @@ public class Principal extends JFrame{
 		JScrollPane scrollPanel = new JScrollPane();
 		scrollPanel.setBounds(0, 0, 790, 450);
 		Incidencias.add(scrollPanel);
-		modelo = new DefaultTableModel(null, titulosIncidencias);
 		tablaincidencias = new JTable(modelo);
 		scrollPanel.setViewportView(tablaincidencias);
 		anadirincidencia = new JButton();
@@ -126,7 +122,6 @@ public class Principal extends JFrame{
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(0, 0, 790, 450);
 		Mensajes.add(scrollPane);
-		model = new DefaultTableModel(null, titulosMensajes);
 		tablamensajes = new JTable(model);
 		scrollPane.setViewportView(tablamensajes);
 		anadirmensaje = new JButton();
@@ -134,7 +129,7 @@ public class Principal extends JFrame{
 		anadirmensaje.setBounds(650, 450, 125, 20);
 		Mensajes.add(anadirmensaje);
 		PanelPrincipal.addTab("Mensajes", null, Mensajes, "Mensajes");
-				
+		
 		//Panel Login
 		panelLogin = new JPanel();
 		panelLogin.setBounds(0, 20, 794, 500);
@@ -144,6 +139,8 @@ public class Principal extends JFrame{
 		panelLogin.setLayout(null);
 		panelLogin.setMinimumSize(new Dimension(0, 0));
 		panelLogin.setBorder(null);
+		modelo = new DefaultTableModel(null, titulosIncidencias);
+		model = new DefaultTableModel(null, titulosMensajes);
 
 		JPanel barrainferior = new JPanel();
 		barrainferior.setBounds(0, 520, 794, 50);

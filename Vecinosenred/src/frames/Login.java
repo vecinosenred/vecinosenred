@@ -102,20 +102,20 @@ public class Login extends JFrame {
 					lblElUsuarioO.setVisible(true);
 				}else{
 					
-					try {
-						principal.setR(new Recuperar(textField.getText()));
-						for (int i = 0; i < principal.r.getCom_usu().size(); i++) {
-							principal.comboBox.addItem(principal.r.getCom_usu().get(i).getPiso());
-						}
-						principal.addTablePanes();
-						setVisible(false);
-					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+//					try {
+////						principal.setR(new Recuperar(textField.getText()));
+////						for (int i = 0; i < principal.r.getCom_usu().size(); i++) {
+////							principal.comboBox.addItem(principal.r.getCom_usu().get(i).getPiso());
+////						}
+////						principal.addTablePanes();
+////						setVisible(false);
+////					} catch (ClassNotFoundException e) {
+////						// TODO Auto-generated catch block
+////						e.printStackTrace();
+////					} catch (SQLException e) {
+////						// TODO Auto-generated catch block
+////						e.printStackTrace();
+//					}
 					
 				}
 				

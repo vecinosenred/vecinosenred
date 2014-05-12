@@ -4,11 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -21,35 +19,26 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-import BD.Recuperar;
+import clases.Anuncio;
+import clases.Incidencia;
+import clases.Mensaje;
+import clases.Usuario;
 
 public class Principal extends JFrame{
 	JPanel panelLogin, PanelInicio,Mensajes,Incidencias;
+	public JButton anadirmensaje,anadirincidencia;
 	JMenuItem mntmLogin, mntmSalir;
-	Recuperar r;
-	JComboBox<String> comboBox;
-	JLabel labelbarrainferior;
-	JPanel barrainferior,Calendario=new JPanel();
-	Login log;
-	JTabbedPane PanelPrincipal;	String titulosMensajes[] = { "Para", "Asunto", "Mensajes" };
+	String titulosMensajes[] = { "De","Para", "Asunto", "Mensajes" };
 	String titulosIncidencias[] = { "ticket","Titulo","Estado","Fecha Creada"};
 	DefaultTableModel model,modelo;
 	JTable tablamensajes,tablaincidencias;
-	public JButton anadirmensaje,anadirincidencia;
+	static Usuario logueado = new Usuario("usuario", "pass", "nombre", "domicilio");
+	static 	ArrayList<Mensaje> ListaMensajes= new ArrayList<Mensaje>();
+	static	ArrayList<Anuncio> ListaAnuncios= new ArrayList<Anuncio>();
+	static	ArrayList<Incidencia> ListaIncidencias= new ArrayList<Incidencia>();
 	
-	public Recuperar getR() {
-		return r;
-	}
-
-	public void setR(Recuperar r) {
-		this.r = r;
-	}
-
 	public Principal(){
 		
-		System.out.println("+++---+++");
-		
-		log=new Login(this);
 		setResizable(false);
 		getContentPane().setEnabled(false);
 		setTitle("Vecinos en Red");
@@ -58,6 +47,16 @@ public class Principal extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		Eventos principal = new Eventos(this);
+		EventosAnuncios Eveanuncios = new EventosAnuncios(this);
+		EventosCalendario EveCalendario = new EventosCalendario(this);
+		EventosComunidad EveComunidad = new EventosComunidad(this);
+		EventosCuentas EveCuentas = new EventosCuentas(this);
+		EventosIncidencias EveIncidencias = new EventosIncidencias(this);
+		EventosInstalaciones EveInstalaciones = new EventosInstalaciones(this);
+		EventosMensajes EveMensajes = new EventosMensajes(this);
+		EventosLogin EveLogin = new EventosLogin(this);
+		
+		
 		
 		JPanel panelmenu = new JPanel();
 		panelmenu.setBounds(0, 0, 794, 20);
@@ -73,13 +72,7 @@ public class Principal extends JFrame{
 		menuBar.add(mnInicio);
 
 		mntmLogin = new JMenuItem("Login");
-		mntmLogin.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				log.setVisible(true);
-			}
-		});
+		mntmLogin.addActionListener(principal);
 		mnInicio.add(mntmLogin);
 		
 
@@ -95,12 +88,18 @@ public class Principal extends JFrame{
 		PanelInicio.setBorder(null);
 		PanelInicio.setLayout(null);
 		
-		PanelPrincipal = new JTabbedPane(JTabbedPane.TOP);
+		JTabbedPane PanelPrincipal = new JTabbedPane(JTabbedPane.TOP);
 		PanelPrincipal.setBounds(0, 0, 794, 500);
 		PanelInicio.add(PanelPrincipal);
+		//Panel Anuncios
 		JPanel Anuncios = new JPanel();
 		PanelPrincipal.addTab("Anuncios", null, Anuncios, "Anuncios");
 		
+		//Panel Calendario
+		JPanel Calendario = new JPanel();
+		PanelPrincipal.addTab("Calendario", null, Calendario, "Calendario");
+		
+		//Panel incidencias
 		Incidencias = new JPanel();
 		Incidencias.setBounds(0, 0, 794, 450);
 		Incidencias.setLayout(null);
@@ -108,7 +107,6 @@ public class Principal extends JFrame{
 		JScrollPane scrollPanel = new JScrollPane();
 		scrollPanel.setBounds(0, 0, 790, 450);
 		Incidencias.add(scrollPanel);
-		modelo = new DefaultTableModel(null, titulosIncidencias);
 		tablaincidencias = new JTable(modelo);
 		scrollPanel.setViewportView(tablaincidencias);
 		anadirincidencia = new JButton();
@@ -117,24 +115,36 @@ public class Principal extends JFrame{
 		Incidencias.add(anadirincidencia);
 		PanelPrincipal.addTab("Incidencias", null, Incidencias, "Incidencias");
 		
-		Calendario.setBounds(0, 0, 794, 450);
-		Calendario.setLayout(null);
-		Calendario.setBorder(null);
-		PanelPrincipal.addTab("Calendario", null, Calendario, "Calendario");
-		
+		//Panel Cuentas
 		JPanel Cuentas = new JPanel();
 		PanelPrincipal.addTab("Cuentas", null, Cuentas, "Cuentas");
 		
+		//Panel Comunidad
 		JPanel Comunidad = new JPanel();
 		PanelPrincipal.addTab("Comunidad", null, Comunidad, "Comunidad");
 		
+		//Panel Instalaciones
 		JPanel Instalaciones = new JPanel();
 		PanelPrincipal.addTab("Instalaciones", null, Instalaciones, "Instalaciones");
 		
-		JPanel Mensajes = new JPanel();
-		PanelPrincipal.addTab( "Mensajes", null, Mensajes, "Mensajes");
-				
+		//Panel Mensajes
+		Mensajes = new JPanel();
+		Mensajes.setBounds(0, 0, 794, 450);
+		Mensajes.setLayout(null);
+		Mensajes.setBorder(null);
 		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 0, 790, 450);
+		Mensajes.add(scrollPane);
+		tablamensajes = new JTable(model);
+		scrollPane.setViewportView(tablamensajes);
+		anadirmensaje = new JButton();
+		anadirmensaje.setText("nuevo mensaje");
+		anadirmensaje.setBounds(650, 450, 125, 20);
+		Mensajes.add(anadirmensaje);
+		PanelPrincipal.addTab("Mensajes", null, Mensajes, "Mensajes");
+		
+		//Panel Login
 		panelLogin = new JPanel();
 		panelLogin.setBounds(0, 20, 794, 500);
 		getContentPane().add(panelLogin);
@@ -143,41 +153,22 @@ public class Principal extends JFrame{
 		panelLogin.setLayout(null);
 		panelLogin.setMinimumSize(new Dimension(0, 0));
 		panelLogin.setBorder(null);
+		modelo = new DefaultTableModel(null, titulosIncidencias);
+		model = new DefaultTableModel(null, titulosMensajes);
 
-		barrainferior = new JPanel();
+		JPanel barrainferior = new JPanel();
 		barrainferior.setBounds(0, 520, 794, 50);
 		getContentPane().add(barrainferior);
 		barrainferior.setLayout(null);
-		
-		comboBox = new JComboBox<String>();
-		comboBox.setBounds(645, 0, 149, 37);
-		comboBox.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-			}
-		});
-		barrainferior.add(comboBox);
 
-		labelbarrainferior = new JLabel("");
+		JLabel labelbarrainferior = new JLabel("");
 		labelbarrainferior.setOpaque(true);
 		labelbarrainferior.setBackground(Color.BLACK);
 //		labelbarrainferior.setIcon(new ImageIcon(Principal.class.getResource("/resources/logobarra.jpg")));
 		labelbarrainferior.setHorizontalAlignment(SwingConstants.CENTER);
 		labelbarrainferior.setBounds(0, 0, 794, 50);
 		barrainferior.add(labelbarrainferior);
-
 		setVisible(true);
-	}
-	
-	public void addTablePanes(){
-		
-		Calendario=(JPanel)new Calendario();
-//		PanelPrincipal.getComponentAt(2).add(new Calendario());
-//		PanelPrincipal.revalidate();
-//		PanelPrincipal.repaint();
-		
 	}
 
 	public static void main(String[] args) {

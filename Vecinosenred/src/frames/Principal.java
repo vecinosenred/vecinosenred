@@ -101,6 +101,7 @@ public class Principal extends JFrame{
 		JScrollPane scrollPanel = new JScrollPane();
 		scrollPanel.setBounds(0, 0, 790, 450);
 		Incidencias.add(scrollPanel);
+		modelo = new DefaultTableModel(null, titulosIncidencias);
 		tablaincidencias = new JTable(modelo);
 		scrollPanel.setViewportView(tablaincidencias);
 		anadirincidencia = new JButton();
@@ -127,9 +128,11 @@ public class Principal extends JFrame{
 		Mensajes.setLayout(null);
 		Mensajes.setBorder(null);
 		
+		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(0, 0, 790, 450);
 		Mensajes.add(scrollPane);
+		model = new DefaultTableModel(null, titulosMensajes);
 		tablamensajes = new JTable(model);
 		scrollPane.setViewportView(tablamensajes);
 		anadirmensaje = new JButton();
@@ -147,8 +150,7 @@ public class Principal extends JFrame{
 		panelLogin.setLayout(null);
 		panelLogin.setMinimumSize(new Dimension(0, 0));
 		panelLogin.setBorder(null);
-		modelo = new DefaultTableModel(null, titulosIncidencias);
-		model = new DefaultTableModel(null, titulosMensajes);
+		
 
 		JPanel barrainferior = new JPanel();
 		barrainferior.setBounds(0, 520, 794, 50);

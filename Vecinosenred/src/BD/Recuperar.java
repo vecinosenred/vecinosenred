@@ -32,7 +32,7 @@ public class Recuperar{
 		c.conectar();
 		st=c.getConexion().createStatement();
 		
-		rs=st.executeQuery("SELECT * FROM LOGUSU_LOGIN_USUARIOS");		
+		rs=st.executeQuery("SELECT * FROM LOGUSU_LOGIN_USUARIOS WHERE LOGUSU_ID='"+id_usu+"'");		
 		while(rs.next()){
 			Usuario usu=new Usuario(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4));
 			usuarios.add(usu);
@@ -153,7 +153,28 @@ public class Recuperar{
 		
 		return rs;
 		
-	} 
+	}
+	
+	public ArrayList<String> recuperarNomComunidad(String usuario){
+		ArrayList<String> nomComunidad = new ArrayList<String>();
+		String query="SELECT COM_NOMBRE FROM COM_COMUNIDADES WHERE COM_ID IN "
+				+ "(SELECT COMUSU_ID_COMUNIDADES FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO='"+usuario+"')";
+		
+		try {
+			c.conectar();
+			st=c.getConexion().createStatement();		
+			rs=st.executeQuery(query);
+			
+			while(rs.next()){
+				nomComunidad.add(rs.getString(1));
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		
+		return nomComunidad;
+	}
 	
 
 }

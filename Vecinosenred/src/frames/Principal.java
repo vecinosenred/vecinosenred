@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -19,10 +21,13 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import BD.Recuperar;
 import clases.Anuncio;
 import clases.Incidencia;
 import clases.Mensaje;
 import clases.Usuario;
+
+import javax.swing.JComboBox;
 
 public class Principal extends JFrame{
 	JPanel panelLogin, PanelInicio,Mensajes,Incidencias;
@@ -36,7 +41,26 @@ public class Principal extends JFrame{
 	static 	ArrayList<Mensaje> ListaMensajes= new ArrayList<Mensaje>();
 	static	ArrayList<Anuncio> ListaAnuncios= new ArrayList<Anuncio>();
 	static	ArrayList<Incidencia> ListaIncidencias= new ArrayList<Incidencia>();
+	Recuperar recuperar;
+	JComboBox<String> comboBox;
+	Eventos principal;
+	EventosAnuncios Eveanuncios;
+	EventosCalendario EveCalendario;
+	EventosComunidad EveComunidad;
+	EventosCuentas EveCuentas;
+	EventosIncidencias EveIncidencias;
+	EventosInstalaciones EveInstalaciones;
+	EventosMensajes EveMensajes;
+	EventosLogin EveLogin;
 	
+	public Recuperar getRecuperar() {
+		return recuperar;
+	}
+
+	public void setRecuperar(Recuperar recuperar) {
+		this.recuperar = recuperar;
+	}
+
 	public Principal(){
 		
 		setResizable(false);
@@ -46,15 +70,15 @@ public class Principal extends JFrame{
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
-		Eventos principal = new Eventos(this);
-		EventosAnuncios Eveanuncios = new EventosAnuncios(this);
-		EventosCalendario EveCalendario = new EventosCalendario(this);
-		EventosComunidad EveComunidad = new EventosComunidad(this);
-		EventosCuentas EveCuentas = new EventosCuentas(this);
-		EventosIncidencias EveIncidencias = new EventosIncidencias(this);
-		EventosInstalaciones EveInstalaciones = new EventosInstalaciones(this);
-		EventosMensajes EveMensajes = new EventosMensajes(this);
-		EventosLogin EveLogin = new EventosLogin(this);
+		principal = new Eventos(this);
+		Eveanuncios = new EventosAnuncios(this);
+		EveCalendario = new EventosCalendario(this);
+		EveComunidad = new EventosComunidad(this);
+		EveCuentas = new EventosCuentas(this);
+		EveIncidencias = new EventosIncidencias(this);
+		EveInstalaciones = new EventosInstalaciones(this);
+		EveMensajes = new EventosMensajes(this);
+		EveLogin = new EventosLogin(this);
 		
 		
 		
@@ -160,6 +184,24 @@ public class Principal extends JFrame{
 		barrainferior.setBounds(0, 520, 794, 50);
 		getContentPane().add(barrainferior);
 		barrainferior.setLayout(null);
+		
+
+		comboBox = new JComboBox<String>();
+		comboBox.setBounds(637, 0, 157, 50);
+		comboBox.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				principal.llenarlistaMensajes(recuperar.getMensajes(),
+						recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
+				principal.llenarlistaIncidencias(recuperar.getIncidencias(),
+						recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
+				
+			}
+		});
+		barrainferior.add(comboBox);
+		setVisible(true);
 
 		JLabel labelbarrainferior = new JLabel("");
 		labelbarrainferior.setOpaque(true);
@@ -168,7 +210,7 @@ public class Principal extends JFrame{
 		labelbarrainferior.setHorizontalAlignment(SwingConstants.CENTER);
 		labelbarrainferior.setBounds(0, 0, 794, 50);
 		barrainferior.add(labelbarrainferior);
-		setVisible(true);
+		
 	}
 
 	public static void main(String[] args) {

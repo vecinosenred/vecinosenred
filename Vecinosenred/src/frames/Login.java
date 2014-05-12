@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -42,7 +43,7 @@ public class Login extends JFrame {
 		
 		principal=p;
 				
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 450, 342);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -102,20 +103,20 @@ public class Login extends JFrame {
 					lblElUsuarioO.setVisible(true);
 				}else{
 					
-//					try {
-////						principal.setR(new Recuperar(textField.getText()));
-////						for (int i = 0; i < principal.r.getCom_usu().size(); i++) {
-////							principal.comboBox.addItem(principal.r.getCom_usu().get(i).getPiso());
-////						}
-////						principal.addTablePanes();
-////						setVisible(false);
-////					} catch (ClassNotFoundException e) {
-////						// TODO Auto-generated catch block
-////						e.printStackTrace();
-////					} catch (SQLException e) {
-////						// TODO Auto-generated catch block
-////						e.printStackTrace();
-//					}
+					try {
+						principal.setRecuperar(new Recuperar(textField.getText()));
+						ArrayList<String> nomCom=principal.recuperar.recuperarNomComunidad(textField.getText());
+						for (int i = 0; i < nomCom.size(); i++) {
+							principal.comboBox.addItem(nomCom.get(i));
+						}						
+						setVisible(false);
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					
 				}
 				

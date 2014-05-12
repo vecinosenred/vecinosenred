@@ -6,7 +6,14 @@ import java.awt.EventQueue;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+
+import clases.*;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,18 +36,29 @@ import clases.Usuario;
 
 import javax.swing.JComboBox;
 
+import metodos.Eventos;
+import metodos.EventosAnuncios;
+import metodos.EventosCalendario;
+import metodos.EventosComunidad;
+import metodos.EventosCuentas;
+import metodos.EventosIncidencias;
+import metodos.EventosInstalaciones;
+import metodos.EventosLogin;
+import metodos.EventosMensajes;
+
 public class Principal extends JFrame{
 	JPanel panelLogin, PanelInicio,Mensajes,Incidencias;
 	public JButton anadirmensaje,anadirincidencia;
-	JMenuItem mntmLogin, mntmSalir;
+	public JMenuItem mntmLogin;
+	JMenuItem mntmSalir;
 	String titulosMensajes[] = { "De","Para", "Asunto", "Mensajes" };
 	String titulosIncidencias[] = { "ticket","Titulo","Estado","Fecha Creada"};
-	DefaultTableModel model,modelo;
-	JTable tablamensajes,tablaincidencias;
-	static Usuario logueado = new Usuario("usuario", "pass", "nombre", "domicilio");
-	static 	ArrayList<Mensaje> ListaMensajes= new ArrayList<Mensaje>();
-	static	ArrayList<Anuncio> ListaAnuncios= new ArrayList<Anuncio>();
-	static	ArrayList<Incidencia> ListaIncidencias= new ArrayList<Incidencia>();
+	public DefaultTableModel model,modelo;
+	public JTable tablamensajes,tablaincidencias;
+	public static Usuario logueado = new Usuario("usuario", "pass", "nombre", "domicilio");
+	public static 	ArrayList<Mensaje> ListaMensajes= new ArrayList<Mensaje>();
+	public static	ArrayList<Anuncio> ListaAnuncios= new ArrayList<Anuncio>();
+	public static	ArrayList<Incidencia> ListaIncidencias= new ArrayList<Incidencia>();
 	Recuperar recuperar;
 	JComboBox<String> comboBox;
 	Eventos principal;
@@ -79,7 +97,7 @@ public class Principal extends JFrame{
 		EveInstalaciones = new EventosInstalaciones(this);
 		EveMensajes = new EventosMensajes(this);
 		EveLogin = new EventosLogin(this);
-		
+			
 		
 		
 		JPanel panelmenu = new JPanel();
@@ -131,6 +149,7 @@ public class Principal extends JFrame{
 		JScrollPane scrollPanel = new JScrollPane();
 		scrollPanel.setBounds(0, 0, 790, 450);
 		Incidencias.add(scrollPanel);
+		modelo = new DefaultTableModel(null, titulosIncidencias);
 		tablaincidencias = new JTable(modelo);
 		scrollPanel.setViewportView(tablaincidencias);
 		anadirincidencia = new JButton();
@@ -160,6 +179,7 @@ public class Principal extends JFrame{
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(0, 0, 790, 450);
 		Mensajes.add(scrollPane);
+		model = new DefaultTableModel(null, titulosMensajes);
 		tablamensajes = new JTable(model);
 		scrollPane.setViewportView(tablamensajes);
 		anadirmensaje = new JButton();

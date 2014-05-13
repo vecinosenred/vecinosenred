@@ -6,16 +6,11 @@ import java.awt.EventQueue;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
-import clases.*;
-
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -28,14 +23,6 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-import BD.Recuperar;
-import clases.Anuncio;
-import clases.Incidencia;
-import clases.Mensaje;
-import clases.Usuario;
-
-import javax.swing.JComboBox;
-
 import metodos.Eventos;
 import metodos.EventosAnuncios;
 import metodos.EventosCalendario;
@@ -45,16 +32,22 @@ import metodos.EventosIncidencias;
 import metodos.EventosInstalaciones;
 import metodos.EventosLogin;
 import metodos.EventosMensajes;
+import BD.Recuperar;
+import clases.Anuncio;
+import clases.Incidencia;
+import clases.Mensaje;
+import clases.Usuario;
 
 public class Principal extends JFrame{
-	JPanel panelLogin, PanelInicio,Mensajes,Incidencias;
-	public JButton anadirmensaje,anadirincidencia;
+	public JPanel panelLogin, PanelInicio,Mensajes,Incidencias,Calendario;
+	public JButton anadirmensaje,anadirincidencia,anadirAnuncio;
 	public JMenuItem mntmLogin;
 	JMenuItem mntmSalir;
 	String titulosMensajes[] = { "De","Para", "Asunto", "Mensajes" };
-	String titulosIncidencias[] = { "ticket","Titulo","Estado","Fecha Creada"};
-	public DefaultTableModel model,modelo;
-	public JTable tablamensajes,tablaincidencias;
+	String titulosIncidencias[] = { "Ticket","Titulo","Estado","Fecha Creada"};
+	String titulosAnuncios[] = { "Ticket","Titulo","Anuncio","Fecha Creada",""};
+	public DefaultTableModel modeloMensajes,modeloIncidencias,modeloAnuncios;
+	public JTable tablamensajes,tablaincidencias,tablaAnuncios;
 	public static Usuario logueado = new Usuario("usuario", "pass", "nombre", "domicilio");
 	public static 	ArrayList<Mensaje> ListaMensajes= new ArrayList<Mensaje>();
 	public static	ArrayList<Anuncio> ListaAnuncios= new ArrayList<Anuncio>();
@@ -78,6 +71,15 @@ public class Principal extends JFrame{
 	public void setRecuperar(Recuperar recuperar) {
 		this.recuperar = recuperar;
 	}
+	
+	public static Usuario getLogueado() {
+		return logueado;
+	}
+
+	public static void setLogueado(Usuario logueado) {
+		Principal.logueado = logueado;
+	}
+
 
 	public Principal(){
 		
@@ -88,7 +90,7 @@ public class Principal extends JFrame{
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
-		principal = new Eventos(this);
+		principal = new Eventos(this,logueado.getUsuario());
 		Eveanuncios = new EventosAnuncios(this);
 		EveCalendario = new EventosCalendario(this);
 		EveComunidad = new EventosComunidad(this);
@@ -135,10 +137,24 @@ public class Principal extends JFrame{
 		PanelInicio.add(PanelPrincipal);
 		//Panel Anuncios
 		JPanel Anuncios = new JPanel();
+		Anuncios.setBounds(0, 0, 794, 450);
+		Anuncios.setLayout(null);
+		Anuncios.setBorder(null);
+		JScrollPane scrollAn = new JScrollPane();
+		scrollAn.setBounds(0, 0, 790, 450);
+		Anuncios.add(scrollAn);
+		modeloAnuncios = new DefaultTableModel(null, titulosAnuncios);
+		tablaAnuncios = new JTable(modeloAnuncios);
+		scrollAn.setViewportView(tablaAnuncios);
+		anadirAnuncio = new JButton();
+		anadirAnuncio.setText("nuevo mensaje");
+		anadirAnuncio.setBounds(650, 450, 125, 20);
+		Anuncios.add(anadirAnuncio);
 		PanelPrincipal.addTab("Anuncios", null, Anuncios, "Anuncios");
 		
 		//Panel Calendario
-		JPanel Calendario = new JPanel();
+		Calendario = new JPanel();
+		
 		PanelPrincipal.addTab("Calendario", null, Calendario, "Calendario");
 		
 		//Panel incidencias
@@ -149,8 +165,8 @@ public class Principal extends JFrame{
 		JScrollPane scrollPanel = new JScrollPane();
 		scrollPanel.setBounds(0, 0, 790, 450);
 		Incidencias.add(scrollPanel);
-		modelo = new DefaultTableModel(null, titulosIncidencias);
-		tablaincidencias = new JTable(modelo);
+		modeloIncidencias = new DefaultTableModel(null, titulosIncidencias);
+		tablaincidencias = new JTable(modeloIncidencias);
 		scrollPanel.setViewportView(tablaincidencias);
 		anadirincidencia = new JButton();
 		anadirincidencia.setText("nuevo mensaje");
@@ -179,8 +195,8 @@ public class Principal extends JFrame{
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(0, 0, 790, 450);
 		Mensajes.add(scrollPane);
-		model = new DefaultTableModel(null, titulosMensajes);
-		tablamensajes = new JTable(model);
+		modeloMensajes = new DefaultTableModel(null, titulosMensajes);
+		tablamensajes = new JTable(modeloMensajes);
 		scrollPane.setViewportView(tablamensajes);
 		anadirmensaje = new JButton();
 		anadirmensaje.setText("nuevo mensaje");
@@ -197,8 +213,8 @@ public class Principal extends JFrame{
 		panelLogin.setLayout(null);
 		panelLogin.setMinimumSize(new Dimension(0, 0));
 		panelLogin.setBorder(null);
-		modelo = new DefaultTableModel(null, titulosIncidencias);
-		model = new DefaultTableModel(null, titulosMensajes);
+		modeloIncidencias = new DefaultTableModel(null, titulosIncidencias);
+		modeloMensajes = new DefaultTableModel(null, titulosMensajes);
 
 		JPanel barrainferior = new JPanel();
 		barrainferior.setBounds(0, 520, 794, 50);
@@ -217,6 +233,17 @@ public class Principal extends JFrame{
 						recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
 				principal.llenarlistaIncidencias(recuperar.getIncidencias(),
 						recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
+				try {
+					principal.llenarlistaAnuncios(recuperar.getAnuncios(),
+							recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
+					principal.mostrarCalendario(recuperar.getRecordatorios(), 
+							recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
+
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 				
 			}
 		});

@@ -105,6 +105,7 @@ public class Login extends JFrame {
 					
 					try {
 						principal.setRecuperar(new Recuperar(textField.getText()));
+						principal.setLogueado(principal.recuperar.getUsuarios().get(0));
 						ArrayList<String> nomCom=principal.recuperar.recuperarNomComunidad(textField.getText());
 						for (int i = 0; i < nomCom.size(); i++) {
 							principal.comboBox.addItem(nomCom.get(i));

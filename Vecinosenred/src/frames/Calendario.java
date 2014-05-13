@@ -1,16 +1,51 @@
 package frames;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
 
-import com.toedter.calendar.JCalendar;
-
-import java.util.*;
-import java.util.zip.*;
-import java.io.*;
+import BD.Actualizar;
+import BD.Introducir;
+import clases.Recordatorio;
 
 public class Calendario extends JPanel implements ActionListener {
 
@@ -21,6 +56,10 @@ public class Calendario extends JPanel implements ActionListener {
 	private JTable table;
 	private JFrame marco;
 	private JTextArea actividadT;
+	private ArrayList<Recordatorio> rec;
+	private int id_com;
+	private Actualizar actualizar=new Actualizar();
+	private Introducir introducir=new Introducir();
 
 	String dias[] = {"Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"};
 	String di[] = {"Lun","Mar","Mie","Jue","Vie","Sab","Dom"};
@@ -40,8 +79,10 @@ public class Calendario extends JPanel implements ActionListener {
 	int buffer = 2048;
 
 
-	public Calendario() {
+	public Calendario(ArrayList<Recordatorio> rec,int id_com) {
 
+		this.rec=rec;
+		this.id_com=id_com;
 
 //		Container c = get
 //		c.setLayout(new FlowLayout());
@@ -734,58 +775,32 @@ public class Calendario extends JPanel implements ActionListener {
 		try {
 
 			if(espaciosLlenos()) {
+				
+				 SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
+				 Date fech = null;
+				 try {
 
-				guardarCantidad();
+				     fech = formatoDelTexto.parse(String.valueOf(anoTemporal)+"-"+String.valueOf(mesTemporal)+"-"
+				     +identificarDato(datoSeleccionado));
 
-				String dat = "";
-				String filenametxt = String.valueOf("recordatorio"+cantidadArchivos+".txt");
-				String filenamezip = String.valueOf("recordatorio"+cantidadArchivos+".zip");
+				 } catch (ParseException ex) {
 
-				cantidadArchivos++;
+				     ex.printStackTrace();
 
-				dat += identificarDato(datoSeleccionado) + "\n";
-				dat += String.valueOf(mesTemporal) + "\n";
-				dat += String.valueOf(anoTemporal) + "\n";
-				dat += horaT.getText() + "\n";
-				dat += lugarT.getText() + "\n";
-				dat += actividadT.getText() + "\n";
+				 }
+				 
+				 SimpleDateFormat formatoDelTextoHora = new SimpleDateFormat("yyyy-MM-dd");
+				 Time fecFormatoTime = null;
+				 try {
+				       formatoDelTextoHora = new SimpleDateFormat("hh:mm:ss", new Locale("es", "ES"));
+				       fecFormatoTime = new Time(formatoDelTextoHora.parse(horaT.getText()).getTime());
+				 } catch (Exception ex) {
+					 ex.printStackTrace();
+				}
+				introducir.introducir("INSERT INTO MARC_MARCAS_CALENDARIO (MARC_ID_COMUNIDAD, MARC_FECHA, MARC_HORA, MARC_LUGAR, MARC_EVENTO)"
+						+ " VALUES('"+id_com+"','"+formatoDelTexto.format(fech)+"','"+formatoDelTextoHora.format(fecFormatoTime)+"','"+lugarT.getText()+"','"+actividadT.getText()+"')");			
 
-				File archivo = new File(filenametxt);
-
-				FileWriter fw = new FileWriter(archivo);
-
-				BufferedWriter bw = new BufferedWriter(fw);
-
-				PrintWriter salida = new PrintWriter(bw);
-
-				salida.print(dat);
-				salida.close();
-
-				BufferedInputStream origin = null;
-
-				FileOutputStream dest = new FileOutputStream(filenamezip);
-
-				ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
-
-				byte data[] = new byte[buffer];
-
-				File f = new File(filenametxt);
-
-				FileInputStream fi = new FileInputStream(f);
-
-				origin = new BufferedInputStream(fi, buffer);
-
-				ZipEntry entry = new ZipEntry(filenametxt);
-
-				out.putNextEntry(entry);
-
-				int count;
-
-				while((count = origin.read(data,0,buffer)) != -1)
-				out.write(data,0,count);
-
-				out.close();
-
+				
 				JOptionPane.showMessageDialog(null,"El recordatorio ha sido guardado con exito",
 				"Recordatorio Guardado",JOptionPane.INFORMATION_MESSAGE);
 
@@ -820,144 +835,49 @@ public class Calendario extends JPanel implements ActionListener {
 
 	}// establecerMarca
 
-	public void guardarCantidad() { // Guarda en un archivo la cantidad de archivos con recordatorios que han sido generados
-
-		try {
-
-			String can = String.valueOf(cantidadArchivos);
-
-			File archivo = new File("cantidadArchivos.txt");
-
-			FileWriter fw = new FileWriter(archivo);
-
-			BufferedWriter bw = new BufferedWriter(fw);
-
-			PrintWriter salida = new PrintWriter(bw);
-
-			salida.print(can);
-			salida.close();
-
-			BufferedInputStream origin = null;
-
-			FileOutputStream dest = new FileOutputStream("cantidadArchivos.zip");
-
-			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
-
-			byte data[] = new byte[buffer];
-
-			File f = new File("cantidadArchivos.txt");
-
-			FileInputStream fi = new FileInputStream(f);
-
-			origin = new BufferedInputStream(fi, buffer);
-
-			ZipEntry entry = new ZipEntry("cantidadArchivos.txt");
-
-			out.putNextEntry(entry);
-
-			int count;
-
-			while((count = origin.read(data,0,buffer)) != -1)
-			out.write(data,0,count);
-
-			out.close();
-
-		}// try
-
-		catch(Exception e) {
-
-			JOptionPane.showMessageDialog(null,"Error en: "+e.toString(),"Error",
-			JOptionPane.ERROR_MESSAGE);
-
-		}// catch
-
-	}// guardarCantidad
-
+	
 	public void verRecordatorio() { // Lee desde los archivos con recordatorios y extrae su informacion
 
 		try {
 
-			cantidadArchivos = obtenerCantidad() + 1;
+//			cantidadArchivos = obtenerCantidad() + 1;
 
 			boolean existe = false;
 
-			String filenametxt = "";
-			String filenamezip = "";
+//			String filenametxt = "";
+//			String filenamezip = "";
 			String hora = "";
 			String lugar = "";
 			String actividad = "";
-			String linea = "";
-
-			int dia = 0;
-			int mes = 0;
-			int ano = 0;
-
-			for(int i = 1; i < cantidadArchivos; i++) {
-
-				filenamezip = "recordatorio"+i+".zip";
-				filenametxt = "recordatorio"+i+".txt";
-
-				BufferedOutputStream dest = null;
-
-				BufferedInputStream is = null;
-
-				ZipEntry entry;
-
-				ZipFile zipfile = new ZipFile(filenamezip);
-
-				Enumeration e = zipfile.entries();
-
-				while(e.hasMoreElements()) {
-
-					entry = (ZipEntry) e.nextElement();
-
-					is = new BufferedInputStream(zipfile.getInputStream(entry));
-
-					int count;
-
-					byte data[] = new byte[buffer];
-
-					FileOutputStream fos = new FileOutputStream(entry.getName());
-
-					dest = new BufferedOutputStream(fos, buffer);
-
-					while((count = is.read(data,0,buffer)) != -1)
-					dest.write(data,0,count);
-
-					dest.flush();
-					dest.close();
-
-					is.close();
-
-				}// while
-
-				DataInputStream input = new DataInputStream(new FileInputStream(filenametxt));
-
-				dia = Integer.parseInt(input.readLine());
-				mes = Integer.parseInt(input.readLine());
-				ano = Integer.parseInt(input.readLine());
-
-				if(dia == Integer.parseInt(identificarDato(datoSeleccionado))) {
-
-					existe = true;
-
-					hora = input.readLine();
-					lugar = input.readLine();
-
-					while((linea = input.readLine()) != null)
-					actividad += linea + "\n";
+//			String linea = "";	
+			
+			
+			SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
+			Date fech = null;
+			try {
+	
+				fech = formatoDelTexto.parse(String.valueOf(anoTemporal)+"-"+String.valueOf(mesTemporal)+"-"
+			    +identificarDato(datoSeleccionado));
+	
+			} catch (ParseException ex) {
+	
+			     ex.printStackTrace();
+	
+			}
+			
+			for (int i = 0; i < rec.size(); i++) {				
+				if(formatoDelTexto.format(rec.get(i).getFecha()).equals(formatoDelTexto.format(fech))){
+					hora = String.valueOf(rec.get(i).getHora());
+					lugar = rec.get(i).getLugar();
+					actividad = rec.get(i).getRecordatorio();
 
 					verRecordatorioInterfaz(hora,lugar,actividad);
 
 					hora = "";
 					lugar = "";
 					actividad = "";
-
-				}// if
-
-				input.close();
-
-			}// for
+				}				
+			}
 
 			if(!existe)
 			JOptionPane.showMessageDialog(null,"No existe un recordatorio guardado\n"+
@@ -1033,62 +953,7 @@ public class Calendario extends JPanel implements ActionListener {
 			marco.show();
 
 	}// verRecordatorioInterfaz
-
-	public int obtenerCantidad() { // Lee desde el archivo cantidadArchivos.zip la cantidad de archivos que han sido generados
-
-		try {
-
-			BufferedOutputStream dest = null;
-
-			BufferedInputStream is = null;
-
-			ZipEntry entry;
-
-			ZipFile zipfile = new ZipFile("cantidadArchivos.zip");
-
-			Enumeration e = zipfile.entries();
-
-			while(e.hasMoreElements()) {
-
-				entry = (ZipEntry) e.nextElement();
-
-				is = new BufferedInputStream(zipfile.getInputStream(entry));
-
-				int count;
-
-				byte data[] = new byte[buffer];
-
-				FileOutputStream fos = new FileOutputStream(entry.getName());
-
-				dest = new BufferedOutputStream(fos, buffer);
-
-				while((count = is.read(data,0,buffer)) != -1)
-				dest.write(data,0,count);
-
-				dest.flush();
-				dest.close();
-
-				is.close();
-
-			}// while
-
-			DataInputStream input = new DataInputStream(new FileInputStream("cantidadArchivos.txt"));
-
-			int a = Integer.parseInt(input.readLine());
-
-			input.close();
-
-			return(a);
-
-		}// try
-
-		catch(Exception e) {
-
-			return(0);
-
-		}// catch
-
-	}// obtenerCantidad
+	
 
 	public boolean chequearMarca(int a, int m, int d) { // Retorna true si el dia a mostrar en la tabla tiene un recordatorio
 
@@ -1096,66 +961,19 @@ public class Calendario extends JPanel implements ActionListener {
 
 		try {
 
-			cantidadArchivos = obtenerCantidad() + 1;
-
-			String filenametxt = "";
-			String filenamezip = "";
-
-			int dia = 0;
-			int mes = 0;
-			int ano = 0;
-
-			for(int i = 1; i < cantidadArchivos; i++) {
-
-				filenamezip = "recordatorio"+i+".zip";
-				filenametxt = "recordatorio"+i+".txt";
-
-				BufferedOutputStream dest = null;
-
-				BufferedInputStream is = null;
-
-				ZipEntry entry;
-
-				ZipFile zipfile = new ZipFile(filenamezip);
-
-				Enumeration e = zipfile.entries();
-
-				while(e.hasMoreElements()) {
-
-					entry = (ZipEntry) e.nextElement();
-
-					is = new BufferedInputStream(zipfile.getInputStream(entry));
-
-					int count;
-
-					byte data[] = new byte[buffer];
-
-					FileOutputStream fos = new FileOutputStream(entry.getName());
-
-					dest = new BufferedOutputStream(fos, buffer);
-
-					while((count = is.read(data,0,buffer)) != -1)
-					dest.write(data,0,count);
-
-					dest.flush();
-					dest.close();
-
-					is.close();
-
-				}// while
-
-				DataInputStream input = new DataInputStream(new FileInputStream(filenametxt));
-
-				dia = Integer.parseInt(input.readLine());
-				mes = Integer.parseInt(input.readLine());
-				ano = Integer.parseInt(input.readLine());
-
-				if(ano == a && mes == m && dia == d)
-				existe = true;
-
-				input.close();
-
-			}// for
+			SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
+			 Date fech = null;
+			 try {
+			     fech = formatoDelTexto.parse(a+"-"+m+"-"+d);
+			 } catch (ParseException ex) {
+			     ex.printStackTrace();
+			 }
+			
+			for (int i = 0; i < rec.size(); i++) {
+				if(formatoDelTexto.format(rec.get(i).getFecha()).equals(formatoDelTexto.format(fech))){
+					existe=true;
+				}
+			}
 
 		}// try
 

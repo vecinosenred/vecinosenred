@@ -12,12 +12,14 @@ import clases.Incidencia;
 import clases.Instalacion;
 import clases.Mensaje;
 import clases.Movimiento;
+import clases.Recordatorio;
 import clases.Usuario;
 
 public class Recuperar{
 	
 	private Statement st;
 	private ResultSet rs;
+	private String id_usu;
 	private ArrayList<ComunidadUsuario> com_usu=new ArrayList<ComunidadUsuario>();
 	private ArrayList<Usuario> usuarios=new ArrayList<Usuario>();
 	private ArrayList<Comunidad> comunidades=new ArrayList<Comunidad>();
@@ -25,10 +27,12 @@ public class Recuperar{
 	private ArrayList<Anuncio> anuncios=new ArrayList<Anuncio>();
 	private ArrayList<Incidencia> incidencias=new ArrayList<Incidencia>();
 	private ArrayList<Mensaje> mensajes=new ArrayList<Mensaje>();
-	private ArrayList<Instalacion> instalaciones=new ArrayList<Instalacion>();	
+	private ArrayList<Instalacion> instalaciones=new ArrayList<Instalacion>();
+	private ArrayList<Recordatorio> recordatorios=new ArrayList<Recordatorio>();
 	private Conectar c=new Conectar();
 	
 	public Recuperar(String id_usu) throws ClassNotFoundException, SQLException{
+		this.id_usu=id_usu;
 		c.conectar();
 		st=c.getConexion().createStatement();
 		
@@ -95,6 +99,16 @@ public class Recuperar{
 			}			
 		}
 		
+		for (int i = 0; i < com_usu.size(); i++) {
+			rs=st.executeQuery("SELECT * FROM MARC_MARCAS_CALENDARIO WHERE MARC_ID_COMUNIDAD="+com_usu.get(i).getId_comunidades());		
+			while(rs.next()){
+				Recordatorio rec= new Recordatorio(rs.getInt(1), rs.getInt(2), rs.getDate(3), rs.getTime(4), rs.getString(5),rs.getString(6));
+				recordatorios.add(rec);
+			}			
+		}
+		
+		
+		
 		c.desconectar();
 	}
 	
@@ -134,6 +148,10 @@ public class Recuperar{
 		return mensajes;
 	}
 	
+	public ArrayList<Recordatorio> getRecordatorios(){
+		return recordatorios;
+	}
+	
 	public ResultSet recuperarColumna(String query) throws ClassNotFoundException, SQLException{
 		
 		c.conectar();
@@ -153,6 +171,113 @@ public class Recuperar{
 		
 		return rs;
 		
+	}
+	
+	public void RefrescarArray(String array) throws ClassNotFoundException, SQLException{
+		c.conectar();
+		st=c.getConexion().createStatement();
+		
+		switch (array) {
+		case "usuarios":
+			usuarios.clear();
+			rs=st.executeQuery("SELECT * FROM LOGUSU_LOGIN_USUARIOS WHERE LOGUSU_ID='"+id_usu+"'");		
+			while(rs.next()){
+				Usuario usu=new Usuario(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4));
+				usuarios.add(usu);
+			}			
+			break;
+			
+		case "com_usu":
+			com_usu.clear();
+			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO='"+id_usu+"'");		
+			while(rs.next()){
+//				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
+				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 
+						rs.getInt("COMUSU_ADMINISTRADOR"), rs.getString("COMUSU_NUM_CUENTA"), rs.getString("COMUSU_PISO"));
+
+				com_usu.add(comusu);
+			}		
+			break;
+			
+		case "comunidades":
+			comunidades.clear();
+			for (int i = 0; i < com_usu.size(); i++) {
+				rs=st.executeQuery("SELECT * FROM COM_COMUNIDADES");		
+				while(rs.next()){
+					Comunidad com= new Comunidad(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
+					comunidades.add(com);
+				}
+			}
+			break;
+			
+		case "movimientos":
+			movimientos.clear();
+			rs=st.executeQuery("SELECT * FROM MOVCUE_MOVIMIENTOS_CUENTAS WHERE MOVCUE_ID_USUARIO='"+id_usu+"'");		
+			while(rs.next()){
+				Movimiento mov=new Movimiento(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), 
+						rs.getInt(5), rs.getInt(6));
+				movimientos.add(mov);
+			}	
+			break;
+
+		case "anuncios":
+			anuncios.clear();
+			for (int i = 0; i < com_usu.size(); i++) {
+				rs=st.executeQuery("SELECT * FROM TABANU_TABLON_ANUNCIOS WHERE TABANU_ID_COMUNIDAD="+com_usu.get(i).getId_comunidades());		
+				while(rs.next()){
+					Anuncio anun= new Anuncio(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getDate(6));
+					anuncios.add(anun);
+				}			
+			}
+			break;
+			
+		case "incidencias":
+			incidencias.clear();
+			for (int i = 0; i < com_usu.size(); i++) {
+				rs=st.executeQuery("SELECT * FROM INCI_INCIDENCIAS WHERE INCI_ID_COMUNIDAD="+com_usu.get(i).getId_comunidades());		
+				while(rs.next()){
+					Incidencia inci= new Incidencia(rs.getInt(1), rs.getInt(2), rs.getString(3), 
+							rs.getString(4), rs.getString(5),rs.getInt(6), rs.getDate(7));
+					incidencias.add(inci);
+				}			
+			}
+			break;
+			
+		case "mensajes":
+			mensajes.clear();
+			rs=st.executeQuery("SELECT * FROM MENS_MENSAJES WHERE MENS_ID_USUARIO='"+id_usu+"'");		
+			while(rs.next()){
+				Mensaje men=new Mensaje(rs.getString(1), rs.getInt(2), rs.getString(3), rs.getString(4), 
+						rs.getString(5), rs.getDate(6));
+				mensajes.add(men);
+			}
+			break;
+			
+		case "instalaciones":
+			instalaciones.clear();
+			for (int i = 0; i < com_usu.size(); i++) {
+				rs=st.executeQuery("SELECT * FROM INST_INSTALACIONES WHERE INST_ID_COMUNIDAD="+com_usu.get(i).getId_comunidades());		
+				while(rs.next()){
+					Instalacion inst= new Instalacion(rs.getInt(1), rs.getInt(2), rs.getString(3), 
+							rs.getInt(4), rs.getString(5),rs.getInt(6), rs.getString(7),rs.getInt(8));
+					instalaciones.add(inst);
+				}			
+			}
+			break;
+			
+		case "recordatorios":
+			recordatorios.clear();
+			for (int i = 0; i < com_usu.size(); i++) {
+				rs=st.executeQuery("SELECT * FROM MARC_MARCAS_CALENDARIO WHERE MARC_ID_COMUNIDAD="+com_usu.get(i).getId_comunidades());		
+				while(rs.next()){
+					Recordatorio rec= new Recordatorio(rs.getInt(1), rs.getInt(2), rs.getDate(3), rs.getTime(4), rs.getString(5),rs.getString(6));
+					recordatorios.add(rec);
+				}			
+			}
+			break;
+		}		
+		
+		c.desconectar();
 	}
 	
 	public ArrayList<String> recuperarNomComunidad(String usuario){

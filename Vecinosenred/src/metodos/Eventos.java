@@ -128,24 +128,6 @@ public class Eventos implements ActionListener {
 		gui.Calendario.validate();
 		gui.Calendario.repaint();
 		
-		
-//		Object[] fila = new Object[gui.modeloAnuncios.getColumnCount()];
-//		for (int i = 0; i < gui.ListaAnuncios.size(); i++) {
-//			if(gui.ListaAnuncios.get(i).getId_comunidad()==id_com){
-//				fila[0]=gui.ListaAnuncios.get(i).getId_mensaje();
-//				fila[1]=gui.ListaAnuncios.get(i).getTitulo();
-//				fila[2]=gui.ListaAnuncios.get(i).getMensaje();
-//				fila[3]=gui.ListaAnuncios.get(i).getFecha_creacion();
-//				fila[4]="Eliminar";
-//				gui.modeloAnuncios.addRow(fila);
-//				gui.tablaAnuncios.getColumn("").setCellRenderer(new ButtonRenderer());
-//				gui.tablaAnuncios.getColumn("").setCellEditor(
-//						new ButtonEditor(new JCheckBox(),gui.ListaAnuncios.get(i).getId_mensaje(), id_usuario));
-//				gui.tablaAnuncios.setModel(gui.modeloAnuncios);
-//				gui.tablaAnuncios.validate();
-//				gui.tablaAnuncios.repaint();
-//			}
-//		}	
 	}
 
 	@Override

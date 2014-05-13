@@ -7,26 +7,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -45,6 +32,7 @@ import javax.swing.table.DefaultTableModel;
 
 import BD.Actualizar;
 import BD.Introducir;
+import BD.Recuperar;
 import clases.Recordatorio;
 
 public class Calendario extends JPanel implements ActionListener {
@@ -60,7 +48,7 @@ public class Calendario extends JPanel implements ActionListener {
 	private int id_com;
 	private Actualizar actualizar=new Actualizar();
 	private Introducir introducir=new Introducir();
-
+	
 	String dias[] = {"Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"};
 	String di[] = {"Lun","Mar","Mie","Jue","Vie","Sab","Dom"};
 	String meses[] = {"ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"};
@@ -77,7 +65,7 @@ public class Calendario extends JPanel implements ActionListener {
 	int filaSeleccionada = 0;
 	int cantidadArchivos = 1;
 	int buffer = 2048;
-
+	
 
 	public Calendario(ArrayList<Recordatorio> rec,int id_com) {
 
@@ -208,9 +196,10 @@ public class Calendario extends JPanel implements ActionListener {
 
 		}// if
 
-		if(e.getSource() == guardar)
-		guardarRecordatorio();
-
+		if(e.getSource() == guardar){
+			
+			guardarRecordatorio();
+		}
 	}// actionPerformed
 
 	public String establecerHora() { // Obtiene la hora del sistema
@@ -792,11 +781,12 @@ public class Calendario extends JPanel implements ActionListener {
 				 SimpleDateFormat formatoDelTextoHora = new SimpleDateFormat("yyyy-MM-dd");
 				 Time fecFormatoTime = null;
 				 try {
-				       formatoDelTextoHora = new SimpleDateFormat("hh:mm:ss", new Locale("es", "ES"));
+				       formatoDelTextoHora = new SimpleDateFormat("HH:mm:ss", new Locale("es", "ES"));
 				       fecFormatoTime = new Time(formatoDelTextoHora.parse(horaT.getText()).getTime());
 				 } catch (Exception ex) {
 					 ex.printStackTrace();
 				}
+				 System.out.println(formatoDelTextoHora.format(fecFormatoTime));
 				introducir.introducir("INSERT INTO MARC_MARCAS_CALENDARIO (MARC_ID_COMUNIDAD, MARC_FECHA, MARC_HORA, MARC_LUGAR, MARC_EVENTO)"
 						+ " VALUES('"+id_com+"','"+formatoDelTexto.format(fech)+"','"+formatoDelTextoHora.format(fecFormatoTime)+"','"+lugarT.getText()+"','"+actividadT.getText()+"')");			
 
@@ -840,16 +830,11 @@ public class Calendario extends JPanel implements ActionListener {
 
 		try {
 
-//			cantidadArchivos = obtenerCantidad() + 1;
 
 			boolean existe = false;
-
-//			String filenametxt = "";
-//			String filenamezip = "";
 			String hora = "";
 			String lugar = "";
 			String actividad = "";
-//			String linea = "";	
 			
 			
 			SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
@@ -866,7 +851,8 @@ public class Calendario extends JPanel implements ActionListener {
 			}
 			
 			for (int i = 0; i < rec.size(); i++) {				
-				if(formatoDelTexto.format(rec.get(i).getFecha()).equals(formatoDelTexto.format(fech))){
+				if(formatoDelTexto.format(rec.get(i).getFecha()).equals(formatoDelTexto.format(fech)) && 
+						rec.get(i).getId_comunidad()==id_com){
 					hora = String.valueOf(rec.get(i).getHora());
 					lugar = rec.get(i).getLugar();
 					actividad = rec.get(i).getRecordatorio();
@@ -876,6 +862,7 @@ public class Calendario extends JPanel implements ActionListener {
 					hora = "";
 					lugar = "";
 					actividad = "";
+					existe=true;
 				}				
 			}
 
@@ -970,7 +957,8 @@ public class Calendario extends JPanel implements ActionListener {
 			 }
 			
 			for (int i = 0; i < rec.size(); i++) {
-				if(formatoDelTexto.format(rec.get(i).getFecha()).equals(formatoDelTexto.format(fech))){
+				if(formatoDelTexto.format(rec.get(i).getFecha()).equals(formatoDelTexto.format(fech)) && 
+						rec.get(i).getId_comunidad()==id_com){
 					existe=true;
 				}
 			}

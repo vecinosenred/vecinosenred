@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -24,11 +23,9 @@ public class Login extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
-	private int usuario=1;
 	private int erroneo=0;
 	private int tipoUsuario=0;
 	private JPasswordField passwordField;
-	private JTextField textField_1;
 	JComboBox<String> jcb;
 	Principal principal;
 
@@ -76,11 +73,6 @@ public class Login extends JFrame {
 		lblElUsuarioO.setVisible(false);
 		contentPane.add(lblElUsuarioO);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(102, 197, 242, 22);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
-		
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.setBounds(308, 257, 97, 25);
 		btnAceptar.addActionListener(new ActionListener() {
@@ -92,9 +84,7 @@ public class Login extends JFrame {
 				for (int i = 0; i < passwordField.getPassword().length; i++) {
 					pass=pass+passwordField.getPassword()[i];
 				}
-				
-				textField_1.setText(textField.getText()+" "+pass);
-				
+								
 				ComprobarUsuario cu= new ComprobarUsuario(textField.getText(),pass);
 				
 				tipoUsuario=cu.comprobar();
@@ -105,17 +95,15 @@ public class Login extends JFrame {
 					
 					try {
 						principal.setRecuperar(new Recuperar(textField.getText()));
-						principal.setLogueado(principal.recuperar.getUsuarios().get(0));
+						principal.setLogueado(principal.recuperar.getUsuarioLog());
 						ArrayList<String> nomCom=principal.recuperar.recuperarNomComunidad(textField.getText());
 						for (int i = 0; i < nomCom.size(); i++) {
 							principal.comboBox.addItem(nomCom.get(i));
 						}						
 						setVisible(false);
 					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					

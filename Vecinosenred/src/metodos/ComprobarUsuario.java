@@ -20,8 +20,6 @@ public class ComprobarUsuario {
 	public int comprobar(){
 		int tipo=0;
 		
-		System.out.println(usuario+" "+pass);
-		
 		if(compUsuario()==true){
 			if(compPass()==true){
 				tipo=1;
@@ -43,20 +41,16 @@ public class ComprobarUsuario {
 			
 			while(rs.next()){
 				check=rs.getString(1);
-				System.out.println(rs.getString(1));
 				if(check.equals(usuario)){					
 						existe=true;
-						System.out.println(existe);
 				}
 			}			
 
 			c.desconectar();
 			
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -76,16 +70,13 @@ public class ComprobarUsuario {
 			String check=rs.getString(1);
 			if(check.equals(pass)){
 				existe=true;
-				System.out.println(existe);
 			}			
 
 			c.desconectar();
 			
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

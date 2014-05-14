@@ -43,8 +43,8 @@ public class Principal extends JFrame{
 	public JButton anadirmensaje,anadirincidencia,anadirAnuncio;
 	public JMenuItem mntmLogin;
 	JMenuItem mntmSalir;
-	String titulosMensajes[] = { "De","Para", "Asunto", "Mensajes" };
-	String titulosIncidencias[] = { "Ticket","Titulo","Estado","Fecha Creada"};
+	String titulosMensajes[] = { "De","Para", "Asunto", "Mensajes","" };
+	String titulosIncidencias[] = { "Ticket","Titulo","Estado","Fecha Creada",""};
 	String titulosAnuncios[] = { "Ticket","Titulo","Anuncio","Fecha Creada",""};
 	public DefaultTableModel modeloMensajes,modeloIncidencias,modeloAnuncios;
 	public JTable tablamensajes,tablaincidencias,tablaAnuncios;
@@ -52,7 +52,7 @@ public class Principal extends JFrame{
 	public static 	ArrayList<Mensaje> ListaMensajes= new ArrayList<Mensaje>();
 	public static	ArrayList<Anuncio> ListaAnuncios= new ArrayList<Anuncio>();
 	public static	ArrayList<Incidencia> ListaIncidencias= new ArrayList<Incidencia>();
-	Recuperar recuperar;
+	public Recuperar recuperar;
 	JComboBox<String> comboBox;
 	Eventos principal;
 	EventosAnuncios Eveanuncios;
@@ -135,6 +135,7 @@ public class Principal extends JFrame{
 		JTabbedPane PanelPrincipal = new JTabbedPane(JTabbedPane.TOP);
 		PanelPrincipal.setBounds(0, 0, 794, 500);
 		PanelInicio.add(PanelPrincipal);
+		
 		//Panel Anuncios
 		JPanel Anuncios = new JPanel();
 		Anuncios.setBounds(0, 0, 794, 450);

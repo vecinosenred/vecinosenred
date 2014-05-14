@@ -4,17 +4,26 @@ import java.sql.Date;
 
 public class Mensaje {
 	
-	private int id_comunidad;
+	private int id_comunidad,id_mensaje;
 	private String id_usuario,id_destinatario,asunto,mensaje;
 	private Date fecha;
 	
-	public Mensaje(String id_usuario,int id_comunidad,String id_destinatario,String asunto,String mensaje,Date fecha){
+	public Mensaje(int id_mensaje,String id_usuario,int id_comunidad,String id_destinatario,String asunto,String mensaje,Date fecha){
+		this.id_mensaje=id_mensaje;
 		this.id_usuario=id_usuario;
 		this.id_comunidad=id_comunidad;
 		this.id_destinatario=id_destinatario;
 		this.asunto=asunto;
 		this.mensaje=mensaje;
 		this.fecha=fecha;
+	}
+	
+	public int getId_mensaje() {
+		return id_mensaje;
+	}
+
+	public void setId_mensaje(int id_mensaje) {
+		this.id_mensaje = id_mensaje;
 	}
 
 	public int getId_comunidad() {
@@ -64,5 +73,6 @@ public class Mensaje {
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
+
 
 }

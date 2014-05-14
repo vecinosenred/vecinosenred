@@ -22,6 +22,7 @@ public class Recuperar implements Runnable{
 	private String id_usu;
 	private ArrayList<ComunidadUsuario> com_usu=new ArrayList<ComunidadUsuario>();
 	private ArrayList<Usuario> usuarios=new ArrayList<Usuario>();
+	private Usuario usuarioLog;
 	private ArrayList<Comunidad> comunidades=new ArrayList<Comunidad>();
 	private ArrayList<Movimiento> movimientos=new ArrayList<Movimiento>();
 	private ArrayList<Anuncio> anuncios=new ArrayList<Anuncio>();
@@ -40,12 +41,11 @@ public class Recuperar implements Runnable{
 		this.id_usu=id_usu;
 		c.conectar();
 		st=c.getConexion().createStatement();
-		
+				
 		rs=st.executeQuery("SELECT * FROM LOGUSU_LOGIN_USUARIOS WHERE LOGUSU_ID='"+id_usu+"'");		
 		while(rs.next()){
-			Usuario usu=new Usuario(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4));
-			usuarios.add(usu);
-		}
+			usuarioLog=new Usuario(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4));
+		}		
 		
 		rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO='"+id_usu+"'");		
 		while(rs.next()){
@@ -57,11 +57,19 @@ public class Recuperar implements Runnable{
 		}		
 
 		for (int i = 0; i < com_usu.size(); i++) {
-			rs=st.executeQuery("SELECT * FROM COM_COMUNIDADES");		
+			rs=st.executeQuery("SELECT * FROM LOGUSU_LOGIN_USUARIOS WHERE LOGUSU_ID IN "
+					+ "(SELECT COMUSU_ID_USUARIO FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_COMUNIDADES="+com_usu.get(i).getId_comunidades()+")");		
 			while(rs.next()){
-				Comunidad com= new Comunidad(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
-				comunidades.add(com);
+				Usuario usu=new Usuario(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4));
+				usuarios.add(usu);
 			}
+			
+		}
+		
+		rs=st.executeQuery("SELECT * FROM COM_COMUNIDADES");		
+		while(rs.next()){
+			Comunidad com= new Comunidad(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
+			comunidades.add(com);
 		}
 		
 		rs=st.executeQuery("SELECT * FROM MOVCUE_MOVIMIENTOS_CUENTAS WHERE MOVCUE_ID_USUARIO='"+id_usu+"'");		
@@ -90,8 +98,8 @@ public class Recuperar implements Runnable{
 		
 		rs=st.executeQuery("SELECT * FROM MENS_MENSAJES WHERE MENS_ID_USUARIO='"+id_usu+"'");		
 		while(rs.next()){
-			Mensaje men=new Mensaje(rs.getString(1), rs.getInt(2), rs.getString(3), rs.getString(4), 
-					rs.getString(5), rs.getDate(6));
+			Mensaje men=new Mensaje(rs.getInt(1),rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5), 
+					rs.getString(6), rs.getDate(7));
 			mensajes.add(men);
 		}
 		
@@ -157,6 +165,15 @@ public class Recuperar implements Runnable{
 		return recordatorios;
 	}
 	
+	public Usuario getUsuarioLog() {
+		return usuarioLog;
+	}
+
+	public void setUsuarioLog(Usuario usuarioLog) {
+		this.usuarioLog = usuarioLog;
+	}
+
+	
 	public ResultSet recuperarColumna(String query) throws ClassNotFoundException, SQLException{
 		
 		c.conectar();
@@ -185,10 +202,14 @@ public class Recuperar implements Runnable{
 		switch (array) {
 		case "usuarios":
 			usuarios.clear();
-			rs=st.executeQuery("SELECT * FROM LOGUSU_LOGIN_USUARIOS WHERE LOGUSU_ID='"+id_usu+"'");		
-			while(rs.next()){
-				Usuario usu=new Usuario(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4));
-				usuarios.add(usu);
+			for (int i = 0; i < com_usu.size(); i++) {
+				rs=st.executeQuery("SELECT * FROM LOGUSU_LOGIN_USUARIOS WHERE LOGUSU_ID IN "
+						+ "(SELECT COMUSU_ID_USUARIO FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_COMUNIDADES="+com_usu.get(i).getId_comunidades()+")");	
+				while(rs.next()){
+					Usuario usu=new Usuario(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4));
+					usuarios.add(usu);
+				}
+				
 			}			
 			break;
 			
@@ -252,8 +273,8 @@ public class Recuperar implements Runnable{
 			mensajes.clear();
 			rs=st.executeQuery("SELECT * FROM MENS_MENSAJES WHERE MENS_ID_USUARIO='"+id_usu+"'");		
 			while(rs.next()){
-				Mensaje men=new Mensaje(rs.getString(1), rs.getInt(2), rs.getString(3), rs.getString(4), 
-						rs.getString(5), rs.getDate(6));
+				Mensaje men=new Mensaje(rs.getInt(1),rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5), 
+						rs.getString(6), rs.getDate(7));
 				mensajes.add(men);
 			}
 			break;
@@ -290,10 +311,15 @@ public class Recuperar implements Runnable{
 		st=c.getConexion().createStatement();
 		
 			usuarios.clear();
-			rs=st.executeQuery("SELECT * FROM LOGUSU_LOGIN_USUARIOS WHERE LOGUSU_ID='"+id_usu+"'");		
-			while(rs.next()){
-				Usuario usu=new Usuario(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4));
-				usuarios.add(usu);
+			for (int i = 0; i < com_usu.size(); i++) {
+
+				rs=st.executeQuery("SELECT * FROM LOGUSU_LOGIN_USUARIOS WHERE LOGUSU_ID IN "
+						+ "(SELECT COMUSU_ID_USUARIO FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_COMUNIDADES="+com_usu.get(i).getId_comunidades()+")");
+				while(rs.next()){
+					Usuario usu=new Usuario(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4));
+					usuarios.add(usu);
+				}
+				
 			}
 			
 			com_usu.clear();
@@ -345,8 +371,8 @@ public class Recuperar implements Runnable{
 			mensajes.clear();
 			rs=st.executeQuery("SELECT * FROM MENS_MENSAJES WHERE MENS_ID_USUARIO='"+id_usu+"'");		
 			while(rs.next()){
-				Mensaje men=new Mensaje(rs.getString(1), rs.getInt(2), rs.getString(3), rs.getString(4), 
-						rs.getString(5), rs.getDate(6));
+				Mensaje men=new Mensaje(rs.getInt(1),rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5), 
+						rs.getString(6), rs.getDate(7));
 				mensajes.add(men);
 			}
 			
@@ -385,11 +411,12 @@ public class Recuperar implements Runnable{
 			while(rs.next()){
 				nomComunidad.add(rs.getString(1));
 			}
+
+			c.desconectar();
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
-		
 		return nomComunidad;
 	}
 

@@ -31,6 +31,7 @@ public class Conectar{
 	public void desconectar() throws SQLException{
 		
 		conexion.close();
+		System.out.println("desconectado");
 		
 	}
 

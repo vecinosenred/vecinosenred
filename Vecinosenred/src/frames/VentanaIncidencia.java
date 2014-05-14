@@ -4,26 +4,38 @@ package frames;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
-import javax.swing.border.LineBorder;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 
-import metodos.ComprobarUsuario;
+import BD.Introducir;
+import clases.Usuario;
 
-public class VentanaMensaje extends JDialog {
+public class VentanaIncidencia extends JDialog {
 	private JTextField textAsunto;
-	private JTextField textdestinatario;
 	private JTextField textRemitente;
 	private JTextArea txtareaMensaje;
+	
+	private int id_com;
+	private Usuario usu;
 
-	public VentanaMensaje() {
+	/**
+	 * @wbp.parser.constructor
+	 */
+	public VentanaIncidencia(int id_comunidad,Usuario usuario) {
+		
+		this.id_com=id_comunidad;
+		this.usu=usuario;
+		
 		getContentPane().setBackground(Color.WHITE);
 		setResizable(false);
-		setTitle("Mensaje");
+		setTitle("Incidencia");
 		setBackground(Color.GRAY);
 		setSize(500, 400);
 		setBounds(400, 300, 500, 400);
@@ -33,16 +45,12 @@ public class VentanaMensaje extends JDialog {
 		lblDe.setBounds(10, 11, 46, 14);
 		getContentPane().add(lblDe);
 
-		JLabel lblA = new JLabel("A:");
-		lblA.setBounds(10, 36, 46, 14);
-		getContentPane().add(lblA);
-
-		JLabel lblAsunto = new JLabel("Asunto:");
+		JLabel lblAsunto = new JLabel("Titulo:");
 		lblAsunto.setBounds(10, 61, 46, 14);
 		getContentPane().add(lblAsunto);
 
-		JLabel lblMensaje = new JLabel("Mensaje:");
-		lblMensaje.setBounds(10, 86, 46, 14);
+		JLabel lblMensaje = new JLabel("Descripción:");
+		lblMensaje.setBounds(10, 86, 105, 14);
 		getContentPane().add(lblMensaje);
 
 		txtareaMensaje = new JTextArea();
@@ -56,13 +64,8 @@ public class VentanaMensaje extends JDialog {
 		getContentPane().add(textAsunto);
 		textAsunto.setColumns(10);
 
-		textdestinatario = new JTextField();
-		textdestinatario.setBorder(new LineBorder(new Color(171, 173, 179)));
-		textdestinatario.setBounds(66, 33, 418, 20);
-		getContentPane().add(textdestinatario);
-		textdestinatario.setColumns(10);
-
 		textRemitente = new JTextField();
+		textRemitente.setText(usu.getNombre());
 		textRemitente.setBorder(new LineBorder(new Color(171, 173, 179)));
 		textRemitente.setBounds(66, 8, 418, 20);
 		getContentPane().add(textRemitente);
@@ -71,24 +74,30 @@ public class VentanaMensaje extends JDialog {
 
 		}
 
-		JButton btnEnviarMensaje = new JButton("Enviar Mensaje");
-		btnEnviarMensaje.setBounds(379, 272, 105, 23);
+		JButton btnEnviarMensaje = new JButton("Enviar Incidencia");
+		btnEnviarMensaje.setBounds(346, 272, 138, 23);
 		getContentPane().add(btnEnviarMensaje);
 		btnEnviarMensaje.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//añadir codigo para insertar mensaje en la base de datos
+				try {
+					enviarIncidencia(id_com, usu.getUsuario(), textAsunto.getText(), txtareaMensaje.getText());
+					setVisible(false);
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 
 	}
 
-	public VentanaMensaje(String Remitente, String Destinatario, String Asunto,
-			String Mensaje) {
+	public VentanaIncidencia(String Remitente, String Titulo, String Descripcion) {
 		getContentPane().setBackground(Color.WHITE);
 		setResizable(false);
-		setTitle("Mensaje");
+		setTitle("Incidencia");
 		setBackground(Color.GRAY);
 		setSize(500, 300);
 		setBounds(400, 300, 500, 300);
@@ -98,15 +107,11 @@ public class VentanaMensaje extends JDialog {
 		lblDe.setBounds(10, 11, 46, 14);
 		getContentPane().add(lblDe);
 
-		JLabel lblA = new JLabel("A:");
-		lblA.setBounds(10, 36, 46, 14);
-		getContentPane().add(lblA);
-
-		JLabel lblAsunto = new JLabel("Asunto:");
+		JLabel lblAsunto = new JLabel("Titulo:");
 		lblAsunto.setBounds(10, 61, 46, 14);
 		getContentPane().add(lblAsunto);
 
-		JLabel lblMensaje = new JLabel("Mensaje:");
+		JLabel lblMensaje = new JLabel("Descripción:");
 		lblMensaje.setBounds(10, 86, 46, 14);
 		getContentPane().add(lblMensaje);
 
@@ -121,27 +126,33 @@ public class VentanaMensaje extends JDialog {
 		getContentPane().add(textAsunto);
 		textAsunto.setColumns(10);
 
-		textdestinatario = new JTextField();
-		textdestinatario.setBorder(new LineBorder(new Color(171, 173, 179)));
-		textdestinatario.setBounds(66, 33, 418, 20);
-		getContentPane().add(textdestinatario);
-		textdestinatario.setColumns(10);
-
 		textRemitente = new JTextField();
 		textRemitente.setBorder(new LineBorder(new Color(171, 173, 179)));
 		textRemitente.setBounds(66, 8, 418, 20);
 		getContentPane().add(textRemitente);
 		textRemitente.setColumns(10);
-		{
-
-		}
-		textAsunto.setText(Asunto);
+		textAsunto.setText(Titulo);
 		textAsunto.setEditable(false);
-		textdestinatario.setText(Destinatario);
-		textdestinatario.setEditable(false);
 		textRemitente.setText(Remitente);
 		textRemitente.setEditable(false);
-		txtareaMensaje.setText(Mensaje);
+		txtareaMensaje.setText(Descripcion);
 		txtareaMensaje.setEditable(false);
+	}
+	
+	private void enviarIncidencia(int id_comunidad,String id_usuario,String titulo,String descripcion) 
+			throws ClassNotFoundException, SQLException{
+
+		String fechaTotal = String.valueOf(new Date());
+		String fechaActual=fechaTotal.substring(fechaTotal.length() - 4, fechaTotal.length())+
+				"-"+new Date().getMonth()+
+				"-"+fechaTotal.substring(8,10);
+			
+		System.out.println(fechaActual);
+		Introducir introducir=new Introducir();
+		
+		introducir.introducir("INSERT INTO INCI_INCIDENCIAS"
+				+ "(INCI_ID_COMUNIDAD,INCI_ID_USUARIO,INCI_TITULO,INCI_DESCRIPCION,INCI_ESTADO,INCI_FECHA_CREACION)"
+				+ "VALUES('"+id_comunidad+"','"+id_usuario+"','"+titulo+"','"+descripcion+"','1','"+fechaActual+"')");
+		
 	}
 }

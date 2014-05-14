@@ -53,7 +53,7 @@ public class Principal extends JFrame{
 	public static	ArrayList<Anuncio> ListaAnuncios= new ArrayList<Anuncio>();
 	public static	ArrayList<Incidencia> ListaIncidencias= new ArrayList<Incidencia>();
 	public Recuperar recuperar;
-	JComboBox<String> comboBox;
+	public JComboBox<String> comboBox;
 	Eventos principal;
 	EventosAnuncios Eveanuncios;
 	EventosCalendario EveCalendario;
@@ -61,7 +61,7 @@ public class Principal extends JFrame{
 	EventosCuentas EveCuentas;
 	EventosIncidencias EveIncidencias;
 	EventosInstalaciones EveInstalaciones;
-	EventosMensajes EveMensajes;
+	public EventosMensajes EveMensajes;
 	EventosLogin EveLogin;
 	
 	public Recuperar getRecuperar() {
@@ -141,16 +141,23 @@ public class Principal extends JFrame{
 		Anuncios.setBounds(0, 0, 794, 450);
 		Anuncios.setLayout(null);
 		Anuncios.setBorder(null);
+		
 		JScrollPane scrollAn = new JScrollPane();
 		scrollAn.setBounds(0, 0, 790, 450);
 		Anuncios.add(scrollAn);
+		
 		modeloAnuncios = new DefaultTableModel(null, titulosAnuncios);
-		tablaAnuncios = new JTable(modeloAnuncios);
+		tablaAnuncios = new JTable(modeloAnuncios){
+	        public boolean isCellEditable(int rowIndex, int vColIndex) {
+	            return false;
+	        }};
 		scrollAn.setViewportView(tablaAnuncios);
+		
 		anadirAnuncio = new JButton();
 		anadirAnuncio.setText("nuevo mensaje");
 		anadirAnuncio.setBounds(650, 450, 125, 20);
 		Anuncios.add(anadirAnuncio);
+		
 		PanelPrincipal.addTab("Anuncios", null, Anuncios, "Anuncios");
 		
 		//Panel Calendario
@@ -163,16 +170,25 @@ public class Principal extends JFrame{
 		Incidencias.setBounds(0, 0, 794, 450);
 		Incidencias.setLayout(null);
 		Incidencias.setBorder(null);
+		
 		JScrollPane scrollPanel = new JScrollPane();
 		scrollPanel.setBounds(0, 0, 790, 450);
 		Incidencias.add(scrollPanel);
+		
 		modeloIncidencias = new DefaultTableModel(null, titulosIncidencias);
-		tablaincidencias = new JTable(modeloIncidencias);
+		tablaincidencias = new JTable(modeloIncidencias){
+	        public boolean isCellEditable(int rowIndex, int vColIndex) {
+	            return false;
+	        }};
+		tablaincidencias.addMouseListener(EveIncidencias);
 		scrollPanel.setViewportView(tablaincidencias);
+		
 		anadirincidencia = new JButton();
 		anadirincidencia.setText("nuevo mensaje");
 		anadirincidencia.setBounds(650, 450, 125, 20);
+		anadirincidencia.addActionListener(EveIncidencias);
 		Incidencias.add(anadirincidencia);
+		
 		PanelPrincipal.addTab("Incidencias", null, Incidencias, "Incidencias");
 		
 		//Panel Cuentas
@@ -196,13 +212,22 @@ public class Principal extends JFrame{
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(0, 0, 790, 450);
 		Mensajes.add(scrollPane);
+		
 		modeloMensajes = new DefaultTableModel(null, titulosMensajes);
-		tablamensajes = new JTable(modeloMensajes);
+		modeloMensajes.addTableModelListener(EveMensajes);
+		tablamensajes = new JTable(modeloMensajes){
+	        public boolean isCellEditable(int rowIndex, int vColIndex) {
+	            return false;
+	        }};
+		tablamensajes.addMouseListener(EveMensajes);
 		scrollPane.setViewportView(tablamensajes);
+		
 		anadirmensaje = new JButton();
 		anadirmensaje.setText("nuevo mensaje");
 		anadirmensaje.setBounds(650, 450, 125, 20);
+		anadirmensaje.addActionListener(EveMensajes);
 		Mensajes.add(anadirmensaje);
+		
 		PanelPrincipal.addTab("Mensajes", null, Mensajes, "Mensajes");
 		
 		//Panel Login

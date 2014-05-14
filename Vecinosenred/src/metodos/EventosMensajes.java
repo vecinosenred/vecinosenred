@@ -3,6 +3,7 @@ package metodos;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -23,6 +24,7 @@ public class EventosMensajes implements ActionListener, TableModelListener,
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		System.out.println("mensajenuevo");
 		if (e.getSource() == gui.anadirmensaje) {
 			VentanaMensaje anadirmensaje = new VentanaMensaje();
 			anadirmensaje.setVisible(true);

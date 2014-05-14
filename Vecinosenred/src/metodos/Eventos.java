@@ -24,6 +24,7 @@ import clases.Recordatorio;
 import frames.Calendario;
 import frames.Login;
 import frames.Principal;
+import frames.VentanaMensaje;
 
 public class Eventos implements ActionListener {
 	Principal gui;
@@ -47,7 +48,7 @@ public class Eventos implements ActionListener {
 				gui.ListaMensajes.add(mns.get(i));
 			}
 		}
-		
+				
 		Object[] fila = new Object[gui.modeloMensajes.getColumnCount()];
 		for (int i = 0; i < gui.ListaMensajes.size(); i++) {
 			if(gui.ListaMensajes.get(i).getId_comunidad()==id_com){
@@ -57,13 +58,13 @@ public class Eventos implements ActionListener {
 				fila[3]=gui.ListaMensajes.get(i).getMensaje();
 				fila[4]="Eliminar";
 				gui.modeloMensajes.addRow(fila);
-				gui.tablamensajes.setModel(gui.modeloMensajes);
-				gui.tablamensajes.validate();
-				gui.tablamensajes.repaint();
 			}
 			
-		}	
-		
+		}			
+
+		gui.tablamensajes.setModel(gui.modeloMensajes);
+		gui.tablamensajes.validate();
+		gui.tablamensajes.repaint();	
 
 		Action delete = new AbstractAction()
 		{
@@ -216,6 +217,12 @@ public class Eventos implements ActionListener {
 		if(e.getSource()==gui.mntmLogin){
 			final Login login= new Login(gui);
 			login.setVisible(true);
+		}
+		
+		if (e.getSource() == gui.anadirmensaje) {
+			System.out.println("mensaje");
+			VentanaMensaje anadirmensaje = new VentanaMensaje();
+			anadirmensaje.setVisible(true);
 		}
 		
 	}

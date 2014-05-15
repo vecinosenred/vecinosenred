@@ -178,7 +178,13 @@ public class Principal extends JFrame{
 		modeloIncidencias = new DefaultTableModel(null, titulosIncidencias);
 		tablaincidencias = new JTable(modeloIncidencias){
 	        public boolean isCellEditable(int rowIndex, int vColIndex) {
-	            return false;
+	        	
+	        	if(vColIndex<4){
+		            return false;
+	        	}else{
+	        		return true;
+	        	}
+	        	
 	        }};
 		tablaincidencias.addMouseListener(EveIncidencias);
 		scrollPanel.setViewportView(tablaincidencias);

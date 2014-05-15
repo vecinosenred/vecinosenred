@@ -123,8 +123,9 @@ public class Eventos implements ActionListener {
 
 		Action delete = new AbstractAction()
 		{
-		    public void actionPerformed(ActionEvent e)
+			public void actionPerformed(ActionEvent e)
 		    {
+				System.out.println("hola capullo");
 		        try {
 					eliminar.eliminarAnuncio("DELETE FROM INCI_INCIDENCIAS WHERE INCI_ID_INCIDENCIA='"+
 		        gui.ListaIncidencias.get(Integer.valueOf( e.getActionCommand() )).getId_mensaje()+"'");
@@ -217,12 +218,6 @@ public class Eventos implements ActionListener {
 		if(e.getSource()==gui.mntmLogin){
 			final Login login= new Login(gui);
 			login.setVisible(true);
-		}
-		
-		if (e.getSource() == gui.anadirmensaje) {
-			System.out.println("mensaje");
-			VentanaMensaje anadirmensaje = new VentanaMensaje();
-			anadirmensaje.setVisible(true);
 		}
 		
 	}

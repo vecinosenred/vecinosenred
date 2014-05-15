@@ -14,6 +14,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import metodos.ObtenerFechaActual;
 import BD.Introducir;
 import clases.Usuario;
 
@@ -142,17 +143,13 @@ public class VentanaIncidencia extends JDialog {
 	private void enviarIncidencia(int id_comunidad,String id_usuario,String titulo,String descripcion) 
 			throws ClassNotFoundException, SQLException{
 
-		String fechaTotal = String.valueOf(new Date());
-		String fechaActual=fechaTotal.substring(fechaTotal.length() - 4, fechaTotal.length())+
-				"-"+new Date().getMonth()+
-				"-"+fechaTotal.substring(8,10);
-			
-		System.out.println(fechaActual);
+		ObtenerFechaActual ofa= new ObtenerFechaActual();
+		
 		Introducir introducir=new Introducir();
 		
 		introducir.introducir("INSERT INTO INCI_INCIDENCIAS"
 				+ "(INCI_ID_COMUNIDAD,INCI_ID_USUARIO,INCI_TITULO,INCI_DESCRIPCION,INCI_ESTADO,INCI_FECHA_CREACION)"
-				+ "VALUES('"+id_comunidad+"','"+id_usuario+"','"+titulo+"','"+descripcion+"','1','"+fechaActual+"')");
+				+ "VALUES('"+id_comunidad+"','"+id_usuario+"','"+titulo+"','"+descripcion+"','1','"+ofa.obtenerFecha()+"')");
 		
 	}
 }

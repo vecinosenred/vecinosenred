@@ -26,7 +26,8 @@ public class EventosMensajes implements ActionListener, TableModelListener,
 	public void actionPerformed(ActionEvent e) {
 		System.out.println("mensajenuevo");
 		if (e.getSource() == gui.anadirmensaje) {
-			VentanaMensaje anadirmensaje = new VentanaMensaje();
+			VentanaMensaje anadirmensaje = new VentanaMensaje(gui.recuperar.getComunidades().get(gui.comboBox.getSelectedIndex()).getId(),
+					gui.logueado,gui.recuperar.getUsuarios());
 			anadirmensaje.setVisible(true);
 		}
 	}

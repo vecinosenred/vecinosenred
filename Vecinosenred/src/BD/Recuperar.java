@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import clases.Anuncio;
 import clases.Comunidad;
 import clases.ComunidadUsuario;
+import clases.Cuenta;
 import clases.Incidencia;
 import clases.Instalacion;
 import clases.Mensaje;
@@ -30,6 +31,7 @@ public class Recuperar implements Runnable{
 	private ArrayList<Mensaje> mensajes=new ArrayList<Mensaje>();
 	private ArrayList<Instalacion> instalaciones=new ArrayList<Instalacion>();
 	private ArrayList<Recordatorio> recordatorios=new ArrayList<Recordatorio>();
+	private ArrayList<Cuenta> cuentas=new ArrayList<Cuenta>();
 	private Conectar c=new Conectar();
 	private Thread thread;
 	
@@ -72,10 +74,19 @@ public class Recuperar implements Runnable{
 			comunidades.add(com);
 		}
 		
+		for (int i = 0; i < com_usu.size(); i++) {
+			rs=st.executeQuery("SELECT * FROM CUEN_CUENTAS WHERE CUEN_ID_COMUNIDAD="+com_usu.get(i).getId_comunidades());		
+			while(rs.next()){
+				Cuenta cue=new Cuenta(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getDouble(4));
+				cuentas.add(cue);
+			}
+			
+		}
+		
 		rs=st.executeQuery("SELECT * FROM MOVCUE_MOVIMIENTOS_CUENTAS WHERE MOVCUE_ID_USUARIO='"+id_usu+"'");		
 		while(rs.next()){
-			Movimiento mov=new Movimiento(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), 
-					rs.getInt(5), rs.getInt(6));
+			Movimiento mov=new Movimiento(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getInt(4), rs.getInt(5), 
+					rs.getDate(6), rs.getString(7), rs.getInt(8), rs.getInt(9));
 			movimientos.add(mov);
 		}		
 		
@@ -240,11 +251,22 @@ public class Recuperar implements Runnable{
 			movimientos.clear();
 			rs=st.executeQuery("SELECT * FROM MOVCUE_MOVIMIENTOS_CUENTAS WHERE MOVCUE_ID_USUARIO='"+id_usu+"'");		
 			while(rs.next()){
-				Movimiento mov=new Movimiento(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), 
-						rs.getInt(5), rs.getInt(6));
+				Movimiento mov=new Movimiento(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getInt(4), rs.getInt(5), 
+						rs.getDate(6), rs.getString(7), rs.getInt(8), rs.getInt(9));
 				movimientos.add(mov);
 			}	
 			break;
+			
+		case "cuentas":
+			cuentas.clear();
+			for (int i = 0; i < com_usu.size(); i++) {
+				rs=st.executeQuery("SELECT * FROM CUEN_CUENTAS WHERE CUEN_ID_COMUNIDAD="+com_usu.get(i).getId_comunidades()+")");		
+				while(rs.next()){
+					Cuenta cue=new Cuenta(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getDouble(4));
+					cuentas.add(cue);
+				}
+				
+			}
 
 		case "anuncios":
 			anuncios.clear();
@@ -344,10 +366,20 @@ public class Recuperar implements Runnable{
 			movimientos.clear();
 			rs=st.executeQuery("SELECT * FROM MOVCUE_MOVIMIENTOS_CUENTAS WHERE MOVCUE_ID_USUARIO='"+id_usu+"'");		
 			while(rs.next()){
-				Movimiento mov=new Movimiento(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), 
-						rs.getInt(5), rs.getInt(6));
+				Movimiento mov=new Movimiento(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getInt(4), rs.getInt(5), 
+						rs.getDate(6), rs.getString(7), rs.getInt(8), rs.getInt(9));
 				movimientos.add(mov);
 			}	
+			
+			cuentas.clear();
+			for (int i = 0; i < com_usu.size(); i++) {
+				rs=st.executeQuery("SELECT * FROM CUEN_CUENTAS WHERE CUEN_ID_COMUNIDAD="+com_usu.get(i).getId_comunidades());		
+				while(rs.next()){
+					Cuenta cue=new Cuenta(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getDouble(4));
+					cuentas.add(cue);
+				}
+				
+			}
 			
 			anuncios.clear();
 			for (int i = 0; i < com_usu.size(); i++) {

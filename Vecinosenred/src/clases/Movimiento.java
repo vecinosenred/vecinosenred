@@ -1,12 +1,16 @@
 package clases;
 
+import java.sql.Date;
+
 public class Movimiento {
 	
-	private int id_comunidad,tipo_movimiento,saldo_anterior,saldo_final;
+	private int id_cuenta,tipo_movimiento,saldo_anterior,saldo_final,id_movimiento,cantidad;
 	private String id_usuario,motivo;
-	
-	public Movimiento(int id_comunidad,String id_usuario,int tipo_movimiento,String motivo,int saldo_anterior,int saldo_final){
-		this.id_comunidad=id_comunidad;
+	private Date fecha;
+
+	public Movimiento(int id_movimiento,int id_cuenta, String id_usuario,int cantidad,int tipo_movimiento, Date fecha, String motivo,int saldo_anterior,int saldo_final){
+		this.id_movimiento=id_movimiento;
+		this.id_cuenta=id_cuenta;
 		this.id_usuario=id_usuario;
 		this.tipo_movimiento=tipo_movimiento;
 		this.motivo=motivo;
@@ -14,12 +18,12 @@ public class Movimiento {
 		this.saldo_final=saldo_final;
 	}
 
-	public int getId_comunidad() {
-		return id_comunidad;
+	public int getId_cuenta() {
+		return id_cuenta;
 	}
 
-	public void setId_comunidad(int id_comunidad) {
-		this.id_comunidad = id_comunidad;
+	public void setId_cuenta(int id_comunidad) {
+		this.id_cuenta = id_comunidad;
 	}
 
 	public int getTipo_movimiento() {
@@ -60,6 +64,30 @@ public class Movimiento {
 
 	public void setMotivo(String motivo) {
 		this.motivo = motivo;
+	}
+	
+	public int getId_movimiento() {
+		return id_movimiento;
+	}
+
+	public void setId_movimiento(int id_movimiento) {
+		this.id_movimiento = id_movimiento;
+	}
+
+	public int getCantidad() {
+		return cantidad;
+	}
+
+	public void setCantidad(int cantidad) {
+		this.cantidad = cantidad;
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
 	}
 	
 	

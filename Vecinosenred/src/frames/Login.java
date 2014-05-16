@@ -101,6 +101,7 @@ public class Login extends JFrame {
 							principal.comboBox.addItem(nomCom.get(i));
 						}						
 						setVisible(false);
+						principal.PanelInicio.setVisible(true);
 					} catch (ClassNotFoundException e) {
 						e.printStackTrace();
 					} catch (SQLException e) {

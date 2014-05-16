@@ -311,7 +311,7 @@ public class Principal extends JFrame{
 		panelLogin.setBounds(0, 20, 794, 500);
 		getContentPane().add(panelLogin);
 		panelLogin.setOpaque(true);
-		panelLogin.setVisible(false);
+		
 		panelLogin.setLayout(null);
 		panelLogin.setMinimumSize(new Dimension(0, 0));
 		panelLogin.setBorder(null);
@@ -352,7 +352,7 @@ public class Principal extends JFrame{
 			}
 		});
 		barrainferior.add(comboBox);
-		setVisible(true);
+		
 
 		JLabel labelbarrainferior = new JLabel("");
 		labelbarrainferior.setOpaque(true);
@@ -361,7 +361,9 @@ public class Principal extends JFrame{
 		labelbarrainferior.setHorizontalAlignment(SwingConstants.CENTER);
 		labelbarrainferior.setBounds(0, 0, 794, 50);
 		barrainferior.add(labelbarrainferior);
-		
+		setVisible(true);
+		panelLogin.setVisible(false);
+		PanelInicio.setVisible(false);
 	}
 
 	public static void main(String[] args) {

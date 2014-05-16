@@ -65,11 +65,12 @@ public class VentanaMensaje extends JDialog {
 		txtareaMensaje.setBorder(new LineBorder(new Color(0, 0, 0)));
 		txtareaMensaje.setBounds(10, 111, 474, 150);
 		getContentPane().add(txtareaMensaje);
-		
 		comboBox = new JComboBox<String>();
 		System.out.println(usuarios.size());
 		for (int i = 0; i < usuarios.size(); i++) {
-			comboBox.addItem(usuarios.get(i).getNombre());
+			if(usuarios.get(i).getId_comunidad()==id_com){
+				comboBox.addItem(usuarios.get(i).getNombre());
+			}
 		}
 		comboBox.setBounds(66, 32, 418, 22);
 		getContentPane().add(comboBox);

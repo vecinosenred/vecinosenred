@@ -11,20 +11,20 @@ import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import BD.Conectar;
 import BD.Eliminar;
 import clases.Anuncio;
+import clases.Cuenta;
 import clases.Incidencia;
 import clases.Mensaje;
+import clases.Movimiento;
 import clases.Recordatorio;
+import clases.Usuario;
 import frames.Calendario;
 import frames.Login;
 import frames.Principal;
-import frames.VentanaMensaje;
 
 public class Eventos implements ActionListener {
 	Principal gui;
@@ -51,14 +51,12 @@ public class Eventos implements ActionListener {
 				
 		Object[] fila = new Object[gui.modeloMensajes.getColumnCount()];
 		for (int i = 0; i < gui.ListaMensajes.size(); i++) {
-			if(gui.ListaMensajes.get(i).getId_comunidad()==id_com){
 				fila[0]=gui.ListaMensajes.get(i).getId_usuario();
 				fila[1]=gui.ListaMensajes.get(i).getId_destinatario();
 				fila[2]=gui.ListaMensajes.get(i).getAsunto();
 				fila[3]=gui.ListaMensajes.get(i).getMensaje();
 				fila[4]="Eliminar";
 				gui.modeloMensajes.addRow(fila);
-			}
 			
 		}			
 
@@ -106,7 +104,6 @@ public class Eventos implements ActionListener {
 		
 		Object[] fila = new Object[gui.modeloIncidencias.getColumnCount()];
 		for (int i = 0; i < gui.ListaIncidencias.size(); i++) {
-			if(gui.ListaIncidencias.get(i).getId_comunidad()==id_com){
 				fila[0]=gui.ListaIncidencias.get(i).getId_mensaje();
 				fila[1]=gui.ListaIncidencias.get(i).getTitulo();
 				fila[2]=gui.ListaIncidencias.get(i).getEstado();
@@ -116,8 +113,6 @@ public class Eventos implements ActionListener {
 				gui.tablaincidencias.setModel(gui.modeloIncidencias);
 				gui.tablaincidencias.validate();
 				gui.tablaincidencias.repaint();
-			}
-			
 		}	
 		
 
@@ -163,7 +158,6 @@ public class Eventos implements ActionListener {
 		
 		Object[] fila = new Object[gui.modeloAnuncios.getColumnCount()];
 		for (int i = 0; i < gui.ListaAnuncios.size(); i++) {
-			if(gui.ListaAnuncios.get(i).getId_comunidad()==id_com){
 				fila[0]=gui.ListaAnuncios.get(i).getId_mensaje();
 				fila[1]=gui.ListaAnuncios.get(i).getTitulo();
 				fila[2]=gui.ListaAnuncios.get(i).getMensaje();
@@ -172,8 +166,7 @@ public class Eventos implements ActionListener {
 				gui.modeloAnuncios.addRow(fila);
 				gui.tablaAnuncios.setModel(gui.modeloAnuncios);
 				gui.tablaAnuncios.validate();
-				gui.tablaAnuncios.repaint();
-			}			
+				gui.tablaAnuncios.repaint();			
 			
 		}	
 		
@@ -211,6 +204,53 @@ public class Eventos implements ActionListener {
 		gui.Calendario.validate();
 		gui.Calendario.repaint();
 		
+	}
+	
+	public void llenarlistaCuentas(ArrayList<Movimiento> mns,int id_com){
+		
+		gui.ListaMovimientos.clear();
+		for (int i = gui.modeloCuentas.getRowCount() - 1; i > -1; i--) {
+	        gui.modeloCuentas.removeRow(i);
+	    }
+		for (int i = 0; i < mns.size(); i++) {
+			if(mns.get(i).getId_comunidad()==id_com){
+				gui.ListaMovimientos.add(mns.get(i));
+			}
+		}
+		
+		Usuario usuario=gui.logueado;
+		Cuenta m = null;
+		
+		Object[] fila = new Object[gui.modeloCuentas.getColumnCount()];
+		
+		for (int i = 0; i < gui.ListaMovimientos.size(); i++) {
+			int id_cuenta=gui.ListaMovimientos.get(i).getId_cuenta();
+			for (int j = 0; j < gui.recuperar.getCuentas().size(); j++) {
+				if(gui.recuperar.getCuentas().get(j).getId_cuenta()==id_cuenta &&
+						gui.recuperar.getCuentas().get(j).getId_comunidad()==id_com){
+					m=gui.recuperar.getCuentas().get(j);
+					
+					if(gui.ListaMovimientos.get(i).getId_usuario().equals(usuario.getUsuario())){
+						fila[0]=gui.recuperar.getCuentas().get(gui.recuperar.getCuentas().indexOf(m)).getNum_cuenta();
+						fila[1]=usuario.getNombre();
+						fila[2]=gui.ListaMovimientos.get(i).getCantidad();
+						fila[3]=gui.ListaMovimientos.get(i).getTipo_movimiento();
+						fila[4]=gui.ListaMovimientos.get(i).getFecha();
+						fila[5]=gui.ListaMovimientos.get(i).getMotivo();
+						fila[6]=gui.ListaMovimientos.get(i).getSaldo_anterior();
+						fila[7]=gui.ListaMovimientos.get(i).getSaldo_final();
+					}
+				
+						gui.modeloCuentas.addRow(fila);
+						gui.tablaCuentas.setModel(gui.modeloCuentas);
+						gui.tablaCuentas.validate();
+						gui.tablaCuentas.repaint();
+				}
+			}
+			System.out.println(id_cuenta);
+						
+			
+		}
 	}
 
 	@Override

@@ -36,22 +36,31 @@ import BD.Recuperar;
 import clases.Anuncio;
 import clases.Incidencia;
 import clases.Mensaje;
+import clases.Movimiento;
 import clases.Usuario;
 
 public class Principal extends JFrame{
-	public JPanel panelLogin, PanelInicio,Mensajes,Incidencias,Calendario;
+	public JPanel panelLogin, PanelInicio,Mensajes,Incidencias,Calendario,Cuentas,Comunidad,Instalaciones;
 	public JButton anadirmensaje,anadirincidencia,anadirAnuncio;
 	public JMenuItem mntmLogin;
 	JMenuItem mntmSalir;
 	String titulosMensajes[] = { "De","Para", "Asunto", "Mensajes","" };
 	String titulosIncidencias[] = { "Ticket","Titulo","Estado","Fecha Creada",""};
 	String titulosAnuncios[] = { "Ticket","Titulo","Anuncio","Fecha Creada",""};
-	public DefaultTableModel modeloMensajes,modeloIncidencias,modeloAnuncios;
-	public JTable tablamensajes,tablaincidencias,tablaAnuncios;
-	public static Usuario logueado = new Usuario("usuario", "pass", "nombre", "domicilio");
+	String titulosCuentas[] = { "Num. Cuenta","Titular","Cantidad","Tipo Movimiento",
+			"Fecha","Motivo","Saldo Anterior","Saldo Nuevo"};
+	String titulosComunidad[] = { "Num. Cuenta","Titular","Cantidad","Tipo Movimiento",
+			"Fecha","Motivo","Saldo Anterior","Saldo Nuevo"};
+	String titulosInstalaciones[] = { "Nombre","Coste","Descripción",""};
+	public DefaultTableModel modeloMensajes,modeloIncidencias,modeloAnuncios,
+							modeloCuentas,modeloComunidad,modeloInstalaciones;
+	public JTable tablamensajes,tablaincidencias,tablaAnuncios,tablaCuentas,
+				tablaComunidad,tablaInstalaciones;
+	public static Usuario logueado = new Usuario("usuario", "pass", "nombre", "domicilio",0);
 	public static 	ArrayList<Mensaje> ListaMensajes= new ArrayList<Mensaje>();
 	public static	ArrayList<Anuncio> ListaAnuncios= new ArrayList<Anuncio>();
 	public static	ArrayList<Incidencia> ListaIncidencias= new ArrayList<Incidencia>();
+	public static	ArrayList<Movimiento> ListaMovimientos= new ArrayList<Movimiento>();
 	public Recuperar recuperar;
 	public JComboBox<String> comboBox;
 	Eventos principal;
@@ -166,8 +175,7 @@ public class Principal extends JFrame{
 		PanelPrincipal.addTab("Anuncios", null, Anuncios, "Anuncios");
 		
 		//Panel Calendario
-		Calendario = new JPanel();
-		
+		Calendario = new JPanel();		
 		PanelPrincipal.addTab("Calendario", null, Calendario, "Calendario");
 		
 		//Panel incidencias
@@ -203,16 +211,68 @@ public class Principal extends JFrame{
 		PanelPrincipal.addTab("Incidencias", null, Incidencias, "Incidencias");
 		
 		//Panel Cuentas
-		JPanel Cuentas = new JPanel();
+		Cuentas = new JPanel();
+		Cuentas.setBounds(0, 0, 794, 450);
+		Cuentas.setLayout(null);
+		Cuentas.setBorder(null);
+		
+		JScrollPane scrollCuentas = new JScrollPane();
+		scrollCuentas.setBounds(0, 0, 790, 450);
+		Cuentas.add(scrollCuentas);
+		
+		modeloCuentas = new DefaultTableModel(null, titulosCuentas);
+		modeloCuentas.addTableModelListener(EveCuentas);
+		tablaCuentas = new JTable(modeloCuentas){
+	        public boolean isCellEditable(int rowIndex, int vColIndex) {
+	        		return false;
+	        }};
+		tablaCuentas.addMouseListener(EveCuentas);
+		scrollCuentas.setViewportView(tablaCuentas);
 		PanelPrincipal.addTab("Cuentas", null, Cuentas, "Cuentas");
 		
 		//Panel Comunidad
-		JPanel Comunidad = new JPanel();
+		Comunidad = new JPanel();
+		Comunidad.setBounds(0, 0, 794, 450);
+		Comunidad.setLayout(null);
+		Comunidad.setBorder(null);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 0, 790, 450);
+		Comunidad.add(scrollPane);
+		
+		modeloComunidad = new DefaultTableModel(null, titulosComunidad);
+		modeloComunidad.addTableModelListener(EveComunidad);
+		tablaComunidad = new JTable(modeloComunidad){
+	        public boolean isCellEditable(int rowIndex, int vColIndex) {
+		            return false;
+	        }};
+		tablaComunidad.addMouseListener(EveComunidad);
+		scrollPane.setViewportView(tablaComunidad);
 		PanelPrincipal.addTab("Comunidad", null, Comunidad, "Comunidad");
 		
 		//Panel Instalaciones
-		JPanel Instalaciones = new JPanel();
-		PanelPrincipal.addTab("Instalaciones", null, Instalaciones, "Instalaciones");
+		Instalaciones = new JPanel();
+		Instalaciones.setBounds(0, 0, 794, 450);
+		Instalaciones.setLayout(null);
+		Instalaciones.setBorder(null);
+		
+		JScrollPane scrollInstalaciones = new JScrollPane();
+		scrollInstalaciones.setBounds(0, 0, 790, 450);
+		Instalaciones.add(scrollInstalaciones);
+		
+		modeloInstalaciones = new DefaultTableModel(null, titulosInstalaciones);
+		modeloInstalaciones.addTableModelListener(EveInstalaciones);
+		tablaInstalaciones = new JTable(modeloInstalaciones){
+	        public boolean isCellEditable(int rowIndex, int vColIndex) {
+
+	        	if(vColIndex<4){
+		            return false;
+	        	}else{
+	        		return true;
+	        	}
+	        }};
+		tablaInstalaciones.addMouseListener(EveInstalaciones);
+		scrollInstalaciones.setViewportView(tablaInstalaciones);
 		
 		//Panel Mensajes
 		Mensajes = new JPanel();
@@ -220,9 +280,9 @@ public class Principal extends JFrame{
 		Mensajes.setLayout(null);
 		Mensajes.setBorder(null);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 0, 790, 450);
-		Mensajes.add(scrollPane);
+		JScrollPane scrollMensajes = new JScrollPane();
+		scrollMensajes.setBounds(0, 0, 790, 450);
+		Mensajes.add(scrollMensajes);
 		
 		modeloMensajes = new DefaultTableModel(null, titulosMensajes);
 		modeloMensajes.addTableModelListener(EveMensajes);
@@ -236,7 +296,7 @@ public class Principal extends JFrame{
 	        	}
 	        }};
 		tablamensajes.addMouseListener(EveMensajes);
-		scrollPane.setViewportView(tablamensajes);
+		scrollMensajes.setViewportView(tablamensajes);
 		
 		anadirmensaje = new JButton();
 		anadirmensaje.setText("nuevo mensaje");
@@ -274,6 +334,8 @@ public class Principal extends JFrame{
 				principal.llenarlistaMensajes(recuperar.getMensajes(),
 						recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
 				principal.llenarlistaIncidencias(recuperar.getIncidencias(),
+						recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
+				principal.llenarlistaCuentas(recuperar.getMovimientos(),
 						recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
 				try {
 					principal.llenarlistaAnuncios(recuperar.getAnuncios(),

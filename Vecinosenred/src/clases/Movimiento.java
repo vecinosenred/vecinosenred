@@ -4,11 +4,11 @@ import java.sql.Date;
 
 public class Movimiento {
 	
-	private int id_cuenta,tipo_movimiento,saldo_anterior,saldo_final,id_movimiento,cantidad;
+	private int id_cuenta,tipo_movimiento,saldo_anterior,saldo_final,id_movimiento,cantidad,id_comunidad;
 	private String id_usuario,motivo;
 	private Date fecha;
 
-	public Movimiento(int id_movimiento,int id_cuenta, String id_usuario,int cantidad,int tipo_movimiento, Date fecha, String motivo,int saldo_anterior,int saldo_final){
+	public Movimiento(int id_movimiento, int id_cuenta, String id_usuario,int cantidad,int tipo_movimiento, Date fecha, String motivo,int saldo_anterior,int saldo_final,int id_com){
 		this.id_movimiento=id_movimiento;
 		this.id_cuenta=id_cuenta;
 		this.id_usuario=id_usuario;
@@ -16,6 +16,17 @@ public class Movimiento {
 		this.motivo=motivo;
 		this.saldo_anterior=saldo_anterior;
 		this.saldo_final=saldo_final;
+		this.id_comunidad=id_com;
+		this.cantidad=cantidad;
+		this.fecha=fecha;
+	}
+
+	public int getId_comunidad() {
+		return id_comunidad;
+	}
+
+	public void setId_comunidad(int id_com) {
+		this.id_comunidad = id_com;
 	}
 
 	public int getId_cuenta() {

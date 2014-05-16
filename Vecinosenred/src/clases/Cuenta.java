@@ -5,7 +5,6 @@ public class Cuenta {
 	int id_cuenta, id_comunidad;
 	double saldo;
 	String num_cuenta;
-	
 	public Cuenta(int id_cuenta,int id_comunidad,String num_cuenta,double saldo){
 		this.id_cuenta=id_cuenta;
 		this.id_comunidad=id_comunidad;
@@ -44,5 +43,14 @@ public class Cuenta {
 	public void setUsuario(String usuario) {
 		this.num_cuenta = usuario;
 	}
+	
+	public String getNum_cuenta() {
+		return num_cuenta;
+	}
+
+	public void setNum_cuenta(String num_cuenta) {
+		this.num_cuenta = num_cuenta;
+	}
+
 	
 }

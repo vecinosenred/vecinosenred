@@ -102,6 +102,7 @@ public class Login extends JFrame {
 						}						
 						setVisible(false);
 						principal.PanelInicio.setVisible(true);
+						principal.mntmCambioContraseña.setEnabled(true);
 					} catch (ClassNotFoundException e) {
 						e.printStackTrace();
 					} catch (SQLException e) {

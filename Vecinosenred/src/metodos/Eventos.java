@@ -25,6 +25,7 @@ import clases.Usuario;
 import frames.Calendario;
 import frames.Login;
 import frames.Principal;
+import frames.VentanaContraseña;
 
 public class Eventos implements ActionListener {
 	Principal gui;
@@ -259,6 +260,15 @@ public class Eventos implements ActionListener {
 			final Login login= new Login(gui);
 			login.setVisible(true);
 		}
-		
+		if(e.getSource()==gui.mntmSalir){
+			System.exit(0);
+		}
+		if(e.getSource()==gui.mntmCambioContraseña){
+			VentanaContraseña ventana=new VentanaContraseña(gui.getLogueado());
+			ventana.setVisible(true);
+		}
+		if(e.getSource()==gui.mntmNuevaComunidad){
+			
+		}
 	}
 }

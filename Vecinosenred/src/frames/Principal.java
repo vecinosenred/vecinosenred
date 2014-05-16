@@ -43,8 +43,7 @@ import clases.Usuario;
 public class Principal extends JFrame{
 	public JPanel panelLogin, PanelInicio,Mensajes,Incidencias,Calendario,Cuentas,Comunidad,Instalaciones;
 	public JButton anadirmensaje,anadirincidencia,anadirAnuncio;
-	public JMenuItem mntmLogin;
-	JMenuItem mntmSalir;
+	public JMenuItem mntmLogin, mntmSalir,mntmCambioContraseña,mntmNuevaComunidad;
 	String titulosMensajes[] = { "De","Para", "Asunto", "Mensajes","" };
 	String titulosIncidencias[] = { "Ticket","Titulo","Estado","Fecha Creada",""};
 	String titulosAnuncios[] = { "Ticket","Titulo","Anuncio","Fecha Creada",""};
@@ -129,8 +128,17 @@ public class Principal extends JFrame{
 		mntmLogin.addActionListener(principal);
 		mnInicio.add(mntmLogin);
 		
+		mntmCambioContraseña= new JMenuItem("Cambiar Contraseña");
+		mntmCambioContraseña.addActionListener(principal);
+		mnInicio.add(mntmCambioContraseña);
+		mntmCambioContraseña.setEnabled(false);
+		
+		mntmNuevaComunidad = new JMenuItem("Nueva Comunidad");
+		mntmNuevaComunidad.addActionListener(principal);
+		mnInicio.add(mntmNuevaComunidad);
 
 		mntmSalir = new JMenuItem("Salir");
+		mntmSalir.addActionListener(principal);
 		mnInicio.add(mntmSalir);
 		
 		

@@ -149,7 +149,12 @@ public class Principal extends JFrame{
 		modeloAnuncios = new DefaultTableModel(null, titulosAnuncios);
 		tablaAnuncios = new JTable(modeloAnuncios){
 	        public boolean isCellEditable(int rowIndex, int vColIndex) {
-	            return false;
+
+	        	if(vColIndex<4){
+		            return false;
+	        	}else{
+	        		return true;
+	        	}
 	        }};
 		scrollAn.setViewportView(tablaAnuncios);
 		
@@ -223,7 +228,12 @@ public class Principal extends JFrame{
 		modeloMensajes.addTableModelListener(EveMensajes);
 		tablamensajes = new JTable(modeloMensajes){
 	        public boolean isCellEditable(int rowIndex, int vColIndex) {
-	            return false;
+
+	        	if(vColIndex<4){
+		            return false;
+	        	}else{
+	        		return true;
+	        	}
 	        }};
 		tablamensajes.addMouseListener(EveMensajes);
 		scrollPane.setViewportView(tablamensajes);

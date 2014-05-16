@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -325,7 +326,7 @@ public class Principal extends JFrame{
 		
 
 		comboBox = new JComboBox<String>();
-		comboBox.setBounds(637, 0, 157, 50);
+		comboBox.setBounds(540, 0, 254, 50);
 		comboBox.addActionListener(new ActionListener() {
 			
 			@Override
@@ -357,9 +358,9 @@ public class Principal extends JFrame{
 		JLabel labelbarrainferior = new JLabel("");
 		labelbarrainferior.setOpaque(true);
 		labelbarrainferior.setBackground(Color.BLACK);
-//		labelbarrainferior.setIcon(new ImageIcon(Principal.class.getResource("/resources/logobarra.jpg")));
+		labelbarrainferior.setIcon(new ImageIcon(Principal.class.getResource("/resources/vecinosenred.png")));
 		labelbarrainferior.setHorizontalAlignment(SwingConstants.CENTER);
-		labelbarrainferior.setBounds(0, 0, 794, 50);
+		labelbarrainferior.setBounds(0, 0, 540, 50);
 		barrainferior.add(labelbarrainferior);
 		setVisible(true);
 		panelLogin.setVisible(false);

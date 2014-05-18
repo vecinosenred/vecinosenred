@@ -26,6 +26,7 @@ import frames.Calendario;
 import frames.Login;
 import frames.Principal;
 import frames.VentanaContraseña;
+import frames.VentanaUsuario;
 
 public class Eventos implements ActionListener {
 	Principal gui;
@@ -269,6 +270,18 @@ public class Eventos implements ActionListener {
 		}
 		if(e.getSource()==gui.mntmNuevaComunidad){
 			
+		}
+		if(e.getSource()==gui.btnAnadirUsuario){
+			VentanaUsuario ventana =new VentanaUsuario(gui.recuperar.getComunidades().get(gui.comboBox.getSelectedIndex()).getId(),gui.logueado,gui.recuperar.getUsuarios(),gui.recuperar.getCom_usu(),"Alta");
+			ventana.setVisible(true);
+		}
+		if(e.getSource()==gui.btnBorrarUsuario){
+			VentanaUsuario ventana =new VentanaUsuario(gui.recuperar.getComunidades().get(gui.comboBox.getSelectedIndex()).getId(),gui.logueado,gui.recuperar.getUsuarios(),gui.recuperar.getCom_usu(),"Baja");
+			ventana.setVisible(true);
+		}
+		if(e.getSource()==gui.btnModificarUsuario){
+			VentanaUsuario ventana =new VentanaUsuario(gui.recuperar.getComunidades().get(gui.comboBox.getSelectedIndex()).getId(),gui.logueado,gui.recuperar.getUsuarios(),gui.recuperar.getCom_usu(),"Modificacion");
+			ventana.setVisible(true);
 		}
 	}
 }

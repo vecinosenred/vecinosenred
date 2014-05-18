@@ -35,14 +35,17 @@ import metodos.EventosLogin;
 import metodos.EventosMensajes;
 import BD.Recuperar;
 import clases.Anuncio;
+import clases.ComunidadUsuario;
 import clases.Incidencia;
 import clases.Mensaje;
 import clases.Movimiento;
 import clases.Usuario;
 
+import java.awt.Font;
+
 public class Principal extends JFrame{
-	public JPanel panelLogin, PanelInicio,Mensajes,Incidencias,Calendario,Cuentas,Comunidad,Instalaciones;
-	public JButton anadirmensaje,anadirincidencia,anadirAnuncio;
+	public JPanel panelLogin, PanelInicio,Mensajes,Incidencias,Calendario,Cuentas,Comunidad,Instalaciones,Administracion;
+	public JButton anadirmensaje,anadirincidencia,anadirAnuncio,btnAnadirUsuario,btnModificarUsuario,btnBorrarUsuario,btnIngreso,btnGasto,btnAnadirInstalacion,btnModificarInstalacion,btnBorrarInstalacion;
 	public JMenuItem mntmLogin, mntmSalir,mntmCambioContraseña,mntmNuevaComunidad;
 	String titulosMensajes[] = { "De","Para", "Asunto", "Mensajes","" };
 	String titulosIncidencias[] = { "Ticket","Titulo","Estado","Fecha Creada",""};
@@ -52,6 +55,7 @@ public class Principal extends JFrame{
 	String titulosComunidad[] = { "Num. Cuenta","Titular","Cantidad","Tipo Movimiento",
 			"Fecha","Motivo","Saldo Anterior","Saldo Nuevo"};
 	String titulosInstalaciones[] = { "Nombre","Coste","Descripción",""};
+	JTabbedPane PanelPrincipal;
 	public DefaultTableModel modeloMensajes,modeloIncidencias,modeloAnuncios,
 							modeloCuentas,modeloComunidad,modeloInstalaciones;
 	public JTable tablamensajes,tablaincidencias,tablaAnuncios,tablaCuentas,
@@ -61,6 +65,7 @@ public class Principal extends JFrame{
 	public static	ArrayList<Anuncio> ListaAnuncios= new ArrayList<Anuncio>();
 	public static	ArrayList<Incidencia> ListaIncidencias= new ArrayList<Incidencia>();
 	public static	ArrayList<Movimiento> ListaMovimientos= new ArrayList<Movimiento>();
+	public static ArrayList<ComunidadUsuario> ListaComusu= new ArrayList<ComunidadUsuario>();
 	public Recuperar recuperar;
 	public JComboBox<String> comboBox;
 	Eventos principal;
@@ -97,6 +102,7 @@ public class Principal extends JFrame{
 		setTitle("Vecinos en Red");
 		setBackground(Color.GRAY);
 		setSize(800, 600);
+		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		principal = new Eventos(this,logueado.getUsuario());
@@ -150,7 +156,7 @@ public class Principal extends JFrame{
 		PanelInicio.setBorder(null);
 		PanelInicio.setLayout(null);
 		
-		JTabbedPane PanelPrincipal = new JTabbedPane(JTabbedPane.TOP);
+		PanelPrincipal = new JTabbedPane(JTabbedPane.TOP);
 		PanelPrincipal.setBounds(0, 0, 794, 500);
 		PanelInicio.add(PanelPrincipal);
 		
@@ -282,6 +288,7 @@ public class Principal extends JFrame{
 	        }};
 		tablaInstalaciones.addMouseListener(EveInstalaciones);
 		scrollInstalaciones.setViewportView(tablaInstalaciones);
+		PanelPrincipal.addTab("Instalaciones",null,Instalaciones,"Instalaciones");
 		
 		//Panel Mensajes
 		Mensajes = new JPanel();
@@ -314,6 +321,73 @@ public class Principal extends JFrame{
 		Mensajes.add(anadirmensaje);
 		
 		PanelPrincipal.addTab("Mensajes", null, Mensajes, "Mensajes");
+
+		//Panel Administracion
+		
+		Administracion = new JPanel();
+		Administracion.setBounds(0, 0, 794, 450);
+		Administracion.setLayout(null);
+		Administracion.setBorder(null);
+		
+		PanelPrincipal.addTab("Administracion",null,Administracion,"Administracion");
+		
+		JLabel lblAccionesDeUsuario = new JLabel("Acciones de Usuario");
+		lblAccionesDeUsuario.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAccionesDeUsuario.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblAccionesDeUsuario.setBounds(10, 10, 200, 23);
+		Administracion.add(lblAccionesDeUsuario);
+		
+		btnAnadirUsuario = new JButton("A\u00F1adir Usuario");
+		btnAnadirUsuario.setBounds(30, 45, 150, 23);
+		Administracion.add(btnAnadirUsuario);
+		btnAnadirUsuario.addActionListener(principal);
+		
+		 btnModificarUsuario = new JButton("Modificar Usuario");
+		btnModificarUsuario.setBounds(30, 79, 150, 23);
+		Administracion.add(btnModificarUsuario);
+		btnModificarUsuario.addActionListener(principal);
+		
+		 btnBorrarUsuario = new JButton("Borrar Usuario");
+		btnBorrarUsuario.setBounds(30, 113, 150, 23);
+		Administracion.add(btnBorrarUsuario);
+		btnBorrarUsuario.addActionListener(principal);
+		
+		JLabel lblAccionesEconomicas = new JLabel("Acciones Economicas");
+		lblAccionesEconomicas.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblAccionesEconomicas.setBounds(579, 10, 200, 23);
+		Administracion.add(lblAccionesEconomicas);
+		
+		btnIngreso = new JButton("Realizar Ingreso ");
+		btnIngreso.setBounds(604, 45, 150, 23);
+		Administracion.add(btnIngreso);
+		btnIngreso.addActionListener(principal);
+		
+		btnGasto = new JButton("Realizar Gasto");
+		btnGasto.setBounds(604, 79, 150, 23);
+		Administracion.add(btnGasto);
+		btnGasto.addActionListener(principal);
+		
+		JLabel lblAccionesDeInstalaciones = new JLabel("Acciones de Instalaciones");
+		lblAccionesDeInstalaciones.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAccionesDeInstalaciones.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblAccionesDeInstalaciones.setBounds(258, 10, 250, 23);
+		Administracion.add(lblAccionesDeInstalaciones);
+		
+		btnAnadirInstalacion = new JButton("A\u00F1adir Instalacion");
+		btnAnadirInstalacion.setBounds(297, 45, 175, 23);
+		Administracion.add(btnAnadirInstalacion);
+		btnAnadirInstalacion.addActionListener(principal);
+		
+		btnModificarInstalacion = new JButton("Modificar Instalacion");
+		btnModificarInstalacion.setBounds(297, 79, 175, 23);
+		Administracion.add(btnModificarInstalacion);
+		btnModificarInstalacion.addActionListener(principal);
+		
+		btnBorrarInstalacion = new JButton("Borrar Instalacion");
+		btnBorrarInstalacion.setBounds(297, 113, 175, 23);
+		Administracion.add(btnBorrarInstalacion);
+		btnBorrarInstalacion.addActionListener(principal);
+		
 		
 		//Panel Login
 		panelLogin = new JPanel();
@@ -326,7 +400,9 @@ public class Principal extends JFrame{
 		panelLogin.setBorder(null);
 		modeloIncidencias = new DefaultTableModel(null, titulosIncidencias);
 		modeloMensajes = new DefaultTableModel(null, titulosMensajes);
-
+		
+		
+		//Barra inferior
 		JPanel barrainferior = new JPanel();
 		barrainferior.setBounds(0, 520, 794, 50);
 		getContentPane().add(barrainferior);
@@ -339,6 +415,15 @@ public class Principal extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				boolean valido=false;
+				
+				for(int i=0;i<recuperar.com_usu.size();i++){
+					if(logueado.getUsuario().equals(recuperar.com_usu.get(i).getId_usuario())&&recuperar.com_usu.get(i).getAdministrador()==1&&recuperar.com_usu.get(i).getId_comunidades()==recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId()){
+						valido=true;
+					}
+				}
+				PanelPrincipal.setEnabledAt(7, valido);
+				
 				
 				principal.llenarlistaMensajes(recuperar.getMensajes(),
 						recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
@@ -373,6 +458,7 @@ public class Principal extends JFrame{
 		setVisible(true);
 		panelLogin.setVisible(false);
 		PanelInicio.setVisible(false);
+		
 	}
 
 	public static void main(String[] args) {

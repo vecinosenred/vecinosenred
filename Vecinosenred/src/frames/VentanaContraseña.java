@@ -46,7 +46,7 @@ public class VentanaContraseña extends JDialog {
 		setTitle("Cambio Contraseña");
 		setBackground(Color.GRAY);
 		setSize(500, 400);
-		setBounds(400, 300, 500, 400);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
 		
 		JLabel lblContraseaActual = new JLabel("Contrase\u00F1a Actual");

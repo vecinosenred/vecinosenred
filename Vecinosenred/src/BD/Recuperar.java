@@ -22,6 +22,7 @@ public class Recuperar implements Runnable{
 	private ResultSet rs;
 	private String id_usu;
 	public ArrayList<ComunidadUsuario> com_usu=new ArrayList<ComunidadUsuario>();
+	public ArrayList<ComunidadUsuario> comunidades_usuarios=new ArrayList<ComunidadUsuario>();
 	public ArrayList<Usuario> usuarios=new ArrayList<Usuario>();
 	public Usuario usuarioLog;
 	public ArrayList<Comunidad> comunidades=new ArrayList<Comunidad>();
@@ -49,14 +50,23 @@ public class Recuperar implements Runnable{
 			usuarioLog=new Usuario(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),0);
 		}		
 		
-		rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
+		rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO='"+id_usu+"'");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
 		while(rs.next()){
 //			ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
 			ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 
 					rs.getInt("COMUSU_ADMINISTRADOR"), rs.getString("COMUSU_NUM_CUENTA"), rs.getString("COMUSU_PISO"));
 
 			com_usu.add(comusu);
-		}		
+		}
+		
+		rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
+		while(rs.next()){
+//			ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
+			ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 
+					rs.getInt("COMUSU_ADMINISTRADOR"), rs.getString("COMUSU_NUM_CUENTA"), rs.getString("COMUSU_PISO"));
+
+			comunidades_usuarios.add(comusu);
+		}
 
 		for (int i = 0; i < com_usu.size(); i++) {
 			rs=st.executeQuery("SELECT * FROM LOGUSU_LOGIN_USUARIOS WHERE LOGUSU_ID IN "
@@ -194,6 +204,14 @@ public class Recuperar implements Runnable{
 	public void setCuentas(ArrayList<Cuenta> cuentas) {
 		this.cuentas = cuentas;
 	}
+	
+	public ArrayList<ComunidadUsuario> getComunidadesUsuarios() {
+		return comunidades_usuarios;
+	}
+
+	public void setComunidadesUsuarios(ArrayList<ComunidadUsuario> comunidadesusuarios) {
+		this.comunidades_usuarios = comunidades_usuarios;
+	}
 
 
 	
@@ -238,13 +256,25 @@ public class Recuperar implements Runnable{
 			
 		case "com_usu":
 			com_usu.clear();
-			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
+			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO='"+id_usu+"'");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
 			while(rs.next()){
 //				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
 				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 
 						rs.getInt("COMUSU_ADMINISTRADOR"), rs.getString("COMUSU_NUM_CUENTA"), rs.getString("COMUSU_PISO"));
 
 				com_usu.add(comusu);
+			}		
+			break;
+			
+		case "comunidades_usuarios":
+			com_usu.clear();
+			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
+			while(rs.next()){
+//				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
+				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 
+						rs.getInt("COMUSU_ADMINISTRADOR"), rs.getString("COMUSU_NUM_CUENTA"), rs.getString("COMUSU_PISO"));
+
+				comunidades_usuarios.add(comusu);
 			}		
 			break;
 			
@@ -359,13 +389,23 @@ public class Recuperar implements Runnable{
 			}
 			
 			com_usu.clear();
-			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
+			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO='"+id_usu+"'");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
 			while(rs.next()){
 //				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
 				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 
 						rs.getInt("COMUSU_ADMINISTRADOR"), rs.getString("COMUSU_NUM_CUENTA"), rs.getString("COMUSU_PISO"));
 
 				com_usu.add(comusu);
+			}		
+			
+			comunidades_usuarios.clear();
+			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
+			while(rs.next()){
+//				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
+				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 
+						rs.getInt("COMUSU_ADMINISTRADOR"), rs.getString("COMUSU_NUM_CUENTA"), rs.getString("COMUSU_PISO"));
+
+				comunidades_usuarios.add(comusu);
 			}		
 			
 			comunidades.clear();

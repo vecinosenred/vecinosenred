@@ -90,9 +90,9 @@ public class VentanaUsuario extends JDialog {
 				for (int i = 0; i < usuarios.size(); i++) {
 					if (usuarios.get(i).getNombre().equals(seleccionado)) {
 						for (int h = 0; h < Com_usu.size(); h++) {
-							if (usuarios.get(i).getUsuario()
-									.equals(Com_usu.get(h).getId_usuario())) {
+							if (usuarios.get(i).getUsuario().equals(Com_usu.get(h).getId_usuario())) {
 								Cuenta = Com_usu.get(h).getNum_cuenta();
+								System.out.println(Cuenta);
 								if (Com_usu.get(h).getAdministrador() == 1 && Com_usu.get(h).getId_comunidades()==Integer.parseInt((textComunidad.getText()))) {
 									administrador = true;
 								}else{administrador = false;}

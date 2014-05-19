@@ -11,10 +11,13 @@ import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import BD.Eliminar;
+import BD.Introducir;
 import clases.Anuncio;
 import clases.Cuenta;
 import clases.Incidencia;
@@ -23,14 +26,17 @@ import clases.Movimiento;
 import clases.Recordatorio;
 import clases.Usuario;
 import frames.Calendario;
+import frames.ListaRespuestas;
 import frames.Login;
 import frames.Principal;
 import frames.VentanaContraseña;
+import frames.VentanaRespuestas;
 import frames.VentanaUsuario;
 
 public class Eventos implements ActionListener {
 	Principal gui;
 	Eliminar eliminar=new Eliminar();
+	Introducir introducir=new Introducir();
 	Statement st;
 	ResultSet rs;
 	String id_usuario;
@@ -158,45 +164,81 @@ public class Eventos implements ActionListener {
 			}
 		}
 		
+		Action delete = new AbstractAction()
+		{
+		    public void actionPerformed(ActionEvent e)
+		    {
+		    	if (gui.ListaAnuncios.get(Integer.valueOf( e.getActionCommand() )).getId_usuario().equals(gui.logueado.getUsuario())) {
+		    		try {
+						eliminar.eliminarAnuncio("DELETE FROM TABANU_TABLON_ANUNCIOS WHERE TABANU_ID_MENSAJE='"+
+			        gui.ListaAnuncios.get(Integer.valueOf( e.getActionCommand() )).getId_mensaje()+"'");
+						gui.recuperar.RefrescarArray("anuncios");
+					} catch (ClassNotFoundException e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+			        
+			        JTable table = (JTable)e.getSource();
+			        int modelRow = Integer.valueOf( e.getActionCommand() );
+			        ((DefaultTableModel)table.getModel()).removeRow(modelRow);
+				}else{
+					JOptionPane.showMessageDialog( null, "Solo el autor puede borrar el mensaje" );
+				}
+		        
+		    }
+		};
+		
+		Action responder = new AbstractAction()
+		{
+		    public void actionPerformed(ActionEvent e)
+		    {	
+		    	VentanaRespuestas vr= new VentanaRespuestas(gui.ListaAnuncios.get(Integer.valueOf( e.getActionCommand() )).getId_mensaje(),
+		    			gui.logueado.getUsuario());
+		    	vr.setVisible(true);
+		    }
+		};
+		
+		Action respuestas = new AbstractAction()
+		{
+		    public void actionPerformed(ActionEvent e)
+		    {	
+		    	System.out.println(gui.ListaAnuncios.get(Integer.valueOf( e.getActionCommand() )).getRespanu().size());
+		    	ListaRespuestas lr= new ListaRespuestas(gui.ListaAnuncios.get(Integer.valueOf( e.getActionCommand() )).getRespanu());
+		    	lr.setVisible(true);
+		    }
+		};
+		
 		Object[] fila = new Object[gui.modeloAnuncios.getColumnCount()];
 		for (int i = 0; i < gui.ListaAnuncios.size(); i++) {
 				fila[0]=gui.ListaAnuncios.get(i).getId_mensaje();
 				fila[1]=gui.ListaAnuncios.get(i).getTitulo();
 				fila[2]=gui.ListaAnuncios.get(i).getMensaje();
 				fila[3]=gui.ListaAnuncios.get(i).getFecha_creacion();
-				fila[4]="Eliminar";								
+				fila[4]="Eliminar";
+				fila[5]="Responder";				
+				fila[6]="Respuestas("+gui.ListaAnuncios.get(i).getRespanu().size()+")";
+				
 				gui.modeloAnuncios.addRow(fila);
 				gui.tablaAnuncios.setModel(gui.modeloAnuncios);
 				gui.tablaAnuncios.validate();
-				gui.tablaAnuncios.repaint();			
-			
-		}	
-		
+				gui.tablaAnuncios.repaint();	
+				
 
-		Action delete = new AbstractAction()
-		{
-		    public void actionPerformed(ActionEvent e)
-		    {
-		        try {
-					eliminar.eliminarAnuncio("DELETE FROM TABANU_TABLON_ANUNCIOS WHERE TABANU_ID_MENSAJE='"+
-		        gui.ListaAnuncios.get(Integer.valueOf( e.getActionCommand() )).getId_mensaje()+"'");
-					gui.recuperar.RefrescarArray("anuncios");
-				} catch (ClassNotFoundException e1) {
-					e1.printStackTrace();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
+				if (gui.ListaAnuncios.get(i).getId_usuario().equals(gui.logueado.getUsuario())) {
+				}else{
+
 				}
-		        
-		        JTable table = (JTable)e.getSource();
-		        int modelRow = Integer.valueOf( e.getActionCommand() );
-		        ((DefaultTableModel)table.getModel()).removeRow(modelRow);
-		        
-		    }
-		};
-		 
-		ButtonColumn buttonColumn = new ButtonColumn(gui.tablaAnuncios, delete, 4);
-		buttonColumn.setMnemonic(KeyEvent.VK_D);
-		
+	
+		}
+
+
+		ButtonColumn buttonColumnEliminar = new ButtonColumn(gui.tablaAnuncios, delete, 4);
+		buttonColumnEliminar.setMnemonic(KeyEvent.VK_D);
+		ButtonColumn buttonColumnRespuestas = new ButtonColumn(gui.tablaAnuncios, responder, 5);
+		buttonColumnRespuestas.setMnemonic(KeyEvent.VK_D);
+		ButtonColumn buttonColumnResponder = new ButtonColumn(gui.tablaAnuncios, respuestas, 6);
+		buttonColumnResponder.setMnemonic(KeyEvent.VK_D);
 	}
 	
 	public void mostrarCalendario(ArrayList<Recordatorio> rec,int id_com) throws ClassNotFoundException, SQLException{
@@ -241,15 +283,16 @@ public class Eventos implements ActionListener {
 						fila[5]=gui.ListaMovimientos.get(i).getMotivo();
 						fila[6]=gui.ListaMovimientos.get(i).getSaldo_anterior();
 						fila[7]=gui.ListaMovimientos.get(i).getSaldo_final();
+						
+						gui.modeloCuentas.addRow(fila);
+						gui.tablaCuentas.setModel(gui.modeloCuentas);
+						gui.tablaCuentas.validate();
+						gui.tablaCuentas.repaint();
 						continue;
 					}
 				
 				}
 			}
-			gui.modeloCuentas.addRow(fila);
-			gui.tablaCuentas.setModel(gui.modeloCuentas);
-			gui.tablaCuentas.validate();
-			gui.tablaCuentas.repaint();
 						
 			
 		}
@@ -284,14 +327,15 @@ public class Eventos implements ActionListener {
 					fila[4]=gui.ListaMovimientos.get(i).getFecha();
 					fila[5]=gui.ListaMovimientos.get(i).getMotivo();
 					fila[6]=gui.ListaMovimientos.get(i).getSaldo_anterior();
-					fila[7]=gui.ListaMovimientos.get(i).getSaldo_final();				
+					fila[7]=gui.ListaMovimientos.get(i).getSaldo_final();
+					
+					gui.modeloComunidad.addRow(fila);
+					gui.tablaComunidad.setModel(gui.modeloComunidad);
+					gui.tablaComunidad.validate();
+					gui.tablaComunidad.repaint();				
 					continue;
 				}						
 			}	
-			gui.modeloComunidad.addRow(fila);
-			gui.tablaComunidad.setModel(gui.modeloComunidad);
-			gui.tablaComunidad.validate();
-			gui.tablaComunidad.repaint();
 		}
 	}
 

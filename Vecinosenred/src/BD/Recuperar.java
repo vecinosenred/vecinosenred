@@ -28,6 +28,7 @@ public class Recuperar implements Runnable{
 	public ArrayList<Comunidad> comunidades=new ArrayList<Comunidad>();
 	public ArrayList<Movimiento> movimientos=new ArrayList<Movimiento>();
 	public ArrayList<Anuncio> anuncios=new ArrayList<Anuncio>();
+	public ArrayList<Anuncio> resp_anuncios=new ArrayList<Anuncio>();
 	public ArrayList<Incidencia> incidencias=new ArrayList<Incidencia>();
 	public ArrayList<Mensaje> mensajes=new ArrayList<Mensaje>();
 	public ArrayList<Instalacion> instalaciones=new ArrayList<Instalacion>();

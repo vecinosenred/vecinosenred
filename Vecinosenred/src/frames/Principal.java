@@ -44,12 +44,12 @@ import clases.Usuario;
 import java.awt.Font;
 
 public class Principal extends JFrame{
-	public JPanel panelLogin, PanelInicio,Mensajes,Incidencias,Calendario,Cuentas,Comunidad,Instalaciones,Administracion;
+	public JPanel panelLogin, PanelInicio,Mensajes,Incidencias,Calendario,Cuentas,Comunidad,Instalaciones,Administracion,Anuncios;
 	public JButton anadirmensaje,anadirincidencia,anadirAnuncio,btnAnadirUsuario,btnModificarUsuario,btnBorrarUsuario,btnIngreso,btnGasto,btnAnadirInstalacion,btnModificarInstalacion,btnBorrarInstalacion;
 	public JMenuItem mntmLogin, mntmSalir,mntmCambioContraseña,mntmNuevaComunidad;
 	String titulosMensajes[] = { "De","Para", "Asunto", "Mensajes","" };
 	String titulosIncidencias[] = { "Ticket","Titulo","Estado","Fecha Creada",""};
-	String titulosAnuncios[] = { "Ticket","Titulo","Anuncio","Fecha Creada",""};
+	String titulosAnuncios[] = { "Ticket","Titulo","Anuncio","Fecha Creada","","",""};
 	String titulosCuentas[] = { "Num. Cuenta","Titular","Cantidad","Tipo Movimiento",
 			"Fecha","Motivo","Saldo Anterior","Saldo Nuevo"};
 	String titulosComunidad[] = { "Num. Cuenta","Titular","Cantidad","Tipo Movimiento",
@@ -61,15 +61,15 @@ public class Principal extends JFrame{
 	public JTable tablamensajes,tablaincidencias,tablaAnuncios,tablaCuentas,
 				tablaComunidad,tablaInstalaciones;
 	public static Usuario logueado = new Usuario("usuario", "pass", "nombre", "domicilio",0);
-	public static 	ArrayList<Mensaje> ListaMensajes= new ArrayList<Mensaje>();
-	public static	ArrayList<Anuncio> ListaAnuncios= new ArrayList<Anuncio>();
-	public static	ArrayList<Incidencia> ListaIncidencias= new ArrayList<Incidencia>();
-	public static	ArrayList<Movimiento> ListaMovimientos= new ArrayList<Movimiento>();
+	public static ArrayList<Mensaje> ListaMensajes= new ArrayList<Mensaje>();
+	public static ArrayList<Anuncio> ListaAnuncios= new ArrayList<Anuncio>();
+	public static ArrayList<Incidencia> ListaIncidencias= new ArrayList<Incidencia>();
+	public static ArrayList<Movimiento> ListaMovimientos= new ArrayList<Movimiento>();
 	public static ArrayList<ComunidadUsuario> ListaComusu= new ArrayList<ComunidadUsuario>();
 	public Recuperar recuperar;
 	public JComboBox<String> comboBox;
 	Eventos principal;
-	EventosAnuncios Eveanuncios;
+	public EventosAnuncios Eveanuncios;
 	EventosCalendario EveCalendario;
 	EventosComunidad EveComunidad;
 	EventosCuentas EveCuentas;
@@ -161,7 +161,7 @@ public class Principal extends JFrame{
 		PanelInicio.add(PanelPrincipal);
 		
 		//Panel Anuncios
-		JPanel Anuncios = new JPanel();
+		Anuncios = new JPanel();
 		Anuncios.setBounds(0, 0, 794, 450);
 		Anuncios.setLayout(null);
 		Anuncios.setBorder(null);
@@ -171,6 +171,7 @@ public class Principal extends JFrame{
 		Anuncios.add(scrollAn);
 		
 		modeloAnuncios = new DefaultTableModel(null, titulosAnuncios);
+		modeloAnuncios.addTableModelListener(Eveanuncios);
 		tablaAnuncios = new JTable(modeloAnuncios){
 	        public boolean isCellEditable(int rowIndex, int vColIndex) {
 
@@ -180,10 +181,11 @@ public class Principal extends JFrame{
 	        		return true;
 	        	}
 	        }};
+	    tablaAnuncios.addMouseListener(Eveanuncios);
 		scrollAn.setViewportView(tablaAnuncios);
 		
 		anadirAnuncio = new JButton();
-		anadirAnuncio.setText("nuevo mensaje");
+		anadirAnuncio.setText("nuevo anuncio");
 		anadirAnuncio.setBounds(650, 450, 125, 20);
 		Anuncios.add(anadirAnuncio);
 		

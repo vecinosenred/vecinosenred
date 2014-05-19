@@ -356,15 +356,15 @@ public class Eventos implements ActionListener {
 			
 		}
 		if(e.getSource()==gui.btnAnadirUsuario){
-			VentanaUsuario ventana =new VentanaUsuario(gui.recuperar.getComunidades().get(gui.comboBox.getSelectedIndex()).getId(),gui.logueado,gui.recuperar.getUsuarios(),gui.recuperar.getComunidadesUsuarios(),"Alta");
+			VentanaUsuario ventana =new VentanaUsuario(gui.idcomunidad(gui.comboBox.getSelectedItem().toString()),gui.logueado,gui.recuperar.getUsuarios(),gui.recuperar.getComunidadesUsuarios(),"Alta");
 			ventana.setVisible(true);
 		}
 		if(e.getSource()==gui.btnBorrarUsuario){
-			VentanaUsuario ventana =new VentanaUsuario(gui.recuperar.getComunidades().get(gui.comboBox.getSelectedIndex()).getId(),gui.logueado,gui.recuperar.getUsuarios(),gui.recuperar.getComunidadesUsuarios(),"Baja");
+			VentanaUsuario ventana =new VentanaUsuario(gui.idcomunidad(gui.comboBox.getSelectedItem().toString()),gui.logueado,gui.recuperar.getUsuarios(),gui.recuperar.getComunidadesUsuarios(),"Baja");
 			ventana.setVisible(true);
 		}
 		if(e.getSource()==gui.btnModificarUsuario){
-			VentanaUsuario ventana =new VentanaUsuario(gui.recuperar.getComunidades().get(gui.comboBox.getSelectedIndex()).getId(),gui.logueado,gui.recuperar.getUsuarios(),gui.recuperar.getComunidadesUsuarios(),"Modificacion");
+			VentanaUsuario ventana =new VentanaUsuario(gui.idcomunidad(gui.comboBox.getSelectedItem().toString()),gui.logueado,gui.recuperar.getUsuarios(),gui.recuperar.getComunidadesUsuarios(),"Modificacion");
 			ventana.setVisible(true);
 		}
 	}

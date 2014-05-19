@@ -211,7 +211,7 @@ public class Recuperar implements Runnable{
 	}
 
 	public void setComunidadesUsuarios(ArrayList<ComunidadUsuario> comunidadesusuarios) {
-		this.comunidades_usuarios = comunidades_usuarios;
+		this.comunidades_usuarios = comunidadesusuarios;
 	}
 
 
@@ -268,7 +268,7 @@ public class Recuperar implements Runnable{
 			break;
 			
 		case "comunidades_usuarios":
-			com_usu.clear();
+			comunidades_usuarios.clear();
 			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
 			while(rs.next()){
 //				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));

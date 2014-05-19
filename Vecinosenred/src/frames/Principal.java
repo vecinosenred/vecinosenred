@@ -93,7 +93,15 @@ public class Principal extends JFrame{
 	public static void setLogueado(Usuario logueado) {
 		Principal.logueado = logueado;
 	}
-
+	public int idcomunidad(String comunidad){
+		int numero=0;
+		for(int i=0;i<recuperar.comunidades.size();i++){
+			if(comunidad.equals(recuperar.comunidades.get(i).getNombre())){
+				numero=recuperar.comunidades.get(i).getId();
+			}
+		}
+		return numero;
+	}
 
 	public Principal(){
 		
@@ -414,13 +422,15 @@ public class Principal extends JFrame{
 		comboBox = new JComboBox<String>();
 		comboBox.setBounds(540, 0, 254, 50);
 		comboBox.addActionListener(new ActionListener() {
-			
+		
+		
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				boolean valido=false;
-				
-				for(int i=0;i<recuperar.com_usu.size();i++){
-					if(logueado.getUsuario().equals(recuperar.com_usu.get(i).getId_usuario())&&recuperar.com_usu.get(i).getAdministrador()==1&&recuperar.com_usu.get(i).getId_comunidades()==recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId()){
+				System.out.println(recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
+				for(int i=0;i<recuperar.comunidades_usuarios.size();i++){
+					
+					if(logueado.getUsuario().equals(recuperar.comunidades_usuarios.get(i).getId_usuario())&&recuperar.comunidades_usuarios.get(i).getAdministrador()==1&&recuperar.comunidades_usuarios.get(i).getId_comunidades()==idcomunidad(comboBox.getSelectedItem().toString())){
 						valido=true;
 					}
 				}

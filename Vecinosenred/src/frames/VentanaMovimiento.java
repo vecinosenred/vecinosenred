@@ -52,7 +52,7 @@ public class VentanaMovimiento extends JDialog {
 		setTitle("Movimiento");
 		setBackground(Color.GRAY);
 		setSize(500, 400);
-		setBounds(400, 300, 500, 400);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
 
 		JLabel lblDe = new JLabel("Cuenta:");
@@ -156,7 +156,7 @@ public class VentanaMovimiento extends JDialog {
 		setTitle("Incidencia");
 		setBackground(Color.GRAY);
 		setSize(500, 300);
-		setBounds(400, 300, 500, 300);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
 
 		JLabel lblCuenta = new JLabel("Cuenta:");

@@ -936,7 +936,8 @@ public class Calendario extends JPanel implements ActionListener {
 			lugarT.setText(l);
 			actividadT.setText(a);
 
-			marco.setSize(300,350);
+			marco.setSize(400,400);
+			marco.setLocationRelativeTo(null);
 			marco.show();
 
 	}// verRecordatorioInterfaz

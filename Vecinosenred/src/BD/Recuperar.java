@@ -21,18 +21,18 @@ public class Recuperar implements Runnable{
 	private Statement st;
 	private ResultSet rs;
 	private String id_usu;
-	private ArrayList<ComunidadUsuario> com_usu=new ArrayList<ComunidadUsuario>();
-	private ArrayList<Usuario> usuarios=new ArrayList<Usuario>();
-	private Usuario usuarioLog;
-	private ArrayList<Comunidad> comunidades=new ArrayList<Comunidad>();
-	private ArrayList<Movimiento> movimientos=new ArrayList<Movimiento>();
-	private ArrayList<Anuncio> anuncios=new ArrayList<Anuncio>();
-	private ArrayList<Incidencia> incidencias=new ArrayList<Incidencia>();
-	private ArrayList<Mensaje> mensajes=new ArrayList<Mensaje>();
-	private ArrayList<Instalacion> instalaciones=new ArrayList<Instalacion>();
-	private ArrayList<Recordatorio> recordatorios=new ArrayList<Recordatorio>();
-	private ArrayList<Cuenta> cuentas=new ArrayList<Cuenta>();
-	private Conectar c=new Conectar();
+	public ArrayList<ComunidadUsuario> com_usu=new ArrayList<ComunidadUsuario>();
+	public ArrayList<Usuario> usuarios=new ArrayList<Usuario>();
+	public Usuario usuarioLog;
+	public ArrayList<Comunidad> comunidades=new ArrayList<Comunidad>();
+	public ArrayList<Movimiento> movimientos=new ArrayList<Movimiento>();
+	public ArrayList<Anuncio> anuncios=new ArrayList<Anuncio>();
+	public ArrayList<Incidencia> incidencias=new ArrayList<Incidencia>();
+	public ArrayList<Mensaje> mensajes=new ArrayList<Mensaje>();
+	public ArrayList<Instalacion> instalaciones=new ArrayList<Instalacion>();
+	public ArrayList<Recordatorio> recordatorios=new ArrayList<Recordatorio>();
+	public ArrayList<Cuenta> cuentas=new ArrayList<Cuenta>();
+	public Conectar c=new Conectar();
 	private Thread thread;
 	
 	public Recuperar(String id_usu) throws ClassNotFoundException, SQLException{
@@ -49,7 +49,7 @@ public class Recuperar implements Runnable{
 			usuarioLog=new Usuario(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),0);
 		}		
 		
-		rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO='"+id_usu+"'");		
+		rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
 		while(rs.next()){
 //			ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
 			ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 
@@ -238,7 +238,7 @@ public class Recuperar implements Runnable{
 			
 		case "com_usu":
 			com_usu.clear();
-			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO='"+id_usu+"'");		
+			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
 			while(rs.next()){
 //				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
 				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 
@@ -359,7 +359,7 @@ public class Recuperar implements Runnable{
 			}
 			
 			com_usu.clear();
-			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO='"+id_usu+"'");		
+			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
 			while(rs.next()){
 //				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
 				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 

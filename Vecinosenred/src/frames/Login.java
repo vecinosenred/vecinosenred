@@ -41,7 +41,8 @@ public class Login extends JFrame {
 		principal=p;
 				
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(100, 100, 450, 342);
+		setSize(450, 342);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -101,6 +102,9 @@ public class Login extends JFrame {
 							principal.comboBox.addItem(nomCom.get(i));
 						}						
 						setVisible(false);
+						principal.PanelInicio.setVisible(true);
+						principal.mntmCambioContraseña.setEnabled(true);
+						
 					} catch (ClassNotFoundException e) {
 						e.printStackTrace();
 					} catch (SQLException e) {

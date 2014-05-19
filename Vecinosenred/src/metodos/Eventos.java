@@ -25,6 +25,8 @@ import clases.Usuario;
 import frames.Calendario;
 import frames.Login;
 import frames.Principal;
+import frames.VentanaContraseña;
+import frames.VentanaUsuario;
 
 public class Eventos implements ActionListener {
 	Principal gui;
@@ -239,17 +241,57 @@ public class Eventos implements ActionListener {
 						fila[5]=gui.ListaMovimientos.get(i).getMotivo();
 						fila[6]=gui.ListaMovimientos.get(i).getSaldo_anterior();
 						fila[7]=gui.ListaMovimientos.get(i).getSaldo_final();
+						continue;
 					}
 				
-						gui.modeloCuentas.addRow(fila);
-						gui.tablaCuentas.setModel(gui.modeloCuentas);
-						gui.tablaCuentas.validate();
-						gui.tablaCuentas.repaint();
 				}
 			}
-			System.out.println(id_cuenta);
+			gui.modeloCuentas.addRow(fila);
+			gui.tablaCuentas.setModel(gui.modeloCuentas);
+			gui.tablaCuentas.validate();
+			gui.tablaCuentas.repaint();
 						
 			
+		}
+	}
+	
+	public void llenarlistaComunidad(ArrayList<Movimiento> mns,int id_com) throws ClassNotFoundException, SQLException{
+		
+		gui.ListaMovimientos.clear();
+		for (int i = gui.modeloComunidad.getRowCount() - 1; i > -1; i--) {
+	        gui.modeloComunidad.removeRow(i);
+	    }
+		for (int i = 0; i < mns.size(); i++) {
+			if(mns.get(i).getId_comunidad()==id_com){
+				gui.ListaMovimientos.add(mns.get(i));
+			}
+		}
+		
+		Cuenta m = null;
+		
+		Object[] fila = new Object[gui.modeloComunidad.getColumnCount()];
+		
+		for (int i = 0; i < gui.ListaMovimientos.size(); i++) {
+			int id_cuenta=gui.ListaMovimientos.get(i).getId_cuenta();
+			for (int j = 0; j < gui.recuperar.getCuentas().size(); j++) {
+				if(gui.recuperar.getCuentas().get(j).getId_cuenta()==id_cuenta &&
+						gui.recuperar.getCuentas().get(j).getId_comunidad()==id_com){
+					m=gui.recuperar.getCuentas().get(j);
+					fila[0]=gui.recuperar.getCuentas().get(gui.recuperar.getCuentas().indexOf(m)).getNum_cuenta();
+					fila[1]=gui.ListaMovimientos.get(i).getId_usuario();
+					fila[2]=gui.ListaMovimientos.get(i).getCantidad();
+					fila[3]=gui.ListaMovimientos.get(i).getTipo_movimiento();
+					fila[4]=gui.ListaMovimientos.get(i).getFecha();
+					fila[5]=gui.ListaMovimientos.get(i).getMotivo();
+					fila[6]=gui.ListaMovimientos.get(i).getSaldo_anterior();
+					fila[7]=gui.ListaMovimientos.get(i).getSaldo_final();				
+					continue;
+				}						
+			}	
+			gui.modeloComunidad.addRow(fila);
+			gui.tablaComunidad.setModel(gui.modeloComunidad);
+			gui.tablaComunidad.validate();
+			gui.tablaComunidad.repaint();
 		}
 	}
 
@@ -259,6 +301,27 @@ public class Eventos implements ActionListener {
 			final Login login= new Login(gui);
 			login.setVisible(true);
 		}
-		
+		if(e.getSource()==gui.mntmSalir){
+			System.exit(0);
+		}
+		if(e.getSource()==gui.mntmCambioContraseña){
+			VentanaContraseña ventana=new VentanaContraseña(gui.getLogueado());
+			ventana.setVisible(true);
+		}
+		if(e.getSource()==gui.mntmNuevaComunidad){
+			
+		}
+		if(e.getSource()==gui.btnAnadirUsuario){
+			VentanaUsuario ventana =new VentanaUsuario(gui.recuperar.getComunidades().get(gui.comboBox.getSelectedIndex()).getId(),gui.logueado,gui.recuperar.getUsuarios(),gui.recuperar.getCom_usu(),"Alta");
+			ventana.setVisible(true);
+		}
+		if(e.getSource()==gui.btnBorrarUsuario){
+			VentanaUsuario ventana =new VentanaUsuario(gui.recuperar.getComunidades().get(gui.comboBox.getSelectedIndex()).getId(),gui.logueado,gui.recuperar.getUsuarios(),gui.recuperar.getCom_usu(),"Baja");
+			ventana.setVisible(true);
+		}
+		if(e.getSource()==gui.btnModificarUsuario){
+			VentanaUsuario ventana =new VentanaUsuario(gui.recuperar.getComunidades().get(gui.comboBox.getSelectedIndex()).getId(),gui.logueado,gui.recuperar.getUsuarios(),gui.recuperar.getCom_usu(),"Modificacion");
+			ventana.setVisible(true);
+		}
 	}
 }

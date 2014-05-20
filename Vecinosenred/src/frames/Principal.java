@@ -3,6 +3,7 @@ package frames;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,15 +38,14 @@ import BD.Recuperar;
 import clases.Anuncio;
 import clases.ComunidadUsuario;
 import clases.Incidencia;
+import clases.Instalacion;
 import clases.Mensaje;
 import clases.Movimiento;
 import clases.Usuario;
 
-import java.awt.Font;
-
 public class Principal extends JFrame{
 	public JPanel panelLogin, PanelInicio,Mensajes,Incidencias,Calendario,Cuentas,Comunidad,Instalaciones,Administracion,Anuncios;
-	public JButton anadirmensaje,anadirincidencia,anadirAnuncio,btnAnadirUsuario,btnModificarUsuario,btnBorrarUsuario,btnMovimiento,btnAnadirInstalacion,btnModificarInstalacion,btnBorrarInstalacion;
+	public JButton anadirmensaje,anadirincidencia,anadirAnuncio,btnAnadirUsuario,btnModificarUsuario,btnBorrarUsuario,btnAnadirInstalacion,btnModificarInstalacion,btnBorrarInstalacion,btnMovimiento;	
 	public JMenuItem mntmLogin, mntmSalir,mntmCambioContraseña,mntmNuevaComunidad;
 	String titulosMensajes[] = { "De","Para", "Asunto", "Mensajes","" };
 	String titulosIncidencias[] = { "Ticket","Titulo","Estado","Fecha Creada",""};
@@ -66,6 +66,7 @@ public class Principal extends JFrame{
 	public static ArrayList<Incidencia> ListaIncidencias= new ArrayList<Incidencia>();
 	public static ArrayList<Movimiento> ListaMovimientos= new ArrayList<Movimiento>();
 	public static ArrayList<ComunidadUsuario> ListaComusu= new ArrayList<ComunidadUsuario>();
+	public static ArrayList<Instalacion> ListaInstalaciones= new ArrayList<Instalacion>();
 	public Recuperar recuperar;
 	public JComboBox<String> comboBox;
 	Eventos principal;
@@ -290,7 +291,7 @@ public class Principal extends JFrame{
 		tablaInstalaciones = new JTable(modeloInstalaciones){
 	        public boolean isCellEditable(int rowIndex, int vColIndex) {
 
-	        	if(vColIndex<4){
+	        	if(vColIndex<3){
 		            return false;
 	        	}else{
 	        		return true;
@@ -422,7 +423,7 @@ public class Principal extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				boolean valido=false;
-				System.out.println(recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
+				System.out.println(recuperar.getInstalaciones().size());
 				for(int i=0;i<recuperar.comunidades_usuarios.size();i++){
 					
 					if(logueado.getUsuario().equals(recuperar.comunidades_usuarios.get(i).getId_usuario())&&recuperar.comunidades_usuarios.get(i).getAdministrador()==1&&recuperar.comunidades_usuarios.get(i).getId_comunidades()==idcomunidad(comboBox.getSelectedItem().toString())){
@@ -437,6 +438,8 @@ public class Principal extends JFrame{
 				principal.llenarlistaIncidencias(recuperar.getIncidencias(),
 						recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
 				principal.llenarlistaCuentas(recuperar.getMovimientos(),
+						recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
+				principal.llenarlistaInstalaciones(recuperar.getInstalaciones(),
 						recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
 				try {
 					principal.llenarlistaAnuncios(recuperar.getAnuncios(),

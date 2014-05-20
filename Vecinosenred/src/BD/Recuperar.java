@@ -14,6 +14,7 @@ import clases.Instalacion;
 import clases.Mensaje;
 import clases.Movimiento;
 import clases.Recordatorio;
+import clases.Reserva;
 import clases.Usuario;
 
 public class Recuperar implements Runnable{
@@ -32,6 +33,7 @@ public class Recuperar implements Runnable{
 	public ArrayList<Incidencia> incidencias=new ArrayList<Incidencia>();
 	public ArrayList<Mensaje> mensajes=new ArrayList<Mensaje>();
 	public ArrayList<Instalacion> instalaciones=new ArrayList<Instalacion>();
+	public ArrayList<Reserva> reservas=new ArrayList<Reserva>();
 	public ArrayList<Recordatorio> recordatorios=new ArrayList<Recordatorio>();
 	public ArrayList<Cuenta> cuentas=new ArrayList<Cuenta>();
 	public Conectar c=new Conectar();
@@ -113,7 +115,7 @@ public class Recuperar implements Runnable{
 		}
 		
 		for (int i = 0; i < com_usu.size(); i++) {
-			rs=st.executeQuery("SELECT * FROM INCI_INCIDENCIAS WHERE INCI_ID_COMUNIDAD="+com_usu.get(i).getId_comunidades());		
+			rs=st.executeQuery("SELECT * FROM INCI_INCIDENCIAS WHERE INCI_ID_COMUNIDAD='"+com_usu.get(i).getId_comunidades()+"'");		
 			while(rs.next()){
 				Incidencia inci= new Incidencia(rs.getInt(1), rs.getInt(2), rs.getString(3), 
 						rs.getString(4), rs.getString(5),rs.getInt(6), rs.getDate(7));
@@ -129,12 +131,21 @@ public class Recuperar implements Runnable{
 		}
 		
 		for (int i = 0; i < com_usu.size(); i++) {
-			rs=st.executeQuery("SELECT * FROM INST_INSTALACIONES WHERE INST_ID_COMUNIDAD="+com_usu.get(i).getId_comunidades());		
+			rs=st.executeQuery("SELECT * FROM INST_INSTALACIONES WHERE INST_ID_COMUNIDAD='"+com_usu.get(i).getId_comunidades()+"'");		
 			while(rs.next()){
 				Instalacion inst= new Instalacion(rs.getInt(1), rs.getInt(2), rs.getString(3), 
 						rs.getInt(4), rs.getString(5),rs.getInt(6), rs.getString(7),rs.getInt(8));
 				instalaciones.add(inst);
 			}			
+		}
+		
+		for (int i = 0; i < instalaciones.size(); i++) {
+			rs=st.executeQuery("SELECT * FROM RESINS_RESERVAS_INSTALACIONES WHERE RESINS_ID_INSTALACION="+instalaciones.get(i).getId_instalacion());		
+			while(rs.next()){
+				Reserva res= new Reserva(rs.getInt(1), rs.getInt(2), rs.getDate(3), 
+						rs.getInt(4),rs.getInt(5));
+				reservas.add(res);
+			}
 		}
 		
 		for (int i = 0; i < com_usu.size(); i++) {
@@ -212,10 +223,16 @@ public class Recuperar implements Runnable{
 
 	public void setComunidadesUsuarios(ArrayList<ComunidadUsuario> comunidadesusuarios) {
 		this.comunidades_usuarios = comunidadesusuarios;
+	}	
+	
+	public ArrayList<Reserva> getReservas() {
+		return reservas;
 	}
 
+	public void setReservas(ArrayList<Reserva> reservas) {
+		this.reservas = reservas;
+	}
 
-	
 	public ResultSet recuperarColumna(String query) throws ClassNotFoundException, SQLException{
 		
 		c.conectar();
@@ -358,6 +375,17 @@ public class Recuperar implements Runnable{
 			}
 			break;
 			
+		case "reservas":
+			reservas.clear();
+			for (int i = 0; i < instalaciones.size(); i++) {
+				rs=st.executeQuery("SELECT * FROM RESINS_RESERVAS_INSTALACIONES WHERE RESINS_ID_INSTALACION="+instalaciones.get(i).getId_instalacion());		
+				while(rs.next()){
+					Reserva res= new Reserva(rs.getInt(1), rs.getInt(2), rs.getDate(3), 
+							rs.getInt(4),rs.getInt(5));
+					reservas.add(res);
+				}
+			}
+			
 		case "recordatorios":
 			recordatorios.clear();
 			for (int i = 0; i < com_usu.size(); i++) {
@@ -474,6 +502,16 @@ public class Recuperar implements Runnable{
 							rs.getInt(4), rs.getString(5),rs.getInt(6), rs.getString(7),rs.getInt(8));
 					instalaciones.add(inst);
 				}			
+			}
+			
+			reservas.clear();
+			for (int i = 0; i < instalaciones.size(); i++) {
+				rs=st.executeQuery("SELECT * FROM RESINS_RESERVAS_INSTALACIONES WHERE RESINS_ID_INSTALACION="+instalaciones.get(i).getId_instalacion());		
+				while(rs.next()){
+					Reserva res= new Reserva(rs.getInt(1), rs.getInt(2), rs.getDate(3), 
+							rs.getInt(4),rs.getInt(5));
+					reservas.add(res);
+				}
 			}
 			
 			recordatorios.clear();

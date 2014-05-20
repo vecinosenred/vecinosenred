@@ -45,7 +45,7 @@ import java.awt.Font;
 
 public class Principal extends JFrame{
 	public JPanel panelLogin, PanelInicio,Mensajes,Incidencias,Calendario,Cuentas,Comunidad,Instalaciones,Administracion,Anuncios;
-	public JButton anadirmensaje,anadirincidencia,anadirAnuncio,btnAnadirUsuario,btnModificarUsuario,btnBorrarUsuario,btnIngreso,btnGasto,btnAnadirInstalacion,btnModificarInstalacion,btnBorrarInstalacion;
+	public JButton anadirmensaje,anadirincidencia,anadirAnuncio,btnAnadirUsuario,btnModificarUsuario,btnBorrarUsuario,btnMovimiento,btnAnadirInstalacion,btnModificarInstalacion,btnBorrarInstalacion;
 	public JMenuItem mntmLogin, mntmSalir,mntmCambioContraseña,mntmNuevaComunidad;
 	String titulosMensajes[] = { "De","Para", "Asunto", "Mensajes","" };
 	String titulosIncidencias[] = { "Ticket","Titulo","Estado","Fecha Creada",""};
@@ -367,15 +367,10 @@ public class Principal extends JFrame{
 		lblAccionesEconomicas.setBounds(579, 10, 200, 23);
 		Administracion.add(lblAccionesEconomicas);
 		
-		btnIngreso = new JButton("Realizar Ingreso ");
-		btnIngreso.setBounds(604, 45, 150, 23);
-		Administracion.add(btnIngreso);
-		btnIngreso.addActionListener(principal);
-		
-		btnGasto = new JButton("Realizar Gasto");
-		btnGasto.setBounds(604, 79, 150, 23);
-		Administracion.add(btnGasto);
-		btnGasto.addActionListener(principal);
+		btnMovimiento = new JButton("Realizar Movimiento");
+		btnMovimiento.setBounds(604, 45, 150, 23);
+		Administracion.add(btnMovimiento);
+		btnMovimiento.addActionListener(principal);
 		
 		JLabel lblAccionesDeInstalaciones = new JLabel("Acciones de Instalaciones");
 		lblAccionesDeInstalaciones.setHorizontalAlignment(SwingConstants.CENTER);

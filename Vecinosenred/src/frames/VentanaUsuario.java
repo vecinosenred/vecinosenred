@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 import metodos.ObtenerFechaActual;
+import BD.Actualizar;
 import BD.Eliminar;
 import BD.Introducir;
 import clases.ComunidadUsuario;
@@ -25,6 +26,7 @@ import clases.Usuario;
 
 import javax.swing.JPasswordField;
 import javax.swing.JCheckBox;
+import javax.xml.soap.Text;
 
 public class VentanaUsuario extends JDialog {
 	private JTextField textdestinatario;
@@ -119,7 +121,6 @@ public class VentanaUsuario extends JDialog {
 			btnAccion.setText("Alta");
 		}
 		if (tipo.equals("Baja")) {
-
 			btnAccion.setText("Baja");
 		}
 		if (tipo.equals("Modificacion")) {
@@ -240,6 +241,19 @@ public class VentanaUsuario extends JDialog {
 					}
 				}
 				if (tipo.equals("Modificacion")) {
+					Actualizar actualizar = new Actualizar();
+					try {
+						int admin=0;
+						if(checkAdministrador.isEnabled()){admin=1;}
+						actualizar.actualizar("Update LOGUSU_LOGIN_USUARIOS set LOGUSU_PASSWORD="+passwordField.getText()+", LOGUSU_NOMBRE="+textNombre.getText()+", LOGUSU_DOMICILIO="+textDireccion.getText()+" where Logusu_ID='"+textIdUsuario.getText()+"'");
+						actualizar.actualizar("Update COMUSU_COMUNIDAD_USUARIO set COMUSU_ADMINISTRADOR="+admin+",COMUSU_NUM_CUENTA="+textCuenta.getText()+",COMUSU_PISO="+textDireccion.getText()+" where COMUSU_ID_USUARIO='"+textIdUsuario.getText()+"' AND COMUSU_ID_COMUNIDADES="+Integer.parseInt(textComunidad.getText())+"");
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		});

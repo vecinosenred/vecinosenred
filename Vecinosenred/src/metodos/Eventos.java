@@ -30,6 +30,8 @@ import frames.ListaRespuestas;
 import frames.Login;
 import frames.Principal;
 import frames.VentanaContraseña;
+import frames.VentanaInstalaciones;
+import frames.VentanaMovimiento;
 import frames.VentanaRespuestas;
 import frames.VentanaUsuario;
 
@@ -365,6 +367,22 @@ public class Eventos implements ActionListener {
 		}
 		if(e.getSource()==gui.btnModificarUsuario){
 			VentanaUsuario ventana =new VentanaUsuario(gui.idcomunidad(gui.comboBox.getSelectedItem().toString()),gui.logueado,gui.recuperar.getUsuarios(),gui.recuperar.getComunidadesUsuarios(),"Modificacion");
+			ventana.setVisible(true);
+		}
+		if(e.getSource()==gui.btnAnadirInstalacion){
+			VentanaInstalaciones ventana = new VentanaInstalaciones(gui.idcomunidad(gui.comboBox.getSelectedItem().toString()), gui.logueado, gui.recuperar.getUsuarios(), gui.recuperar.getInstalaciones(), "Alta");
+			ventana.setVisible(true);
+		}
+		if(e.getSource()==gui.btnModificarInstalacion){
+			VentanaInstalaciones ventana = new VentanaInstalaciones(gui.idcomunidad(gui.comboBox.getSelectedItem().toString()), gui.logueado, gui.recuperar.getUsuarios(), gui.recuperar.getInstalaciones(), "Modificacion");
+			ventana.setVisible(true);
+		}
+		if(e.getSource()==gui.btnBorrarInstalacion){
+			VentanaInstalaciones ventana = new VentanaInstalaciones(gui.idcomunidad(gui.comboBox.getSelectedItem().toString()), gui.logueado, gui.recuperar.getUsuarios(), gui.recuperar.getInstalaciones(), "Baja");
+			ventana.setVisible(true);
+		}
+		if(e.getSource()==gui.btnMovimiento){
+			VentanaMovimiento ventana = new VentanaMovimiento(gui.idcomunidad(gui.comboBox.getSelectedItem().toString()), gui.logueado, gui.recuperar.getUsuarios(), gui.recuperar.getComunidadesUsuarios());
 			ventana.setVisible(true);
 		}
 	}

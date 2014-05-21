@@ -1,14 +1,16 @@
 package BD;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * 
+ * @author JonB
+ * Clase utilizada para actualizar la BDD
+ */
 public class Actualizar{
 
 	private Statement st;
-	private ResultSet rs;
-
 	public void actualizar(String query) throws ClassNotFoundException, SQLException{
 		
 		
@@ -17,7 +19,7 @@ public class Actualizar{
 		c.conectar();		
 
 		st = c.getConexion().createStatement();	
-		rs=st.executeQuery(query);		
+		st.executeQuery(query);		
 		
 		c.desconectar();
 		

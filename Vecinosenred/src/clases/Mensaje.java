@@ -2,6 +2,11 @@ package clases;
 
 import java.sql.Date;
 
+/**
+ * Clase que define el tipo Mensaje
+ * @author JonB
+ *
+ */
 public class Mensaje {
 	
 	private int id_comunidad,id_mensaje;

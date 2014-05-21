@@ -8,6 +8,11 @@ import java.util.ArrayList;
 
 import BD.Conectar;
 
+/**
+ * Clase que define el tipo RespuestaAnuncio
+ * @author JonB
+ *
+ */
 public class RespuestaAnuncio {
 	
 	private Statement st;
@@ -65,6 +70,12 @@ public class RespuestaAnuncio {
 		this.rean = rean;
 	}
 	
+	/**
+	 * Método constructor al que sele pasa por parámetro el ID de la respuesta al anuncio y recupera las respuestas al mismo, 
+	 * genera un arraylist con ellos. Este arraylist formará parte del objeto Anuncio.
+	 * @see clases.Anuncio#Anuncio(int, int, String, String, String, Date) Anuncio
+	 * @param id_incidencia
+	 */
 	public RespuestaAnuncio(int id_mensaje){
 		
 		Conectar con = new Conectar();
@@ -84,10 +95,8 @@ public class RespuestaAnuncio {
 				
 			}
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

@@ -2,6 +2,11 @@ package clases;
 
 import java.sql.Date;
 
+/**
+ * Clase que define el tipo Movimiento
+ * @author JonB
+ *
+ */
 public class Movimiento {
 	
 	private int id_cuenta,tipo_movimiento,id_movimiento,id_comunidad;

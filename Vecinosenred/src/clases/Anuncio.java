@@ -1,13 +1,13 @@
 package clases;
 
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
-import BD.Conectar;
-
+/**
+ * Clase que define el tipo Anuncio
+ * @author JonB
+ *
+ */
 public class Anuncio {
 	
 	private int id_mensaje,id_comunidad;

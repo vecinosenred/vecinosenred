@@ -1,5 +1,10 @@
 package clases;
 
+/**
+ * Clase que define el tipo ComunidadUsuario
+ * @author JonB
+ *
+ */
 public class ComunidadUsuario {
 	
 	private int id_comunidades,administrador;

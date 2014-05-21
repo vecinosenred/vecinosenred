@@ -4,6 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * 
+ * @author JonB
+ * Clase utilizada para conectar con la BDD
+ */
 public class Conectar{	
 
 	private Connection conexion;

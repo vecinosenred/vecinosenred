@@ -442,14 +442,14 @@ public class Principal extends JFrame{
 						recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
 				principal.llenarlistaCuentas(recuperar.getMovimientos(),
 						recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
-				principal.llenarlistaInstalaciones(recuperar.getInstalaciones(),
-						recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
+				//principal.llenarlistaInstalaciones(recuperar.getInstalaciones(),			Da fallo, no esta el metodo
+		//				recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
 				try {
 					principal.llenarlistaAnuncios(recuperar.getAnuncios(),
 							recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
 					principal.mostrarCalendario(recuperar.getRecordatorios(), 
 							recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
-					principal.llenarlistaComunidad(recuperar.getMovimientosComunidad(),
+					principal.llenarlistaComunidad(recuperar.getMovimientosComunidad(), 
 							recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
 
 				} catch (ClassNotFoundException e) {

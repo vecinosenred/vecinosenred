@@ -3,6 +3,11 @@ package BD;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * 
+ * @author JonB
+ * Clase utilizada para introducir datos en la BDD
+ */
 public class Introducir {
 	
 	private Statement st;

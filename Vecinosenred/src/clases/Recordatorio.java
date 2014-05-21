@@ -3,6 +3,11 @@ package clases;
 import java.sql.Date;
 import java.sql.Time;
 
+/**
+ * Clase que define el tipo Recordatorio
+ * @author JonB
+ *
+ */
 public class Recordatorio {
 	
 	private int id_marca,id_comunidad;

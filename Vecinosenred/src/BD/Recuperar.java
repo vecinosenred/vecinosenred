@@ -1,6 +1,5 @@
 package BD;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,6 +17,11 @@ import clases.Recordatorio;
 import clases.Reserva;
 import clases.Usuario;
 
+/**
+ * 
+ * @author JonB
+ * Clase que recupera la BDD y la almacena en diferentes ArrayList.
+ */
 public class Recuperar implements Runnable{
 	
 	private Statement st;
@@ -41,6 +45,14 @@ public class Recuperar implements Runnable{
 	public Conectar c=new Conectar();
 	private Thread thread;
 	
+	/**
+	 * Constructor al que se le pasa por parámetro el ID del usuario logueado para recuperar solo los datos 
+	 * relacionados con el mismo. Además inicializa el thread para actualizar automáticamente cada minuto
+	 * @see BD.Recuperar#run() run()
+	 * @param id_usu
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public Recuperar(String id_usu) throws ClassNotFoundException, SQLException{
 		
 		thread=new Thread(this,"");
@@ -55,18 +67,16 @@ public class Recuperar implements Runnable{
 			usuarioLog=new Usuario(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),0);
 		}		
 		
-		rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO='"+id_usu+"'");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
+		rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO='"+id_usu+"'");
 		while(rs.next()){
-//			ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
 			ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 
 					rs.getInt("COMUSU_ADMINISTRADOR"), rs.getString("COMUSU_NUM_CUENTA"), rs.getString("COMUSU_PISO"));
 
 			com_usu.add(comusu);
 		}
 		
-		rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
+		rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO");
 		while(rs.next()){
-//			ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
 			ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 
 					rs.getInt("COMUSU_ADMINISTRADOR"), rs.getString("COMUSU_NUM_CUENTA"), rs.getString("COMUSU_PISO"));
 
@@ -253,28 +263,13 @@ public class Recuperar implements Runnable{
 	public void setMovimientosComunidad(ArrayList<Movimiento> movimientosComunidad) {
 		this.movimientosComunidad = movimientosComunidad;
 	}
-
-	public ResultSet recuperarColumna(String query) throws ClassNotFoundException, SQLException{
-		
-		c.conectar();
-		st=c.getConexion().createStatement();
-		rs=st.executeQuery(query);
-		c.desconectar();
-		
-		return rs;
-	}
 	
-	public ResultSet recuperarTodo(String tabla) throws SQLException, ClassNotFoundException{
-		
-		c.conectar();
-		st=c.getConexion().createStatement();
-		rs=st.executeQuery("SELECT * FROM "+tabla);
-		c.desconectar();
-		
-		return rs;
-		
-	}
-	
+	/**
+	 * Método utilizado para actualizar únicamente el array deseado. Éste se le pasará por parámetro.
+	 * @param array
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public void RefrescarArray(String array) throws ClassNotFoundException, SQLException{
 		c.conectar();
 		st=c.getConexion().createStatement();
@@ -295,9 +290,8 @@ public class Recuperar implements Runnable{
 			
 		case "com_usu":
 			com_usu.clear();
-			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO='"+id_usu+"'");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
+			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO='"+id_usu+"'");
 			while(rs.next()){
-//				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
 				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 
 						rs.getInt("COMUSU_ADMINISTRADOR"), rs.getString("COMUSU_NUM_CUENTA"), rs.getString("COMUSU_PISO"));
 
@@ -307,9 +301,8 @@ public class Recuperar implements Runnable{
 			
 		case "comunidades_usuarios":
 			comunidades_usuarios.clear();
-			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
+			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO");
 			while(rs.next()){
-//				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
 				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 
 						rs.getInt("COMUSU_ADMINISTRADOR"), rs.getString("COMUSU_NUM_CUENTA"), rs.getString("COMUSU_PISO"));
 
@@ -434,6 +427,12 @@ public class Recuperar implements Runnable{
 		c.desconectar();
 	}
 	
+	/**
+	 * Método utilizado para refrescar todos arrays. Se utiliza únicamente en el thread.
+	 * @see BD.Recuperar#run() run()
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public void RefrescarArray() throws ClassNotFoundException, SQLException{
 		c.conectar();
 		st=c.getConexion().createStatement();
@@ -451,9 +450,8 @@ public class Recuperar implements Runnable{
 			}
 			
 			com_usu.clear();
-			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO='"+id_usu+"'");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
+			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_USUARIO='"+id_usu+"'");
 			while(rs.next()){
-//				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
 				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 
 						rs.getInt("COMUSU_ADMINISTRADOR"), rs.getString("COMUSU_NUM_CUENTA"), rs.getString("COMUSU_PISO"));
 
@@ -461,9 +459,8 @@ public class Recuperar implements Runnable{
 			}		
 			
 			comunidades_usuarios.clear();
-			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO");		// WHERE COMUSU_ID_USUARIO='"+id_usu+"'
+			rs=st.executeQuery("SELECT * FROM COMUSU_COMUNIDAD_USUARIO");
 			while(rs.next()){
-//				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
 				ComunidadUsuario comusu= new ComunidadUsuario(rs.getString("COMUSU_ID_USUARIO"),rs.getInt("COMUSU_ID_COMUNIDADES"), 
 						rs.getInt("COMUSU_ADMINISTRADOR"), rs.getString("COMUSU_NUM_CUENTA"), rs.getString("COMUSU_PISO"));
 
@@ -570,6 +567,12 @@ public class Recuperar implements Runnable{
 		c.desconectar();
 	}
 	
+	/**
+	 * Método utilizado únicamente para recuperar los nombres de las comunidades del usuario.
+	 * @see frames.Login#Login(frames.Principal) Login
+	 * @param usuario
+	 * @return
+	 */
 	public ArrayList<String> recuperarNomComunidad(String usuario){
 		ArrayList<String> nomComunidad = new ArrayList<String>();
 		String query="SELECT COM_NOMBRE FROM COM_COMUNIDADES WHERE COM_ID IN "
@@ -586,7 +589,6 @@ public class Recuperar implements Runnable{
 
 			c.desconectar();
 		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
 		return nomComunidad;

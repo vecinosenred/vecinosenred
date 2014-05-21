@@ -1,5 +1,10 @@
 package clases;
 
+/**
+ * Clase que define el tipo Instalacion
+ * @author JonB
+ *
+ */
 public class Instalacion {
 	
 	private int id_instalacion,id_comunidad,coste,en_servicio,morosos;

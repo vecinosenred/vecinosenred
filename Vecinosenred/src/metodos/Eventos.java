@@ -1,4 +1,3 @@
-
 package metodos;
 
 import java.awt.event.ActionEvent;
@@ -21,6 +20,7 @@ import BD.Introducir;
 import clases.Anuncio;
 import clases.Cuenta;
 import clases.Incidencia;
+import clases.Instalacion;
 import clases.Mensaje;
 import clases.Movimiento;
 import clases.Recordatorio;
@@ -28,361 +28,430 @@ import clases.Usuario;
 import frames.Calendario;
 import frames.ListaRespuestas;
 import frames.Login;
+import frames.PanelComunidad;
 import frames.Principal;
 import frames.VentanaContraseña;
+import frames.VentanaCreaCom;
 import frames.VentanaInstalaciones;
 import frames.VentanaMovimiento;
+import frames.VentanaReservas;
 import frames.VentanaRespuestas;
 import frames.VentanaUsuario;
 
 public class Eventos implements ActionListener {
 	Principal gui;
-	Eliminar eliminar=new Eliminar();
-	Introducir introducir=new Introducir();
+	Eliminar eliminar = new Eliminar();
+	Introducir introducir = new Introducir();
 	Statement st;
 	ResultSet rs;
 	String id_usuario;
 
-	public Eventos(Principal in,String usuario){
+	public Eventos(Principal in, String usuario) {
 		gui = in;
-		id_usuario=usuario;
+		id_usuario = usuario;
 	}
-	public void llenarlistaMensajes(ArrayList<Mensaje> mns,int id_com){
-		
+
+	public void llenarlistaMensajes(ArrayList<Mensaje> mns, int id_com) {
+
 		gui.ListaMensajes.clear();
 		for (int i = gui.modeloMensajes.getRowCount() - 1; i > -1; i--) {
-	        gui.modeloMensajes.removeRow(i);
-	    }
+			gui.modeloMensajes.removeRow(i);
+		}
 		for (int i = 0; i < mns.size(); i++) {
-			if(mns.get(i).getId_comunidad()==id_com){
+			if (mns.get(i).getId_comunidad() == id_com) {
 				gui.ListaMensajes.add(mns.get(i));
 			}
 		}
-				
+
 		Object[] fila = new Object[gui.modeloMensajes.getColumnCount()];
 		for (int i = 0; i < gui.ListaMensajes.size(); i++) {
-				fila[0]=gui.ListaMensajes.get(i).getId_usuario();
-				fila[1]=gui.ListaMensajes.get(i).getId_destinatario();
-				fila[2]=gui.ListaMensajes.get(i).getAsunto();
-				fila[3]=gui.ListaMensajes.get(i).getMensaje();
-				fila[4]="Eliminar";
-				gui.modeloMensajes.addRow(fila);
-			
-		}			
+			fila[0] = gui.ListaMensajes.get(i).getId_usuario();
+			fila[1] = gui.ListaMensajes.get(i).getId_destinatario();
+			fila[2] = gui.ListaMensajes.get(i).getAsunto();
+			fila[3] = gui.ListaMensajes.get(i).getMensaje();
+			fila[4] = "Eliminar";
+			gui.modeloMensajes.addRow(fila);
+
+		}
 
 		gui.tablamensajes.setModel(gui.modeloMensajes);
 		gui.tablamensajes.validate();
-		gui.tablamensajes.repaint();	
+		gui.tablamensajes.repaint();
 
-		Action delete = new AbstractAction()
-		{
-		    public void actionPerformed(ActionEvent e)
-		    {
-		        try {
-					eliminar.eliminarAnuncio("DELETE FROM MENS_MENSAJES WHERE MENS_ID_MENSAJE='"+
-		        gui.ListaMensajes.get(Integer.valueOf( e.getActionCommand() )).getId_mensaje()+"'");
+		Action delete = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					eliminar.eliminarAnuncio("DELETE FROM MENS_MENSAJES WHERE MENS_ID_MENSAJE='"
+							+ gui.ListaMensajes.get(
+									Integer.valueOf(e.getActionCommand()))
+									.getId_mensaje() + "'");
 					gui.recuperar.RefrescarArray("mensajes");
 				} catch (ClassNotFoundException e1) {
 					e1.printStackTrace();
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-		        
-		        JTable table = (JTable)e.getSource();
-		        int modelRow = Integer.valueOf( e.getActionCommand() );
-		        ((DefaultTableModel)table.getModel()).removeRow(modelRow);
-		        
-		    }
+
+				JTable table = (JTable) e.getSource();
+				int modelRow = Integer.valueOf(e.getActionCommand());
+				((DefaultTableModel) table.getModel()).removeRow(modelRow);
+
+			}
 		};
-		 
-		ButtonColumn buttonColumn = new ButtonColumn(gui.tablamensajes, delete, 4);
+
+		ButtonColumn buttonColumn = new ButtonColumn(gui.tablamensajes, delete,
+				4);
 		buttonColumn.setMnemonic(KeyEvent.VK_D);
-		
+
 	}
-	
-	public void llenarlistaIncidencias(ArrayList<Incidencia> mns,int id_com){
-		
+
+	public void llenarlistaIncidencias(ArrayList<Incidencia> mns, int id_com) {
+
 		gui.ListaIncidencias.clear();
 		for (int i = gui.modeloIncidencias.getRowCount() - 1; i > -1; i--) {
-	        gui.modeloIncidencias.removeRow(i);
-	    }
+			gui.modeloIncidencias.removeRow(i);
+		}
 		for (int i = 0; i < mns.size(); i++) {
-			if(mns.get(i).getId_comunidad()==id_com){
+			if (mns.get(i).getId_comunidad() == id_com) {
 				gui.ListaIncidencias.add(mns.get(i));
 			}
 		}
-		
+
 		Object[] fila = new Object[gui.modeloIncidencias.getColumnCount()];
 		for (int i = 0; i < gui.ListaIncidencias.size(); i++) {
-				fila[0]=gui.ListaIncidencias.get(i).getId_mensaje();
-				fila[1]=gui.ListaIncidencias.get(i).getTitulo();
-				fila[2]=gui.ListaIncidencias.get(i).getEstado();
-				fila[3]=gui.ListaIncidencias.get(i).getFecha_creacion();
-				fila[4]="Eliminar";
-				gui.modeloIncidencias.addRow(fila);
-				gui.tablaincidencias.setModel(gui.modeloIncidencias);
-				gui.tablaincidencias.validate();
-				gui.tablaincidencias.repaint();
-		}	
-		
+			fila[0] = gui.ListaIncidencias.get(i).getId_mensaje();
+			fila[1] = gui.ListaIncidencias.get(i).getTitulo();
+			fila[2] = gui.ListaIncidencias.get(i).getEstado();
+			fila[3] = gui.ListaIncidencias.get(i).getFecha_creacion();
+			fila[4] = "Eliminar";
+			gui.modeloIncidencias.addRow(fila);
+			gui.tablaincidencias.setModel(gui.modeloIncidencias);
+			gui.tablaincidencias.validate();
+			gui.tablaincidencias.repaint();
+		}
 
-		Action delete = new AbstractAction()
-		{
-			public void actionPerformed(ActionEvent e)
-		    {
+		Action delete = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
 				System.out.println("hola capullo");
-		        try {
-					eliminar.eliminarAnuncio("DELETE FROM INCI_INCIDENCIAS WHERE INCI_ID_INCIDENCIA='"+
-		        gui.ListaIncidencias.get(Integer.valueOf( e.getActionCommand() )).getId_mensaje()+"'");
+				try {
+					eliminar.eliminarAnuncio("DELETE FROM INCI_INCIDENCIAS WHERE INCI_ID_INCIDENCIA='"
+							+ gui.ListaIncidencias.get(
+									Integer.valueOf(e.getActionCommand()))
+									.getId_mensaje() + "'");
 					gui.recuperar.RefrescarArray("incidencias");
-					
+
 				} catch (ClassNotFoundException e1) {
 					e1.printStackTrace();
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-		        
-		        JTable table = (JTable)e.getSource();
-		        int modelRow = Integer.valueOf( e.getActionCommand() );
-		        ((DefaultTableModel)table.getModel()).removeRow(modelRow);
-		        
-		    }
+
+				JTable table = (JTable) e.getSource();
+				int modelRow = Integer.valueOf(e.getActionCommand());
+				((DefaultTableModel) table.getModel()).removeRow(modelRow);
+
+			}
 		};
-		 
-		ButtonColumn buttonColumn = new ButtonColumn(gui.tablaincidencias, delete, 4);
+
+		ButtonColumn buttonColumn = new ButtonColumn(gui.tablaincidencias,
+				delete, 4);
 		buttonColumn.setMnemonic(KeyEvent.VK_D);
-		
+
 	}
-	
-	public void llenarlistaAnuncios(ArrayList<Anuncio> mns,int id_com) throws ClassNotFoundException, SQLException{
-		
+
+	public void llenarlistaAnuncios(ArrayList<Anuncio> mns, int id_com)
+			throws ClassNotFoundException, SQLException {
+
 		gui.ListaAnuncios.clear();
 		for (int i = gui.modeloAnuncios.getRowCount() - 1; i > -1; i--) {
-	        gui.modeloAnuncios.removeRow(i);
-	    }
+			gui.modeloAnuncios.removeRow(i);
+		}
 		for (int i = 0; i < mns.size(); i++) {
-			if(mns.get(i).getId_comunidad()==id_com){
+			if (mns.get(i).getId_comunidad() == id_com) {
 				gui.ListaAnuncios.add(mns.get(i));
 			}
 		}
-		
-		Action delete = new AbstractAction()
-		{
-		    public void actionPerformed(ActionEvent e)
-		    {
-		    	if (gui.ListaAnuncios.get(Integer.valueOf( e.getActionCommand() )).getId_usuario().equals(gui.logueado.getUsuario())) {
-		    		try {
-						eliminar.eliminarAnuncio("DELETE FROM TABANU_TABLON_ANUNCIOS WHERE TABANU_ID_MENSAJE='"+
-			        gui.ListaAnuncios.get(Integer.valueOf( e.getActionCommand() )).getId_mensaje()+"'");
+
+		Action delete = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				if (gui.ListaAnuncios
+						.get(Integer.valueOf(e.getActionCommand()))
+						.getId_usuario().equals(gui.logueado.getUsuario())) {
+					try {
+						eliminar.eliminarAnuncio("DELETE FROM TABANU_TABLON_ANUNCIOS WHERE TABANU_ID_MENSAJE='"
+								+ gui.ListaAnuncios.get(
+										Integer.valueOf(e.getActionCommand()))
+										.getId_mensaje() + "'");
 						gui.recuperar.RefrescarArray("anuncios");
 					} catch (ClassNotFoundException e1) {
 						e1.printStackTrace();
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}
-			        
-			        JTable table = (JTable)e.getSource();
-			        int modelRow = Integer.valueOf( e.getActionCommand() );
-			        ((DefaultTableModel)table.getModel()).removeRow(modelRow);
-				}else{
-					JOptionPane.showMessageDialog( null, "Solo el autor puede borrar el mensaje" );
+
+					JTable table = (JTable) e.getSource();
+					int modelRow = Integer.valueOf(e.getActionCommand());
+					((DefaultTableModel) table.getModel()).removeRow(modelRow);
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Solo el autor puede borrar el mensaje");
 				}
-		        
-		    }
+
+			}
 		};
-		
-		Action responder = new AbstractAction()
-		{
-		    public void actionPerformed(ActionEvent e)
-		    {	
-		    	VentanaRespuestas vr= new VentanaRespuestas(gui.ListaAnuncios.get(Integer.valueOf( e.getActionCommand() )).getId_mensaje(),
-		    			gui.logueado.getUsuario());
-		    	vr.setVisible(true);
-		    }
+
+		Action responder = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				VentanaRespuestas vr = new VentanaRespuestas(gui.ListaAnuncios
+						.get(Integer.valueOf(e.getActionCommand()))
+						.getId_mensaje(), gui.logueado.getUsuario());
+				vr.setVisible(true);
+			}
 		};
-		
-		Action respuestas = new AbstractAction()
-		{
-		    public void actionPerformed(ActionEvent e)
-		    {	
-		    	System.out.println(gui.ListaAnuncios.get(Integer.valueOf( e.getActionCommand() )).getRespanu().size());
-		    	ListaRespuestas lr= new ListaRespuestas(gui.ListaAnuncios.get(Integer.valueOf( e.getActionCommand() )).getRespanu());
-		    	lr.setVisible(true);
-		    }
+
+		Action respuestas = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(gui.ListaAnuncios
+						.get(Integer.valueOf(e.getActionCommand()))
+						.getRespanu().size());
+				ListaRespuestas lr = new ListaRespuestas(gui.ListaAnuncios.get(
+						Integer.valueOf(e.getActionCommand())).getRespanu());
+				lr.setVisible(true);
+			}
 		};
-		
+
 		Object[] fila = new Object[gui.modeloAnuncios.getColumnCount()];
 		for (int i = 0; i < gui.ListaAnuncios.size(); i++) {
-				fila[0]=gui.ListaAnuncios.get(i).getId_mensaje();
-				fila[1]=gui.ListaAnuncios.get(i).getTitulo();
-				fila[2]=gui.ListaAnuncios.get(i).getMensaje();
-				fila[3]=gui.ListaAnuncios.get(i).getFecha_creacion();
-				fila[4]="Eliminar";
-				fila[5]="Responder";				
-				fila[6]="Respuestas("+gui.ListaAnuncios.get(i).getRespanu().size()+")";
-				
-				gui.modeloAnuncios.addRow(fila);
-				gui.tablaAnuncios.setModel(gui.modeloAnuncios);
-				gui.tablaAnuncios.validate();
-				gui.tablaAnuncios.repaint();	
-				
+			fila[0] = gui.ListaAnuncios.get(i).getId_mensaje();
+			fila[1] = gui.ListaAnuncios.get(i).getTitulo();
+			fila[2] = gui.ListaAnuncios.get(i).getMensaje();
+			fila[3] = gui.ListaAnuncios.get(i).getFecha_creacion();
+			fila[4] = "Eliminar";
+			fila[5] = "Responder";
+			fila[6] = "Respuestas("
+					+ gui.ListaAnuncios.get(i).getRespanu().size() + ")";
 
-				if (gui.ListaAnuncios.get(i).getId_usuario().equals(gui.logueado.getUsuario())) {
-				}else{
+			gui.modeloAnuncios.addRow(fila);
+			gui.tablaAnuncios.setModel(gui.modeloAnuncios);
+			gui.tablaAnuncios.validate();
+			gui.tablaAnuncios.repaint();
 
-				}
-	
+			if (gui.ListaAnuncios.get(i).getId_usuario()
+					.equals(gui.logueado.getUsuario())) {
+			} else {
+
+			}
+
 		}
 
-
-		ButtonColumn buttonColumnEliminar = new ButtonColumn(gui.tablaAnuncios, delete, 4);
+		ButtonColumn buttonColumnEliminar = new ButtonColumn(gui.tablaAnuncios,
+				delete, 4);
 		buttonColumnEliminar.setMnemonic(KeyEvent.VK_D);
-		ButtonColumn buttonColumnRespuestas = new ButtonColumn(gui.tablaAnuncios, responder, 5);
+		ButtonColumn buttonColumnRespuestas = new ButtonColumn(
+				gui.tablaAnuncios, responder, 5);
 		buttonColumnRespuestas.setMnemonic(KeyEvent.VK_D);
-		ButtonColumn buttonColumnResponder = new ButtonColumn(gui.tablaAnuncios, respuestas, 6);
+		ButtonColumn buttonColumnResponder = new ButtonColumn(
+				gui.tablaAnuncios, respuestas, 6);
 		buttonColumnResponder.setMnemonic(KeyEvent.VK_D);
 	}
-	
-	public void mostrarCalendario(ArrayList<Recordatorio> rec,int id_com) throws ClassNotFoundException, SQLException{
-		
+
+	public void mostrarCalendario(ArrayList<Recordatorio> rec, int id_com)
+			throws ClassNotFoundException, SQLException {
+
 		gui.Calendario.removeAll();
-		gui.Calendario.add(new Calendario(rec,id_com));
+		gui.Calendario.add(new Calendario(rec, id_com));
 		gui.Calendario.validate();
 		gui.Calendario.repaint();
-		
+
 	}
-	
-	public void llenarlistaCuentas(ArrayList<Movimiento> mns,int id_com){
-		
+
+	public void llenarlistaCuentas(ArrayList<Movimiento> mns, int id_com) {
+
 		gui.ListaMovimientos.clear();
 		for (int i = gui.modeloCuentas.getRowCount() - 1; i > -1; i--) {
-	        gui.modeloCuentas.removeRow(i);
-	    }
+			gui.modeloCuentas.removeRow(i);
+		}
 		for (int i = 0; i < mns.size(); i++) {
-			if(mns.get(i).getId_comunidad()==id_com){
+			if (mns.get(i).getId_comunidad() == id_com) {
 				gui.ListaMovimientos.add(mns.get(i));
 			}
 		}
-		
-		Usuario usuario=gui.logueado;
+
+		Usuario usuario = gui.logueado;
 		Cuenta m = null;
-		
+
 		Object[] fila = new Object[gui.modeloCuentas.getColumnCount()];
-		
+
 		for (int i = 0; i < gui.ListaMovimientos.size(); i++) {
-			int id_cuenta=gui.ListaMovimientos.get(i).getId_cuenta();
+			int id_cuenta = gui.ListaMovimientos.get(i).getId_cuenta();
 			for (int j = 0; j < gui.recuperar.getCuentas().size(); j++) {
-				if(gui.recuperar.getCuentas().get(j).getId_cuenta()==id_cuenta &&
-						gui.recuperar.getCuentas().get(j).getId_comunidad()==id_com){
-					m=gui.recuperar.getCuentas().get(j);
-					
-					if(gui.ListaMovimientos.get(i).getId_usuario().equals(usuario.getUsuario())){
-						fila[0]=gui.recuperar.getCuentas().get(gui.recuperar.getCuentas().indexOf(m)).getNum_cuenta();
-						fila[1]=usuario.getNombre();
-						fila[2]=gui.ListaMovimientos.get(i).getCantidad();
-						fila[3]=gui.ListaMovimientos.get(i).getTipo_movimiento();
-						fila[4]=gui.ListaMovimientos.get(i).getFecha();
-						fila[5]=gui.ListaMovimientos.get(i).getMotivo();
-						fila[6]=gui.ListaMovimientos.get(i).getSaldo_anterior();
-						fila[7]=gui.ListaMovimientos.get(i).getSaldo_final();
-						
+				if (gui.recuperar.getCuentas().get(j).getId_cuenta() == id_cuenta
+						&& gui.recuperar.getCuentas().get(j).getId_comunidad() == id_com) {
+					m = gui.recuperar.getCuentas().get(j);
+
+					if (gui.ListaMovimientos.get(i).getId_usuario()
+							.equals(usuario.getUsuario())) {
+						fila[0] = gui.recuperar.getCuentas()
+								.get(gui.recuperar.getCuentas().indexOf(m))
+								.getNum_cuenta();
+						fila[1] = usuario.getNombre();
+						fila[2] = gui.ListaMovimientos.get(i).getCantidad();
+						fila[3] = gui.ListaMovimientos.get(i)
+								.getTipo_movimiento();
+						fila[4] = gui.ListaMovimientos.get(i).getFecha();
+						fila[5] = gui.ListaMovimientos.get(i).getMotivo();
+						fila[6] = gui.ListaMovimientos.get(i)
+								.getSaldo_anterior();
+						fila[7] = gui.ListaMovimientos.get(i).getSaldo_final();
+
 						gui.modeloCuentas.addRow(fila);
 						gui.tablaCuentas.setModel(gui.modeloCuentas);
 						gui.tablaCuentas.validate();
 						gui.tablaCuentas.repaint();
 						continue;
 					}
-				
+
 				}
 			}
-						
-			
+
 		}
 	}
-	
-	public void llenarlistaComunidad(ArrayList<Movimiento> mns,int id_com) throws ClassNotFoundException, SQLException{
-		
+
+	public void llenarlistaComunidad(ArrayList<Movimiento> mns, int id_com)
+			throws ClassNotFoundException, SQLException {
+
 		gui.ListaMovimientos.clear();
-		for (int i = gui.modeloComunidad.getRowCount() - 1; i > -1; i--) {
-	        gui.modeloComunidad.removeRow(i);
-	    }
+		// if (gui.modeloComunidad.getRowCount() > 0) {
+		// for (int i = gui.modeloComunidad.getRowCount() - 1; i > -1; i--) {
+		// gui.modeloComunidad.removeRow(i);
+		// }
+		// }
 		for (int i = 0; i < mns.size(); i++) {
-			if(mns.get(i).getId_comunidad()==id_com){
+			if (mns.get(i).getId_comunidad() == id_com) {
 				gui.ListaMovimientos.add(mns.get(i));
 			}
 		}
-		
-		Cuenta m = null;
-		
-		Object[] fila = new Object[gui.modeloComunidad.getColumnCount()];
-		
-		for (int i = 0; i < gui.ListaMovimientos.size(); i++) {
-			int id_cuenta=gui.ListaMovimientos.get(i).getId_cuenta();
-			for (int j = 0; j < gui.recuperar.getCuentas().size(); j++) {
-				if(gui.recuperar.getCuentas().get(j).getId_cuenta()==id_cuenta &&
-						gui.recuperar.getCuentas().get(j).getId_comunidad()==id_com){
-					m=gui.recuperar.getCuentas().get(j);
-					fila[0]=gui.recuperar.getCuentas().get(gui.recuperar.getCuentas().indexOf(m)).getNum_cuenta();
-					fila[1]=gui.ListaMovimientos.get(i).getId_usuario();
-					fila[2]=gui.ListaMovimientos.get(i).getCantidad();
-					fila[3]=gui.ListaMovimientos.get(i).getTipo_movimiento();
-					fila[4]=gui.ListaMovimientos.get(i).getFecha();
-					fila[5]=gui.ListaMovimientos.get(i).getMotivo();
-					fila[6]=gui.ListaMovimientos.get(i).getSaldo_anterior();
-					fila[7]=gui.ListaMovimientos.get(i).getSaldo_final();
-					
-					gui.modeloComunidad.addRow(fila);
-					gui.tablaComunidad.setModel(gui.modeloComunidad);
-					gui.tablaComunidad.validate();
-					gui.tablaComunidad.repaint();				
-					continue;
-				}						
-			}	
+		PanelComunidad pc = new PanelComunidad(gui.ListaMovimientosComunidad);
+		gui.scrollComunidad.setViewportView(pc);
+	}
+
+	public void llenarlistaInstalaciones(ArrayList<Instalacion> mns, int id_com) {
+
+		gui.ListaInstalaciones.clear();
+		for (int i = gui.modeloInstalaciones.getRowCount() - 1; i > -1; i--) {
+			gui.modeloInstalaciones.removeRow(i);
 		}
+		for (int i = 0; i < mns.size(); i++) {
+			if (mns.get(i).getId_comunidad() == id_com) {
+				gui.ListaInstalaciones.add(mns.get(i));
+			}
+		}
+
+		Object[] fila = new Object[gui.modeloInstalaciones.getColumnCount()];
+		for (int i = 0; i < gui.ListaInstalaciones.size(); i++) {
+			fila[0] = gui.ListaInstalaciones.get(i).getNombre();
+			fila[1] = gui.ListaInstalaciones.get(i).getCoste();
+			fila[2] = gui.ListaInstalaciones.get(i).getDescripcion();
+			fila[3] = "Reservar";
+			gui.modeloInstalaciones.addRow(fila);
+
+		}
+
+		gui.tablaInstalaciones.setModel(gui.modeloInstalaciones);
+		gui.tablaInstalaciones.validate();
+		gui.tablaInstalaciones.repaint();
+
+		Action reservar = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int id_instalacion = gui.ListaInstalaciones.get(
+							Integer.valueOf(e.getActionCommand()))
+							.getId_instalacion();
+					VentanaReservas vr = new VentanaReservas(
+							gui.recuperar.getReservas(), id_instalacion,
+							gui.recuperar);
+					vr.setVisible(true);
+					gui.recuperar.RefrescarArray("instalaciones");
+				} catch (ClassNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+
+			}
+		};
+
+		ButtonColumn buttonColumn = new ButtonColumn(gui.tablaInstalaciones,
+				reservar, 3);
+		buttonColumn.setMnemonic(KeyEvent.VK_D);
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==gui.mntmLogin){
-			final Login login= new Login(gui);
+		if (e.getSource() == gui.mntmLogin) {
+			final Login login = new Login(gui);
 			login.setVisible(true);
 		}
-		if(e.getSource()==gui.mntmSalir){
+		if (e.getSource() == gui.mntmSalir) {
 			System.exit(0);
 		}
-		if(e.getSource()==gui.mntmCambioContraseña){
-			VentanaContraseña ventana=new VentanaContraseña(gui.getLogueado());
+		if (e.getSource() == gui.mntmCambioContraseña) {
+			VentanaContraseña ventana = new VentanaContraseña(gui.getLogueado());
 			ventana.setVisible(true);
 		}
-		if(e.getSource()==gui.mntmNuevaComunidad){
-			
+		if (e.getSource() == gui.mntmNuevaComunidad) {
+			VentanaCreaCom ventana = new VentanaCreaCom(gui.getLogueado());
+			ventana.setVisible(true);
+
 		}
-		if(e.getSource()==gui.btnAnadirUsuario){
-			VentanaUsuario ventana =new VentanaUsuario(gui.idcomunidad(gui.comboBox.getSelectedItem().toString()),gui.logueado,gui.recuperar.getUsuarios(),gui.recuperar.getComunidadesUsuarios(),"Alta");
+		if (e.getSource() == gui.btnAnadirUsuario) {
+			VentanaUsuario ventana = new VentanaUsuario(
+					gui.idcomunidad(gui.comboBox.getSelectedItem().toString()),
+					gui.logueado, gui.recuperar.getUsuarios(),
+					gui.recuperar.getComunidadesUsuarios(), "Alta");
 			ventana.setVisible(true);
 		}
-		if(e.getSource()==gui.btnBorrarUsuario){
-			VentanaUsuario ventana =new VentanaUsuario(gui.idcomunidad(gui.comboBox.getSelectedItem().toString()),gui.logueado,gui.recuperar.getUsuarios(),gui.recuperar.getComunidadesUsuarios(),"Baja");
+		if (e.getSource() == gui.btnBorrarUsuario) {
+			VentanaUsuario ventana = new VentanaUsuario(
+					gui.idcomunidad(gui.comboBox.getSelectedItem().toString()),
+					gui.logueado, gui.recuperar.getUsuarios(),
+					gui.recuperar.getComunidadesUsuarios(), "Baja");
 			ventana.setVisible(true);
 		}
-		if(e.getSource()==gui.btnModificarUsuario){
-			VentanaUsuario ventana =new VentanaUsuario(gui.idcomunidad(gui.comboBox.getSelectedItem().toString()),gui.logueado,gui.recuperar.getUsuarios(),gui.recuperar.getComunidadesUsuarios(),"Modificacion");
+		if (e.getSource() == gui.btnModificarUsuario) {
+			VentanaUsuario ventana = new VentanaUsuario(
+					gui.idcomunidad(gui.comboBox.getSelectedItem().toString()),
+					gui.logueado, gui.recuperar.getUsuarios(),
+					gui.recuperar.getComunidadesUsuarios(), "Modificacion");
 			ventana.setVisible(true);
 		}
-		if(e.getSource()==gui.btnAnadirInstalacion){
-			VentanaInstalaciones ventana = new VentanaInstalaciones(gui.idcomunidad(gui.comboBox.getSelectedItem().toString()), gui.logueado, gui.recuperar.getUsuarios(), gui.recuperar.getInstalaciones(), "Alta");
+		if (e.getSource() == gui.btnAnadirInstalacion) {
+			VentanaInstalaciones ventana = new VentanaInstalaciones(
+					gui.idcomunidad(gui.comboBox.getSelectedItem().toString()),
+					gui.logueado, gui.recuperar.getUsuarios(),
+					gui.recuperar.getInstalaciones(), "Alta");
 			ventana.setVisible(true);
 		}
-		if(e.getSource()==gui.btnModificarInstalacion){
-			VentanaInstalaciones ventana = new VentanaInstalaciones(gui.idcomunidad(gui.comboBox.getSelectedItem().toString()), gui.logueado, gui.recuperar.getUsuarios(), gui.recuperar.getInstalaciones(), "Modificacion");
+		if (e.getSource() == gui.btnModificarInstalacion) {
+			VentanaInstalaciones ventana = new VentanaInstalaciones(
+					gui.idcomunidad(gui.comboBox.getSelectedItem().toString()),
+					gui.logueado, gui.recuperar.getUsuarios(),
+					gui.recuperar.getInstalaciones(), "Modificacion");
 			ventana.setVisible(true);
 		}
-		if(e.getSource()==gui.btnBorrarInstalacion){
-			VentanaInstalaciones ventana = new VentanaInstalaciones(gui.idcomunidad(gui.comboBox.getSelectedItem().toString()), gui.logueado, gui.recuperar.getUsuarios(), gui.recuperar.getInstalaciones(), "Baja");
+		if (e.getSource() == gui.btnBorrarInstalacion) {
+			VentanaInstalaciones ventana = new VentanaInstalaciones(
+					gui.idcomunidad(gui.comboBox.getSelectedItem().toString()),
+					gui.logueado, gui.recuperar.getUsuarios(),
+					gui.recuperar.getInstalaciones(), "Baja");
 			ventana.setVisible(true);
 		}
-		if(e.getSource()==gui.btnMovimiento){
-			VentanaMovimiento ventana = new VentanaMovimiento(gui.idcomunidad(gui.comboBox.getSelectedItem().toString()), gui.logueado, gui.recuperar.getUsuarios(), gui.recuperar.getComunidadesUsuarios());
+		if (e.getSource() == gui.btnMovimiento) {
+			VentanaMovimiento ventana = new VentanaMovimiento(
+					gui.idcomunidad(gui.comboBox.getSelectedItem().toString()),
+					gui.logueado, gui.recuperar.getUsuarios(),
+					gui.recuperar.getComunidadesUsuarios());
 			ventana.setVisible(true);
 		}
 	}

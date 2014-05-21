@@ -2,6 +2,11 @@ package clases;
 
 import java.sql.Date;
 
+/**
+ * Clase que define el tipo Reserva
+ * @author JonB
+ *
+ */
 public class Reserva {
 	private int id_reserva,id_instalacion,horainicio,horafin;
 	Date fecha;

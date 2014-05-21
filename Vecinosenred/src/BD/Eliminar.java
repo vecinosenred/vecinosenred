@@ -3,6 +3,11 @@ package BD;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * 
+ * @author JonB
+ * Clase utilizada para eliminar filas de la BDD
+ */
 public class Eliminar {
 	
 	private Statement st;

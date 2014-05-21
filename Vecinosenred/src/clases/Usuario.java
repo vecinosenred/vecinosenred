@@ -1,5 +1,10 @@
 package clases;
 
+/**
+ * Clase que define el tipo Usuario
+ * @author JonB
+ *
+ */
 public class Usuario {
 	
 	private String usuario,pass,nombre,domicilio;

@@ -8,6 +8,11 @@ import java.util.ArrayList;
 
 import BD.Conectar;
 
+/**
+ * Clase que define el tipo Incidencia
+ * @author JonB
+ *
+ */
 public class Incidencia {
 	
 	private int id_incidencia,id_comunidad,estado;
@@ -94,6 +99,11 @@ public class Incidencia {
 
 }
 
+/**
+ * Clase que define el tipo RespuestaIncidencia
+ * @author JonB
+ *
+ */
 class RespuestaIncidencia{
 	
 	private Statement st;
@@ -151,6 +161,12 @@ class RespuestaIncidencia{
 		this.rein = rean;
 	}
 	
+	/**
+	 * Método constructor al que sele pasa por parámetro el ID de la incidencia y recupera las respuestas a la misma, 
+	 * genera un arraylist con ellas. Este arraylist formará parte del objeto Incidencia.
+	 * @see clases.Incidencia#Incidencia(int, int, String, String, String, int, Date) Incidencia
+	 * @param id_incidencia
+	 */
 	public RespuestaIncidencia(int id_incidencia){
 		
 		Conectar con = new Conectar();
@@ -165,8 +181,7 @@ class RespuestaIncidencia{
 				this.id_respuesta=rs.getInt(2);
 				this.respuesta=rs.getString(3);
 				this.id_usuario=rs.getString(4);
-				this.fecha_respuesta=rs.getDate(5);
-				
+				this.fecha_respuesta=rs.getDate(5);				
 				this.rein.add(this);
 				
 			}

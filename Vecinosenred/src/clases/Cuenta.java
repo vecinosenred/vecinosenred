@@ -1,5 +1,10 @@
 package clases;
 
+/**
+ * Clase que define el tipo Cuenta
+ * @author JonB
+ *
+ */
 public class Cuenta {
 
 	int id_cuenta, id_comunidad;

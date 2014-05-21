@@ -1,4 +1,3 @@
-
 package frames;
 
 import java.awt.Color;
@@ -28,25 +27,28 @@ public class VentanaMovimiento extends JDialog {
 	private JTextField textCantidad;
 	private JTextArea txtareaMotivo;
 	private JComboBox<String> comboTipoMov;
-	
+
 	private int id_com;
 	private Usuario usu;
 	private JTextField textFecha;
 	private ObtenerFechaActual ofa;
-	
+	public String[] tipomov = { "INGRESO ORDINARIO", "INGRESO EXTRAORDINARIO",
+			"INGRESO ANTICIPADO", "INGRESO PENDIENTE", "GASTO ORDINARIO",
+			"GASTO EXTRAORDINARIO", "GASTO PENDIENTE" };
 	private ArrayList<Usuario> usuarios;
 	private ArrayList<ComunidadUsuario> com_usu;
 
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public VentanaMovimiento(int id_comunidad,Usuario usuario,ArrayList<Usuario> usu,ArrayList<ComunidadUsuario> comusu) {
-		
-		this.id_com=id_comunidad;
-		this.usuarios=usu;
-		this.com_usu=comusu;
-		this.ofa=new ObtenerFechaActual();
-		
+	public VentanaMovimiento(int id_comunidad, Usuario usuario,
+			ArrayList<Usuario> usu, ArrayList<ComunidadUsuario> comusu) {
+
+		this.id_com = id_comunidad;
+		this.usuarios = usu;
+		this.com_usu = comusu;
+		this.ofa = new ObtenerFechaActual();
+
 		getContentPane().setBackground(Color.WHITE);
 		setResizable(false);
 		setTitle("Movimiento");
@@ -66,11 +68,11 @@ public class VentanaMovimiento extends JDialog {
 		JLabel lblMensaje = new JLabel("Motivo:");
 		lblMensaje.setBounds(10, 159, 46, 14);
 		getContentPane().add(lblMensaje);
-		
+
 		JLabel lblFecha = new JLabel("Fecha:");
 		lblFecha.setBounds(10, 70, 46, 14);
 		getContentPane().add(lblFecha);
-		
+
 		JLabel lblTipoMovimiento = new JLabel("Tipo movimiento:");
 		lblTipoMovimiento.setBounds(10, 97, 106, 16);
 		getContentPane().add(lblTipoMovimiento);
@@ -82,19 +84,27 @@ public class VentanaMovimiento extends JDialog {
 
 		textTitular = new JComboBox<String>();
 		for (int i = 0; i < usuarios.size(); i++) {
-			textTitular.addItem(usuarios.get(i).getNombre());
+			if (usuarios.get(i).getId_comunidad() == id_com) {
+				textTitular.addItem(usuarios.get(i).getNombre());
+			}
 		}
 		textTitular.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("buenaabierta");
 				for (int j = 0; j < com_usu.size(); j++) {
-					if(com_usu.get(j).getId_usuario().equals(usuarios.get(textTitular.getSelectedIndex()).getUsuario()) && 
-							com_usu.get(j).getId_comunidades()==id_com){
-						textCuenta.setText(com_usu.get(j).getNum_cuenta());						
+					if (com_usu
+							.get(j)
+							.getId_usuario()
+							.equals(usuarios
+									.get(textTitular.getSelectedIndex())
+									.getUsuario())
+							&& com_usu.get(j).getId_comunidades() == id_com) {
+						textCuenta.setText(com_usu.get(j).getNum_cuenta());
 					}
 				}
-				
+
 			}
 		});
 		textTitular.setBorder(new LineBorder(new Color(171, 173, 179)));
@@ -106,14 +116,14 @@ public class VentanaMovimiento extends JDialog {
 		textCuenta.setBorder(new LineBorder(new Color(171, 173, 179)));
 		textCuenta.setBounds(128, 8, 356, 20);
 		getContentPane().add(textCuenta);
-		
+
 		textFecha = new JTextField();
 		textFecha.setText(ofa.obtenerFecha());
 		textFecha.setColumns(10);
 		textFecha.setBorder(new LineBorder(new Color(171, 173, 179)));
 		textFecha.setBounds(128, 67, 356, 20);
-		
-		comboTipoMov = new JComboBox();
+
+		comboTipoMov = new JComboBox(tipomov);
 		comboTipoMov.setBounds(128, 94, 356, 22);
 		getContentPane().add(comboTipoMov);
 		{
@@ -124,11 +134,11 @@ public class VentanaMovimiento extends JDialog {
 		btnEnviarMensaje.setBounds(346, 283, 138, 23);
 		getContentPane().add(btnEnviarMensaje);
 		getContentPane().add(textFecha);
-		
+
 		JLabel lblCantidad = new JLabel("Cantidad:");
 		lblCantidad.setBounds(10, 129, 56, 16);
 		getContentPane().add(lblCantidad);
-		
+
 		textCantidad = new JTextField();
 		textCantidad.setBounds(128, 126, 356, 22);
 		getContentPane().add(textCantidad);
@@ -138,7 +148,11 @@ public class VentanaMovimiento extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					enviarMovimiento(Integer.parseInt(textCuenta.getText()), (String)textTitular.getSelectedItem(),Double.parseDouble(textCuenta.getText()), comboTipoMov.getSelectedIndex(), txtareaMotivo.getText());
+					enviarMovimiento(Integer.parseInt(textCuenta.getText()),
+							(String) textTitular.getSelectedItem(),
+							Double.parseDouble(textCuenta.getText()),
+							comboTipoMov.getSelectedIndex(),
+							txtareaMotivo.getText());
 					setVisible(false);
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
@@ -150,10 +164,11 @@ public class VentanaMovimiento extends JDialog {
 
 	}
 
-	public VentanaMovimiento(String cuenta, String titular, double cantidad,String fecha, String motivo) {
+	public VentanaMovimiento(String cuenta, String titular, double cantidad,
+			String fecha, String motivo) {
 		getContentPane().setBackground(Color.WHITE);
 		setResizable(false);
-		setTitle("Incidencia");
+		setTitle("Movimientos");
 		setBackground(Color.GRAY);
 		setSize(500, 300);
 		setLocationRelativeTo(null);
@@ -170,7 +185,7 @@ public class VentanaMovimiento extends JDialog {
 		JLabel lblMotivo = new JLabel("Motivo:");
 		lblMotivo.setBounds(10, 86, 46, 14);
 		getContentPane().add(lblMotivo);
-		
+
 		JLabel lblFecha = new JLabel("Fecha:");
 		lblFecha.setBounds(10, 70, 46, 14);
 		getContentPane().add(lblFecha);
@@ -191,7 +206,7 @@ public class VentanaMovimiento extends JDialog {
 		textCuenta.setBounds(66, 8, 418, 20);
 		getContentPane().add(textCuenta);
 		textCuenta.setColumns(10);
-		
+
 		txtTitular.setText(titular);
 		txtTitular.setEditable(false);
 		textCuenta.setText(cuenta);
@@ -201,18 +216,22 @@ public class VentanaMovimiento extends JDialog {
 		txtareaMotivo.setText(motivo);
 		txtareaMotivo.setEditable(false);
 	}
-	
-	private void enviarMovimiento(int id_cuenta,String id_usuario,double cantidad,int tipo_mov,String motivo) 
-			throws ClassNotFoundException, SQLException{
 
-		ObtenerFechaActual ofa= new ObtenerFechaActual();
-		
-		Introducir introducir=new Introducir();
-		
-		introducir.introducir("INSERT INTO MOVCUE_MOVIENTOS_CUENTAS"
-				+ "(MOVCUE_ID_CUENTA, MOVCUE_ID_USUARIO, MOVCUE_CANTIDAD,MOVCUE_TIPO_MOVIMIENTO,"
-				+ "MOVCUE_FECHA_MOVIMIENTO,MOVCUE_MOTIVO)"
-				+ "VALUES('"+id_cuenta+"','"+id_usuario+"','"+cantidad+"','"+tipo_mov+"','"+ofa.obtenerFecha()+"','"+motivo+"')");
-		
+	private void enviarMovimiento(int id_cuenta, String id_usuario,
+			double cantidad, int tipo_mov, String motivo)
+			throws ClassNotFoundException, SQLException {
+
+		ObtenerFechaActual ofa = new ObtenerFechaActual();
+
+		Introducir introducir = new Introducir();
+
+		introducir
+				.introducir("INSERT INTO MOVCUE_MOVIENTOS_CUENTAS"
+						+ "(MOVCUE_ID_CUENTA, MOVCUE_ID_USUARIO, MOVCUE_CANTIDAD,MOVCUE_TIPO_MOVIMIENTO,"
+						+ "MOVCUE_FECHA_MOVIMIENTO,MOVCUE_MOTIVO)" + "VALUES('"
+						+ id_cuenta + "','" + id_usuario + "','" + cantidad
+						+ "','" + tipo_mov + "','" + ofa.obtenerFecha() + "','"
+						+ motivo + "')");
+
 	}
 }

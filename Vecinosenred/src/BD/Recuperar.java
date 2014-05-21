@@ -1,5 +1,6 @@
 package BD;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,6 +29,7 @@ public class Recuperar implements Runnable{
 	public Usuario usuarioLog;
 	public ArrayList<Comunidad> comunidades=new ArrayList<Comunidad>();
 	public ArrayList<Movimiento> movimientos=new ArrayList<Movimiento>();
+	public ArrayList<Movimiento> movimientosComunidad=new ArrayList<Movimiento>();
 	public ArrayList<Anuncio> anuncios=new ArrayList<Anuncio>();
 	public ArrayList<Anuncio> resp_anuncios=new ArrayList<Anuncio>();
 	public ArrayList<Incidencia> incidencias=new ArrayList<Incidencia>();
@@ -100,9 +102,20 @@ public class Recuperar implements Runnable{
 			rs=st.executeQuery("SELECT * FROM MOVCUE_MOVIMIENTOS_CUENTAS WHERE MOVCUE_ID_USUARIO IN "
 					+ "(SELECT COMUSU_ID_USUARIO FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_COMUNIDADES="+com_usu.get(i).getId_comunidades()+")");		
 			while(rs.next()){
-				Movimiento mov=new Movimiento(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getInt(4), rs.getInt(5), 
-						rs.getDate(6), rs.getString(7), rs.getInt(8), rs.getInt(9),com_usu.get(i).getId_comunidades());
+				Movimiento mov=new Movimiento(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getDouble(4), rs.getInt(5), 
+						rs.getDate(6), rs.getString(7), rs.getDouble(8), rs.getDouble(9),com_usu.get(i).getId_comunidades());
 				movimientos.add(mov);
+
+			}
+		}
+		
+		for (int i = 0; i < cuentas.size(); i++) {
+			rs=st.executeQuery("SELECT * FROM MOVCUE_MOVIMIENTOS_CUENTAS WHERE MOVCUE_ID_CUENTA="+cuentas.get(i).getId_cuenta());		
+			while(rs.next()){
+				Movimiento mov=new Movimiento(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getDouble(4), rs.getInt(5), 
+						rs.getDate(6), rs.getString(7), rs.getDouble(8), rs.getDouble(9),cuentas.get(i).getId_comunidad());
+				movimientosComunidad.add(mov);
+
 			}
 		}
 		
@@ -231,6 +244,14 @@ public class Recuperar implements Runnable{
 
 	public void setReservas(ArrayList<Reserva> reservas) {
 		this.reservas = reservas;
+	}	
+
+	public ArrayList<Movimiento> getMovimientosComunidad() {
+		return movimientosComunidad;
+	}
+
+	public void setMovimientosComunidad(ArrayList<Movimiento> movimientosComunidad) {
+		this.movimientosComunidad = movimientosComunidad;
 	}
 
 	public ResultSet recuperarColumna(String query) throws ClassNotFoundException, SQLException{
@@ -313,23 +334,34 @@ public class Recuperar implements Runnable{
 				rs=st.executeQuery("SELECT * FROM MOVCUE_MOVIMIENTOS_CUENTAS WHERE MOVCUE_ID_USUARIO IN "
 						+ "(SELECT COMUSU_ID_USUARIO FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_COMUNIDADES="+com_usu.get(i).getId_comunidades()+")");		
 				while(rs.next()){
-					Movimiento mov=new Movimiento(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getInt(4), rs.getInt(5), 
-							rs.getDate(6), rs.getString(7), rs.getInt(8), rs.getInt(9),com_usu.get(i).getId_comunidades());
+					Movimiento mov=new Movimiento(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getDouble(4), rs.getInt(5), 
+							rs.getDate(6), rs.getString(7), rs.getDouble(8), rs.getDouble(9),com_usu.get(i).getId_comunidades());
 					movimientos.add(mov);
 				}
 			}
 			
+			for (int i = 0; i < cuentas.size(); i++) {
+				rs=st.executeQuery("SELECT * FROM MOVCUE_MOVIMIENTOS_CUENTAS WHERE MOVCUE_ID_CUENTA="+cuentas.get(i).getId_cuenta());		
+				while(rs.next()){
+					Movimiento mov=new Movimiento(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getDouble(4), rs.getInt(5), 
+							rs.getDate(6), rs.getString(7), rs.getDouble(8), rs.getDouble(9),cuentas.get(i).getId_comunidad());
+					movimientosComunidad.add(mov);
+
+				}
+			}
+			break;
+			
 		case "cuentas":
 			cuentas.clear();
 			for (int i = 0; i < com_usu.size(); i++) {
-				rs=st.executeQuery("SELECT * FROM CUEN_CUENTAS WHERE CUEN_ID_COMUNIDAD="+com_usu.get(i).getId_comunidades()+")");		
+				rs=st.executeQuery("SELECT * FROM CUEN_CUENTAS WHERE CUEN_ID_COMUNIDAD="+com_usu.get(i).getId_comunidades());		
 				while(rs.next()){
 					Cuenta cue=new Cuenta(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getDouble(4));
 					cuentas.add(cue);
 				}
 				
 			}
-
+			break;
 		case "anuncios":
 			anuncios.clear();
 			for (int i = 0; i < com_usu.size(); i++) {
@@ -385,6 +417,7 @@ public class Recuperar implements Runnable{
 					reservas.add(res);
 				}
 			}
+			break;
 			
 		case "recordatorios":
 			recordatorios.clear();
@@ -451,8 +484,8 @@ public class Recuperar implements Runnable{
 				rs=st.executeQuery("SELECT * FROM MOVCUE_MOVIMIENTOS_CUENTAS WHERE MOVCUE_ID_USUARIO IN "
 						+ "(SELECT COMUSU_ID_USUARIO FROM COMUSU_COMUNIDAD_USUARIO WHERE COMUSU_ID_COMUNIDADES="+com_usu.get(i).getId_comunidades()+")");		
 				while(rs.next()){
-					Movimiento mov=new Movimiento(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getInt(4), rs.getInt(5), 
-							rs.getDate(6), rs.getString(7), rs.getInt(8), rs.getInt(9),com_usu.get(i).getId_comunidades());
+					Movimiento mov=new Movimiento(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getDouble(4), rs.getInt(5), 
+							rs.getDate(6), rs.getString(7), rs.getDouble(8), rs.getDouble(9),com_usu.get(i).getId_comunidades());
 					movimientos.add(mov);
 				}
 			}
@@ -465,6 +498,17 @@ public class Recuperar implements Runnable{
 					cuentas.add(cue);
 				}
 				
+			}
+			
+			movimientosComunidad.clear();
+			for (int i = 0; i < cuentas.size(); i++) {
+				rs=st.executeQuery("SELECT * FROM MOVCUE_MOVIMIENTOS_CUENTAS WHERE MOVCUE_ID_CUENTA="+cuentas.get(i).getId_cuenta());		
+				while(rs.next()){
+					Movimiento mov=new Movimiento(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getDouble(4), rs.getInt(5), 
+							rs.getDate(6), rs.getString(7), rs.getDouble(8), rs.getDouble(9),cuentas.get(i).getId_comunidad());
+					movimientosComunidad.add(mov);
+
+				}
 			}
 			
 			anuncios.clear();

@@ -116,8 +116,11 @@ public class VentanaReservas extends JFrame implements ActionListener{
 		
 		rec.RefrescarArray("reservas");
 		reservas=rec.getReservas();
-
+		
+		comboHoraIni.removeAllItems();
+		
 		horainicio.clear();
+		
 		if (reservas.isEmpty()) {
 			for (int i = 8; i < 23; i++) {
 				horainicio.add(i);
@@ -140,7 +143,17 @@ public class VentanaReservas extends JFrame implements ActionListener{
 				}
 			}
 		}
-//		comboHoraIni.updateUI();
+		
+		if(horainicio.isEmpty()){
+			for (int i = 8; i < 23; i++) {
+				horainicio.add(i);
+			}
+		}
+		
+		for (int i = 0; i < horainicio.size(); i++) {
+			comboHoraIni.addItem(horainicio.get(i));
+		}
+		comboHoraIni.updateUI();
 		repaint();
 	}
 }

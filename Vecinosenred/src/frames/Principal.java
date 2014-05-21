@@ -65,6 +65,7 @@ public class Principal extends JFrame{
 	public static ArrayList<Anuncio> ListaAnuncios= new ArrayList<Anuncio>();
 	public static ArrayList<Incidencia> ListaIncidencias= new ArrayList<Incidencia>();
 	public static ArrayList<Movimiento> ListaMovimientos= new ArrayList<Movimiento>();
+	public static ArrayList<Movimiento> ListaMovimientosComunidad= new ArrayList<Movimiento>();
 	public static ArrayList<ComunidadUsuario> ListaComusu= new ArrayList<ComunidadUsuario>();
 	public static ArrayList<Instalacion> ListaInstalaciones= new ArrayList<Instalacion>();
 	public Recuperar recuperar;
@@ -78,6 +79,7 @@ public class Principal extends JFrame{
 	EventosInstalaciones EveInstalaciones;
 	public EventosMensajes EveMensajes;
 	EventosLogin EveLogin;
+	public JScrollPane scrollComunidad;
 	
 	public Recuperar getRecuperar() {
 		return recuperar;
@@ -104,7 +106,7 @@ public class Principal extends JFrame{
 		return numero;
 	}
 
-	public Principal(){
+	public Principal() throws ClassNotFoundException, SQLException{
 		
 		setResizable(false);
 		getContentPane().setEnabled(false);
@@ -262,18 +264,18 @@ public class Principal extends JFrame{
 		Comunidad.setLayout(null);
 		Comunidad.setBorder(null);
 		
-		JScrollPane scrollComunidad = new JScrollPane();
+		scrollComunidad = new JScrollPane();
 		scrollComunidad.setBounds(0, 0, 790, 450);
 		Comunidad.add(scrollComunidad);
-		
-		modeloComunidad = new DefaultTableModel(null, titulosComunidad);
-		modeloComunidad.addTableModelListener(EveComunidad);
-		tablaComunidad = new JTable(modeloComunidad){
-	        public boolean isCellEditable(int rowIndex, int vColIndex) {
-		            return false;
-	        }};
-		tablaComunidad.addMouseListener(EveComunidad);
-		scrollComunidad.setViewportView(tablaComunidad);
+//		
+//		modeloComunidad = new DefaultTableModel(null, titulosComunidad);
+//		modeloComunidad.addTableModelListener(EveComunidad);
+//		tablaComunidad = new JTable(modeloComunidad){
+//	        public boolean isCellEditable(int rowIndex, int vColIndex) {
+//		            return false;
+//	        }};
+//		tablaComunidad.addMouseListener(EveComunidad);
+//		scrollComunidad.setViewportView(tablaComunidad);
 		PanelPrincipal.addTab("Comunidad", null, Comunidad, "Comunidad");
 		
 		//Panel Instalaciones
@@ -423,10 +425,11 @@ public class Principal extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				boolean valido=false;
-				System.out.println(recuperar.getInstalaciones().size());
 				for(int i=0;i<recuperar.comunidades_usuarios.size();i++){
 					
-					if(logueado.getUsuario().equals(recuperar.comunidades_usuarios.get(i).getId_usuario())&&recuperar.comunidades_usuarios.get(i).getAdministrador()==1&&recuperar.comunidades_usuarios.get(i).getId_comunidades()==idcomunidad(comboBox.getSelectedItem().toString())){
+					if(logueado.getUsuario().equals(recuperar.comunidades_usuarios.get(i).getId_usuario()) &&
+							recuperar.comunidades_usuarios.get(i).getAdministrador()==1 &&
+							recuperar.comunidades_usuarios.get(i).getId_comunidades()==idcomunidad(comboBox.getSelectedItem().toString())){
 						valido=true;
 					}
 				}
@@ -446,7 +449,7 @@ public class Principal extends JFrame{
 							recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
 					principal.mostrarCalendario(recuperar.getRecordatorios(), 
 							recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
-					principal.llenarlistaComunidad(recuperar.getMovimientos(),
+					principal.llenarlistaComunidad(recuperar.getMovimientosComunidad(),
 							recuperar.getComunidades().get(comboBox.getSelectedIndex()).getId());
 
 				} catch (ClassNotFoundException e) {

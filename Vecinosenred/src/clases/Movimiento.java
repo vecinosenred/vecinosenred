@@ -4,11 +4,12 @@ import java.sql.Date;
 
 public class Movimiento {
 	
-	private int id_cuenta,tipo_movimiento,saldo_anterior,saldo_final,id_movimiento,cantidad,id_comunidad;
+	private int id_cuenta,tipo_movimiento,id_movimiento,id_comunidad;
+	private double saldo_anterior,saldo_final,cantidad;
 	private String id_usuario,motivo;
 	private Date fecha;
 
-	public Movimiento(int id_movimiento, int id_cuenta, String id_usuario,int cantidad,int tipo_movimiento, Date fecha, String motivo,int saldo_anterior,int saldo_final,int id_com){
+	public Movimiento(int id_movimiento, int id_cuenta, String id_usuario,double cantidad,int tipo_movimiento, Date fecha, String motivo,double saldo_anterior,double saldo_final,int id_com){
 		this.id_movimiento=id_movimiento;
 		this.id_cuenta=id_cuenta;
 		this.id_usuario=id_usuario;
@@ -45,7 +46,7 @@ public class Movimiento {
 		this.tipo_movimiento = tipo_movimiento;
 	}
 
-	public int getSaldo_anterior() {
+	public double getSaldo_anterior() {
 		return saldo_anterior;
 	}
 
@@ -53,7 +54,7 @@ public class Movimiento {
 		this.saldo_anterior = saldo_anterior;
 	}
 
-	public int getSaldo_final() {
+	public double getSaldo_final() {
 		return saldo_final;
 	}
 
@@ -85,7 +86,7 @@ public class Movimiento {
 		this.id_movimiento = id_movimiento;
 	}
 
-	public int getCantidad() {
+	public double getCantidad() {
 		return cantidad;
 	}
 
